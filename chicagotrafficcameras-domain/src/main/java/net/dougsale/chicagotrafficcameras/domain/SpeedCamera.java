@@ -5,6 +5,8 @@ package net.dougsale.chicagotrafficcameras.domain;
 
 import static org.apache.commons.lang3.Validate.notEmpty;
 
+import java.util.Set;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -13,28 +15,28 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * @author dsale
  *
  */
-public class SpeedCameraLocation extends CameraLocation {
+public class SpeedCamera extends Camera {
 
-	private String address;
+	public final String address;
 
 	private int hashCode = 0;
 	private String toString = null;
 	
 	/**
+	 * Create a SpeedCamera instance.  Note that SpeedCamera instances are immutable.
+	 * The approaches set is unmodifiable and its elements are copied
+	 * from the constructor parameter sets.  Location is immutable.
+	 * All fields are final.
 	 * 
+	 * @param address the street address of the camera
+	 * @param location coordinates per the WGS84 standard
+	 * @param approaches at least one approach direction
 	 */
-	public SpeedCameraLocation(String address, double latitude, double longitude, Approach[] approaches) {		
-		super(latitude, longitude, approaches);
+	public SpeedCamera(String address, Location location, Set<Approach> approaches) {		
+		super(location, approaches);
 		
 		notEmpty(address, "invalid address: null or empty");
 		this.address = address;
-	}
-
-	/**
-	 * @return the intersection
-	 */
-	public String getAddress() {
-		return address;
 	}
 
 	public boolean equals(Object o) {
@@ -42,7 +44,7 @@ public class SpeedCameraLocation extends CameraLocation {
 	   if (o == this) return true;
 	   if (o.getClass() != getClass()) return false;
 	   
-	   SpeedCameraLocation that = (SpeedCameraLocation) o;
+	   SpeedCamera that = (SpeedCamera) o;
 	   
 	   return new EqualsBuilder()
 	                 .appendSuper(super.equals(o))
@@ -54,7 +56,8 @@ public class SpeedCameraLocation extends CameraLocation {
 		// immutable class, calculate hashCode once, lazily
 		if (hashCode == 0)
 			hashCode = new HashCodeBuilder(19, 73)
-					.appendSuper(super.hashCode()).append(address)
+					.appendSuper(super.hashCode())
+					.append(address)
 					.toHashCode();
 
 		return hashCode;

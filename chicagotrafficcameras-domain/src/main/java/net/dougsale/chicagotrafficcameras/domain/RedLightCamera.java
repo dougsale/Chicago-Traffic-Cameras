@@ -3,9 +3,12 @@
  */
 package net.dougsale.chicagotrafficcameras.domain;
 
+import static org.apache.commons.lang3.Validate.isTrue;
 import static org.apache.commons.lang3.Validate.notEmpty;
 
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -15,32 +18,33 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * @author dsale
  *
  */
-public class RedLightCameraLocation extends CameraLocation {
+public class RedLightCamera extends Camera {
 
-	private String[] intersection;
+	public final Set<String> intersection;
 
 	private int hashCode = 0;
 	private String toString = null;
 	
 	/**
+	 * Create a RedLightCamera instance.  Note that RedLightCamera instances are immutable.
+	 * The intersection and approaches sets are unmodifiable and their elements are copied
+	 * from the constructor parameter sets.  Location is immutable.
+	 * All fields are final.
 	 * 
+	 * @param intersection a set of 2 or more street names
+	 * @param location coordinates per the WGS84 standard
+	 * @param approaches at least one approach direction
 	 */
-	public RedLightCameraLocation(String[] intersection, double latitude, double longitude, Approach[] approaches) {
-		super(latitude, longitude, approaches);
+	public RedLightCamera(Set<String> intersection, Location location, Set<Approach> approaches) {
+		super(location, approaches);
 
 		// validate intersection
-		notEmpty(intersection, "invalid intersection: null or empty");
+		isTrue(intersection.size() > 1, "invalid intersection: must contain 2 or more streets");
 		for (String street : intersection)
-			notEmpty(street, "invalid intersection: null or empty street");
+			notEmpty(street, "invalid intersection: street null or empty");
 		
-		this.intersection = Arrays.copyOf(intersection, intersection.length);
-	}
-
-	/**
-	 * @return the intersection
-	 */
-	public String[] getIntersection() {
-		return Arrays.copyOf(intersection, intersection.length);
+		// ensure set is immutable
+		this.intersection = Collections.unmodifiableSet(new HashSet<>(intersection));
 	}
 
 	public boolean equals(Object object) {
@@ -48,7 +52,7 @@ public class RedLightCameraLocation extends CameraLocation {
 	   if (object == this) return true;
 	   if (object.getClass() != getClass()) return false;
 	   
-	   RedLightCameraLocation that = (RedLightCameraLocation) object;
+	   RedLightCamera that = (RedLightCamera) object;
 	   
 	   return new EqualsBuilder()
 	                 .appendSuper(super.equals(object))
@@ -60,7 +64,8 @@ public class RedLightCameraLocation extends CameraLocation {
 		// immutable class, calculate hashCode once, lazily
 		if (hashCode == 0)
 			hashCode = new HashCodeBuilder(19, 73)
-					.appendSuper(super.hashCode()).append(intersection)
+					.appendSuper(super.hashCode())
+					.append(intersection)
 					.toHashCode();
 
 		return hashCode;
