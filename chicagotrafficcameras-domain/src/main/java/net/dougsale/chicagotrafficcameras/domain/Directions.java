@@ -9,8 +9,6 @@ import java.util.List;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import net.dougsale.chicagotrafficcameras.domain.Directions.Step;
-
 /**
  * Immutable data class representing the salient portion of the directions
  * provided by the Google Maps API.  These directions represent the steps

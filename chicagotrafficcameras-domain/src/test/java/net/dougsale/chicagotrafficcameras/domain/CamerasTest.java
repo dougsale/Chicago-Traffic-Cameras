@@ -1,8 +1,8 @@
 package net.dougsale.chicagotrafficcameras.domain;
 
-import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertThat;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
