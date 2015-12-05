@@ -11,7 +11,7 @@ import java.util.Set;
 
 import org.junit.Test;
 
-public class TestSpeedCamera {
+public class SpeedCameraTest {
 
 	String address = "123 Milky Way";
 	double latitude = -68.132412f;

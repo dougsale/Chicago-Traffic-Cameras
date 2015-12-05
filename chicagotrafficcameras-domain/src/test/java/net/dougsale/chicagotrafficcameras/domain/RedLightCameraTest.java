@@ -11,7 +11,7 @@ import java.util.Set;
 
 import org.junit.Test;
 
-public class TestRedLightCamera {
+public class RedLightCameraTest {
 
 	double latitude = -68.132412f;
 	double longitude = 104.345612f;
