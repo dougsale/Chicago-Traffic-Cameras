@@ -5,6 +5,7 @@ package net.dougsale.chicagotrafficcameras.domain;
 
 import static org.apache.commons.lang3.Validate.notNull;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,8 +17,10 @@ import java.util.Set;
  * @author dsale
  *
  */
-public class Cameras {
+public class Cameras implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
+
 	private Map<Class<? extends Camera>, Set<? extends Camera>> camerasByType = new HashMap<>();
 
 	/**

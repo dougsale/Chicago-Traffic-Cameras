@@ -20,6 +20,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  */
 public class RedLightCamera extends Camera {
 
+	private static final long serialVersionUID = 1L;
+
 	public final Set<String> intersection;
 
 	private int hashCode = 0;

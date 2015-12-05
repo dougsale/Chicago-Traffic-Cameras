@@ -17,6 +17,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  */
 public class SpeedCamera extends Camera {
 
+	private static final long serialVersionUID = 1L;
+
 	public final String address;
 
 	private int hashCode = 0;

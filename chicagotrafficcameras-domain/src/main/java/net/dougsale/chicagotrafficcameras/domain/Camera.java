@@ -3,6 +3,7 @@ package net.dougsale.chicagotrafficcameras.domain;
 import static org.apache.commons.lang3.Validate.notEmpty;
 import static org.apache.commons.lang3.Validate.notNull;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -11,8 +12,10 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class Camera {
+public class Camera implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+	
 	public final Location location;
 	public final Set<Approach> approaches;
 

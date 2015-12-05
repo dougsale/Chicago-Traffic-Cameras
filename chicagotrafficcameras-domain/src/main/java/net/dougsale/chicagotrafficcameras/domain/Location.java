@@ -2,12 +2,16 @@ package net.dougsale.chicagotrafficcameras.domain;
 
 import static org.apache.commons.lang3.Validate.inclusiveBetween;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-public class Location {
+public class Location implements Serializable {
 
+	private static final long serialVersionUID = 1L;
+	
 	// these are the bounds set by WGS84 (is that the right reference?),
 	// the geospatial scheme used by google
 	private static double MIN_LATITUDE = -90.0;
