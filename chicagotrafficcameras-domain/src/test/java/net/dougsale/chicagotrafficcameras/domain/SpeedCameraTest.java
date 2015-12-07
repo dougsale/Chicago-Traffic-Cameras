@@ -4,8 +4,8 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,7 +17,7 @@ public class SpeedCameraTest {
 	double latitude = -68.132412f;
 	double longitude = 104.345612f;
 	Location location = new Location(latitude, longitude);
-	Set<Approach> approaches = new HashSet<Approach>(Arrays.asList(Approach.EASTBOUND, Approach.SOUTHBOUND));
+	Set<Approach> approaches = EnumSet.of(Approach.EASTBOUND, Approach.SOUTHBOUND);
 
 	// constructor 
 	

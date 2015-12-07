@@ -6,7 +6,6 @@ import static org.apache.commons.lang3.Validate.notNull;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.EnumSet;
-import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;

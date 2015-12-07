@@ -4,9 +4,8 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.EnumSet;
 import java.util.Set;
 
 import org.junit.Test;
@@ -15,7 +14,7 @@ public class CameraTest {
 
 	double latitude = -68.132412;
 	double longitude = 104.345612;
-	Set<Approach> approaches = new HashSet<Approach>(Arrays.asList(Approach.EASTBOUND, Approach.SOUTHBOUND));
+	Set<Approach> approaches = EnumSet.of(Approach.EASTBOUND, Approach.SOUTHBOUND);
 
 	@Test
 	public void testCameraBasic() {
@@ -29,26 +28,6 @@ public class CameraTest {
 	public void testCameraImmutable() {
 		Camera camera = new Camera(new Location(latitude, longitude), approaches);
 		camera.approaches.add(Approach.NORTHBOUND);
-	}
-	
-	@Test(expected=IllegalArgumentException.class)
-	public void testCameraLatitudeTooLow() {
-		new Camera(new Location(-90.000001, longitude), approaches);
-	}
-
-	@Test(expected=IllegalArgumentException.class)
-	public void testCameraLatitudeTooHigh() {
-		new Camera(new Location(90.000001, longitude), approaches);
-	}
-
-	@Test(expected=IllegalArgumentException.class)
-	public void testCameraLongitudeTooLow() {
-		new Camera(new Location(latitude, -180.000001), approaches);
-	}
-
-	@Test(expected=IllegalArgumentException.class)
-	public void testCameraLongitudeTooHigh() {
-		new Camera(new Location(latitude, 180.000001), approaches);
 	}
 
 	@Test(expected=IllegalArgumentException.class)

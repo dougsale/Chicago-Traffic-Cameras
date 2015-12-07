@@ -1,13 +1,15 @@
 /**
  * 
  */
-package net.dougsale.chicagotrafficcameras.domain;
+package net.dougsale.chicagotrafficcameras;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import net.dougsale.chicagotrafficcameras.domain.Location;
 
 /**
  * Immutable data class representing the salient portion of the directions
