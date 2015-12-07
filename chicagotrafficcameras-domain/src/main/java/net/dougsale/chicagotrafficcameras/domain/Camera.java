@@ -5,6 +5,7 @@ import static org.apache.commons.lang3.Validate.notNull;
 
 import java.io.Serializable;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -39,7 +40,7 @@ public class Camera implements Serializable {
 			notNull(approach, "invalid approaches: null approach");
 		
 		// ensure the set is immutable
-		this.approaches = Collections.unmodifiableSet(new HashSet<>(approaches));	
+		this.approaches = Collections.unmodifiableSet(EnumSet.copyOf(approaches));	
 	}
 
 	public boolean equals(Object object) {
