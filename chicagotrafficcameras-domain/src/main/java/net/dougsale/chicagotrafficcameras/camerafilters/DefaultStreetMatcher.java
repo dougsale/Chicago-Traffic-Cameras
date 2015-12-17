@@ -2,16 +2,13 @@ package net.dougsale.chicagotrafficcameras.camerafilters;
 
 import static org.apache.commons.lang3.Validate.notEmpty;
 
-import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import net.dougsale.chicagotrafficcameras.CameraFilter;
-import net.dougsale.chicagotrafficcameras.Cameras;
 import net.dougsale.chicagotrafficcameras.domain.Camera;
 import net.dougsale.chicagotrafficcameras.domain.RedLightCamera;
 import net.dougsale.chicagotrafficcameras.domain.SpeedCamera;
-import net.dougsale.chicagotrafficcameras.repository.CamerasRepository;
 
 public class DefaultStreetMatcher implements CameraFilter, StreetMatcher {
 
