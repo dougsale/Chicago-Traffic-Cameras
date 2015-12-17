@@ -11,6 +11,13 @@ import java.util.List;
 import net.dougsale.chicagotrafficcameras.Cameras;
 import net.dougsale.chicagotrafficcameras.webapp.CamerasToJsonSerializer;
 
+/**
+ * Drives the ETL process for Chicago traffic cameras.
+ * Reads the data from the provided CSV files.
+ * Outputs serialized Cameras instance by default (./Cameras.ser).
+ * Accepts one command line argument, the output format: "serializedClass" (the default), or "json"
+ * @author dsale
+ */
 public class ETLDriver {
 
 	static String redLightCameraSource = "Red_Light_Camera_Locations.csv";
