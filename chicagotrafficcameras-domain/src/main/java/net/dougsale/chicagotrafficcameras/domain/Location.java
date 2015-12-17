@@ -36,6 +36,7 @@ public class Location implements Serializable {
 		this.longitude = longitude;
 	}
 
+	@Override
 	public boolean equals(Object object) {
 		if (object == null) return false;
 		if (object == this) return true;
@@ -49,6 +50,7 @@ public class Location implements Serializable {
 			.isEquals();
 	}
 
+	@Override
 	public int hashCode() {
 		// immutable class, calculate hashCode once, lazily
 		if (hashCode == null)
@@ -60,6 +62,7 @@ public class Location implements Serializable {
 		return hashCode;
 	}
 
+	@Override
 	public String toString() {
 		// immutable class, generate toString once, lazily
 		if (toString == null)

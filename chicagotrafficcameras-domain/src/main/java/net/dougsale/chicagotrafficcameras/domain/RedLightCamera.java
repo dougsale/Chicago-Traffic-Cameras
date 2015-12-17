@@ -49,6 +49,7 @@ public class RedLightCamera extends Camera {
 		this.intersection = Collections.unmodifiableSet(new HashSet<>(intersection));
 	}
 
+	@Override
 	public boolean equals(Object object) {
 	   if (object == null) return false;
 	   if (object == this) return true;
@@ -62,6 +63,7 @@ public class RedLightCamera extends Camera {
 	                 .isEquals();
 	}
 
+	@Override
 	public int hashCode() {
 		// immutable class, calculate hashCode once, lazily
 		if (hashCode == null)
@@ -73,6 +75,7 @@ public class RedLightCamera extends Camera {
 		return hashCode;
 	}
 
+	@Override
 	public String toString() {
 		// immutable class, generate toString once, lazily
 		if (toString == null)

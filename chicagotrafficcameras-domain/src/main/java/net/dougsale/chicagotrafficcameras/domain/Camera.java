@@ -45,6 +45,7 @@ public class Camera implements Serializable {
 		this.approaches = Collections.unmodifiableSet(EnumSet.copyOf(approaches));	
 	}
 
+	@Override
 	public boolean equals(Object object) {
 		   if (object == null) return false;
 		   if (object == this) return true;
@@ -58,6 +59,7 @@ public class Camera implements Serializable {
                  .isEquals();
 	}
 	
+	@Override
 	public int hashCode() {
 		// immutable class, calculate hashCode once, lazily
 		if (hashCode == null)
@@ -69,6 +71,7 @@ public class Camera implements Serializable {
 		return hashCode;
 	}
 	
+	@Override
 	public String toString() {
 		// immutable class, generate toString once, lazily
 		if (toString == null)

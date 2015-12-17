@@ -43,6 +43,7 @@ public class SpeedCamera extends Camera {
 		this.address = address;
 	}
 
+	@Override
 	public boolean equals(Object o) {
 	   if (o == null) return false;
 	   if (o == this) return true;
@@ -56,6 +57,7 @@ public class SpeedCamera extends Camera {
 	                 .isEquals();
 	}
 
+	@Override
 	public int hashCode() {
 		// immutable class, calculate hashCode once, lazily
 		if (hashCode == null)
@@ -67,6 +69,7 @@ public class SpeedCamera extends Camera {
 		return hashCode;
 	}
 
+	@Override
 	public String toString() {
 		// immutable class, generate toString once, lazily
 		if (toString == null)
