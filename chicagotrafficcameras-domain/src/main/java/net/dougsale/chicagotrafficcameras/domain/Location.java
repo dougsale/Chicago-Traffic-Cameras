@@ -11,18 +11,19 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 public class Location implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
-	// these are the bounds set by WGS84 (is that the right reference?),
-	// the geospatial scheme used by google
+		
+	// these are the bounds set by WGS84 encoding,
+	// the scheme used by google maps
 	private static double MIN_LATITUDE = -90.0;
 	private static double MAX_LATITUDE = 90.0;
 	private static double MIN_LONGITUDE = -180.0;
 	private static double MAX_LONGITUDE = 180.0;
 
-	// immutable class, so can generate these once, lazily
-	private int hashCode = 0;
+	// immutable class, these values are computed once, lazily
+	// current values indicate that they have not been computed
+	private Integer hashCode = null;
 	private String toString = null;
-
+	
 	public final double latitude;
 	public final double longitude;
 
@@ -50,7 +51,7 @@ public class Location implements Serializable {
 
 	public int hashCode() {
 		// immutable class, calculate hashCode once, lazily
-		if (hashCode  == 0)
+		if (hashCode == null)
 			hashCode = new HashCodeBuilder(19, 73)
 				.append(latitude)
 				.append(longitude)
@@ -67,5 +68,6 @@ public class Location implements Serializable {
 				.append("longitude", longitude)
 				.toString();
 
-		return toString;	}
+		return toString;
+	}
 }

@@ -19,7 +19,9 @@ public class Camera implements Serializable {
 	public final Location location;
 	public final Set<Approach> approaches;
 
-	private int hashCode = 0;
+	// immutable class, these values are computed once, lazily
+	// current values indicate that they have not been computed
+	private Integer hashCode = null;
 	private String toString = null;
 	
 	/**
@@ -29,9 +31,10 @@ public class Camera implements Serializable {
 	 * All fields are final.
 	 * 
 	 * @param location coordinates per the WGS84 standard
-	 * @param approaches at least one approach direction
+	 * @param approach directions, requiring at least one entry
 	 */
 	public Camera(Location location, Set<Approach> approaches) {
+		notNull(location, "invalid location: null");
 		this.location = location;
 
 		notEmpty(approaches, "invalid approaches: null or empty");
@@ -57,7 +60,7 @@ public class Camera implements Serializable {
 	
 	public int hashCode() {
 		// immutable class, calculate hashCode once, lazily
-		if (hashCode  == 0)
+		if (hashCode == null)
 			hashCode = new HashCodeBuilder(19, 73)
 					.append(location)
 					.append(approaches)

@@ -14,11 +14,12 @@ public class CameraTest {
 
 	double latitude = -68.132412;
 	double longitude = 104.345612;
+	Location location = new Location(latitude, longitude);
 	Set<Approach> approaches = EnumSet.of(Approach.EASTBOUND, Approach.SOUTHBOUND);
 
 	@Test
 	public void testCameraBasic() {
-		Camera camera = new Camera(new Location(latitude, longitude), approaches);
+		Camera camera = new Camera(location, approaches);
 		assertThat(latitude, equalTo(camera.location.latitude));
 		assertThat(longitude, equalTo(camera.location.longitude));
 		assertThat(approaches, equalTo(camera.approaches));
@@ -26,24 +27,30 @@ public class CameraTest {
 
 	@Test(expected=UnsupportedOperationException.class)
 	public void testCameraImmutable() {
-		Camera camera = new Camera(new Location(latitude, longitude), approaches);
+		// location is final, attempts to change caught by compiler
+		Camera camera = new Camera(location, approaches);
 		camera.approaches.add(Approach.NORTHBOUND);
 	}
 
+	@Test(expected=NullPointerException.class)
+	public void testCameraNullLocation() {
+		new Camera(null, approaches); 
+	}
+	
 	@Test(expected=IllegalArgumentException.class)
 	public void testCameraEmptyApproach() {
-		new Camera(new Location(latitude, longitude), Collections.emptySet()); 
+		new Camera(location, Collections.emptySet()); 
 	}
 
 	@Test(expected=NullPointerException.class)
 	public void testCameraNullApproachComponent() {
-		new Camera(new Location(latitude, longitude), Collections.singleton(null)); 
+		new Camera(location, Collections.singleton(null)); 
 	}
 	
 	@Test
 	public void testEqualsAndHashCode() {
-		Camera camera1 = new Camera(new Location(latitude, longitude), approaches);
-		Camera camera2 = new Camera(new Location(latitude, longitude), approaches);
+		Camera camera1 = new Camera(location, approaches);
+		Camera camera2 = new Camera(location, approaches);
 		assertThat(camera1, equalTo(camera2));
 		assertThat(camera2, equalTo(camera1));
 		assertThat(camera1.hashCode(), equalTo(camera2.hashCode()));
@@ -56,7 +63,7 @@ public class CameraTest {
 		assertThat(camera1, not(equalTo(camera4)));
 		assertThat(camera4, not(equalTo(camera1)));
 		
-		Camera camera5 = new Camera(new Location(latitude, longitude), Collections.singleton(Approach.WESTBOUND));
+		Camera camera5 = new Camera(location, Collections.singleton(Approach.WESTBOUND));
 		assertThat(camera1, not(equalTo(camera5)));
 		assertThat(camera5, not(equalTo(camera1)));
 	}

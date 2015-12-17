@@ -32,6 +32,9 @@ public class RedLightCameraTest {
 	}
 
 	// immutability
+	// red light camera fields are marked final;  location's member fields are final
+	// their immutability handled by the compiler
+
 	
 	@Test
 	public void testRedLightCameraImmutable() {
@@ -40,6 +43,7 @@ public class RedLightCameraTest {
 		
 		RedLightCamera camera = new RedLightCamera(intersection, location, approaches);
 
+		// should be no effect, these should be copied
 		intersection.clear();
 		approaches.clear();
 		
@@ -84,6 +88,26 @@ public class RedLightCameraTest {
 	@Test(expected=IllegalArgumentException.class)
 	public void testRedLightCameraEmptyIntersectionStreet() {
 		new RedLightCamera(new HashSet<String>(Arrays.asList("", "Foo Way")), location, approaches); 
+	}
+
+	@Test(expected=NullPointerException.class)
+	public void testSpeedCameraNullLocation() {
+		new RedLightCamera(intersection, null, approaches); 
+	}
+
+	@Test(expected=NullPointerException.class)
+	public void testRedLightCameraNullApproaches() {
+		new RedLightCamera(intersection, location, null); 
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void testRedLightCameraEmptyApproaches() {
+		new RedLightCamera(intersection, location, Collections.emptySet()); 
+	}
+
+	@Test(expected=NullPointerException.class)
+	public void testRedLightCameraNullApproachesComponent() {
+		new RedLightCamera(intersection, location, Collections.singleton(null)); 
 	}
 
 	@Test

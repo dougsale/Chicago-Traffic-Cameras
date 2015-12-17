@@ -31,6 +31,8 @@ public class SpeedCameraTest {
 	}
 
 	// immutability 
+	// speed camera fields are marked final;  location's member fields are final
+	// their immutability handled by the compiler
 	
 	@Test
 	public void testRedLightCameraImmutable() {
@@ -38,7 +40,7 @@ public class SpeedCameraTest {
 		
 		SpeedCamera camera = new SpeedCamera(address, location, approaches);
 
-		approaches.clear();
+		approaches.clear(); // clear the provided set - should be copied
 		
 		assertThat(approaches, not(equalTo(camera.approaches)));
 		assertThat(this.approaches, equalTo(camera.approaches));
@@ -46,6 +48,7 @@ public class SpeedCameraTest {
 	
 	@Test(expected=UnsupportedOperationException.class)
 	public void testRedLightCameraIntersectionImmutable() {
+		// approaches set is unmodifiable
 		new SpeedCamera(address, location, approaches).approaches.clear();
 	}
 	
@@ -59,6 +62,26 @@ public class SpeedCameraTest {
 	@Test(expected=IllegalArgumentException.class)
 	public void testSpeedCameraEmptyAddress() {
 		new SpeedCamera("", location, approaches); 
+	}
+
+	@Test(expected=NullPointerException.class)
+	public void testSpeedCameraNullLocation() {
+		new SpeedCamera(address, null, approaches); 
+	}
+
+	@Test(expected=NullPointerException.class)
+	public void testSpeedCameraNullApproaches() {
+		new SpeedCamera(address, location, null); 
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void testSpeedCameraEmptyApproaches() {
+		new SpeedCamera(address, location, Collections.emptySet()); 
+	}
+
+	@Test(expected=NullPointerException.class)
+	public void testSpeedCameraNullApproachesComponent() {
+		new SpeedCamera(address, location, Collections.singleton(null)); 
 	}
 
 	@Test

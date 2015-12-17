@@ -7,12 +7,18 @@ import net.dougsale.chicagotrafficcameras.repository.CamerasRepository;
 public class CameraLocatorService {
 
 	private CameraLocator locator;
+	private Cameras allCameras;
 	
 	public CameraLocatorService() {
 	}
 	
 	public void init() throws ClassNotFoundException, IOException {
-		locator = new CameraLocator(new CamerasRepository("Cameras.ser").getCameras());
+		allCameras = new CamerasRepository("Cameras.ser").getCameras();
+		locator = new CameraLocator(allCameras);
+	}
+	
+	public Cameras locateCameras() {
+		return allCameras;
 	}
 	
 	public Cameras locateCameras(Directions directions) {

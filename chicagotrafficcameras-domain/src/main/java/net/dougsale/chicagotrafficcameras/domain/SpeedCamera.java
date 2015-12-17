@@ -21,7 +21,9 @@ public class SpeedCamera extends Camera {
 
 	public final String address;
 
-	private int hashCode = 0;
+	// immutable class, these values are computed once, lazily
+	// current values indicate that they have not been computed
+	private Integer hashCode = null;
 	private String toString = null;
 	
 	/**
@@ -56,7 +58,7 @@ public class SpeedCamera extends Camera {
 
 	public int hashCode() {
 		// immutable class, calculate hashCode once, lazily
-		if (hashCode == 0)
+		if (hashCode == null)
 			hashCode = new HashCodeBuilder(19, 73)
 					.appendSuper(super.hashCode())
 					.append(address)

@@ -24,7 +24,7 @@ public class RedLightCamera extends Camera {
 
 	public final Set<String> intersection;
 
-	private int hashCode = 0;
+	private Integer hashCode = null;
 	private String toString = null;
 	
 	/**
@@ -64,7 +64,7 @@ public class RedLightCamera extends Camera {
 
 	public int hashCode() {
 		// immutable class, calculate hashCode once, lazily
-		if (hashCode == 0)
+		if (hashCode == null)
 			hashCode = new HashCodeBuilder(19, 73)
 					.appendSuper(super.hashCode())
 					.append(intersection)
