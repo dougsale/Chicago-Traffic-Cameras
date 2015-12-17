@@ -1,11 +1,9 @@
 package net.dougsale.chicagotrafficcameras.camerafilters;
 
+import net.dougsale.chicagotrafficcameras.CameraFilter;
 import net.dougsale.chicagotrafficcameras.domain.Camera;
 
-public interface StreetMatcher {
-
-	boolean accept(Camera camera);
+public interface StreetMatcher extends CameraFilter {
 
 	boolean match(Camera camera);
-
 }
