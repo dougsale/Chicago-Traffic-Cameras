@@ -5,6 +5,7 @@ package net.dougsale.chicagotrafficcameras.domain;
 
 import static org.apache.commons.lang3.Validate.isTrue;
 import static org.apache.commons.lang3.Validate.notEmpty;
+import static org.apache.commons.lang3.Validate.notNull;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -41,10 +42,11 @@ public class RedLightCamera extends Camera {
 		super(location, approaches);
 
 		// validate intersection
-		isTrue(intersection.size() > 1, "invalid intersection: must contain 2 or more streets");
-		for (String street : intersection)
-			notEmpty(street, "invalid intersection: street null or empty");
-		
+		isTrue(intersection.size() > 1, "invalid parameter: intersection; size=" + intersection.size() + " (must contain at least 2 streets");
+		for (String street : intersection) {
+			notNull(street, "invalid parameter: street=" + street);
+			notEmpty(street.trim(), "invalid parameter: street=" + street);
+		}
 		// ensure set is immutable
 		this.intersection = Collections.unmodifiableSet(new HashSet<>(intersection));
 	}

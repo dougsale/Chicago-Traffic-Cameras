@@ -4,6 +4,7 @@
 package net.dougsale.chicagotrafficcameras.domain;
 
 import static org.apache.commons.lang3.Validate.notEmpty;
+import static org.apache.commons.lang3.Validate.notNull;
 
 import java.util.Set;
 
@@ -38,8 +39,8 @@ public class SpeedCamera extends Camera {
 	 */
 	public SpeedCamera(String address, Location location, Set<Approach> approaches) {		
 		super(location, approaches);
-		
-		notEmpty(address, "invalid address: null or empty");
+		notNull(address, "invalid parameter: address=" + address);
+		notEmpty(address.trim(), "invalid parameter: address=" + address);
 		this.address = address;
 	}
 

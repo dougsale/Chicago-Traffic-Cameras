@@ -31,8 +31,8 @@ public class BoundingBox implements CameraFilter {
 	 * @param padding allowed variance, in degrees
 	 */
 	public BoundingBox(Step step, double padding) {
-		notNull(step, "invalid step: null");
-		isTrue(padding >= 0.0, "invalid padding: must be non-negative");
+		notNull(step, "invalid parameter: step=" + step);
+		isTrue(padding >= 0.0, "invalid parameter: padding=" + padding + " (must be >= 0.0)");
 		
 		Location start = step.start;
 		Location end = step.end;
@@ -44,6 +44,7 @@ public class BoundingBox implements CameraFilter {
 	}
 	
 	public boolean inBounds(Camera camera) {
+		notNull(camera, "invalid parameter: camera=" + camera);
 		boolean inBounds = camera.location.latitude >= minLat && camera.location.latitude <= maxLat
 				&& camera.location.longitude >= minLng && camera.location.longitude <= maxLng;
 				

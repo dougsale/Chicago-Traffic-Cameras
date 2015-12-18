@@ -69,7 +69,7 @@ public class Cameras implements Serializable {
 	 * @param camera
 	 */
 	public <T extends Camera> void add(T camera) {
-		notNull(camera, "camera must be non-null");
+		notNull(camera, "invalid parameter: camera=" + camera);
 		
 		@SuppressWarnings("unchecked")
 		Set<T> cameras = (Set<T>) camerasByType.get(camera.getClass());
@@ -96,6 +96,8 @@ public class Cameras implements Serializable {
 	 * @return a set of cameras of the given type
 	 */
 	public  <T extends Camera> Set<T> get(Class<T> type) {
+		notNull(type, "invalid parameter: type=" + type);
+		
 		@SuppressWarnings("unchecked")
 		Set<T> cameras = (Set<T>) camerasByType.get(type);
 		return cameras == null? Collections.emptySet() : Collections.unmodifiableSet(cameras);
@@ -107,7 +109,10 @@ public class Cameras implements Serializable {
 	 * @param sorted the ordering criteria for the given set
 	 * @return a set of cameras of the given type
 	 */
-	public  <T extends Camera> NavigableSet<T> get(Class<T> type, Sorted sorted) {
+	public <T extends Camera> NavigableSet<T> get(Class<T> type, Sorted sorted) {
+		notNull(type, "invalid parameter: type=" + type);
+		notNull(sorted, "invalid parameter: sorted=" + sorted);
+		
 		@SuppressWarnings("unchecked")
 		Set<T> cameras = (Set<T>) camerasByType.get(type);
 		if (cameras == null) {

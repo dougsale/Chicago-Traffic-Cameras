@@ -34,12 +34,12 @@ public class Camera implements Serializable {
 	 * @param approach directions, requiring at least one entry
 	 */
 	public Camera(Location location, Set<Approach> approaches) {
-		notNull(location, "invalid location: null");
+		notNull(location, "invalid parameter: location=" + location);
 		this.location = location;
 
-		notEmpty(approaches, "invalid approaches: null or empty");
+		notEmpty(approaches, "invalid parameter: approaches=" + approaches);
 		for (Approach approach : approaches)
-			notNull(approach, "invalid approaches: null approach");
+			notNull(approach, "invalid parameter: approaches; contains element=" + approaches);
 		
 		// ensure the set is immutable
 		this.approaches = Collections.unmodifiableSet(EnumSet.copyOf(approaches));	

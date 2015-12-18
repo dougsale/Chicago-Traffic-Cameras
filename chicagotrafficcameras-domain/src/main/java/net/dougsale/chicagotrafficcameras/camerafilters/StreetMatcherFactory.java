@@ -45,12 +45,12 @@ public class StreetMatcherFactory {
 	private Map<Step, String> streetForStep;
 	
 	public StreetMatcherFactory(Directions directions) {
-		notNull(directions);
+		notNull(directions, "invalid parameter: directions=" + directions);
 		this.directions = directions;
 	}
 	
 	public StreetMatcher get(Step step) {
-		notNull(step);
+		notNull(step, "invalid parameter: step=" + step);
 		
 		String street = getStreetForStep(step);
 		if (street != null) {

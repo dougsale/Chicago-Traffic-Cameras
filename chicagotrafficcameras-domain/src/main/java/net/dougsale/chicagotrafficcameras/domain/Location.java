@@ -29,8 +29,8 @@ public class Location implements Serializable {
 
 	public Location(double latitude, double longitude) {
 		// validate latitude, longitude within range
-		inclusiveBetween(MIN_LATITUDE, MAX_LATITUDE, latitude);
-		inclusiveBetween(MIN_LONGITUDE, MAX_LONGITUDE, longitude);
+		inclusiveBetween(MIN_LATITUDE, MAX_LATITUDE, latitude, "invalid parameter: latitude=" + latitude + " (out of range)");
+		inclusiveBetween(MIN_LONGITUDE, MAX_LONGITUDE, longitude, "invalid parameter: longitude=" + longitude + " (out of range)");
 
 		this.latitude = latitude;
 		this.longitude = longitude;

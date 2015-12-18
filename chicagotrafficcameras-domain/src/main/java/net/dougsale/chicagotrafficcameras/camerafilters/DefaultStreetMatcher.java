@@ -1,6 +1,7 @@
 package net.dougsale.chicagotrafficcameras.camerafilters;
 
 import static org.apache.commons.lang3.Validate.notEmpty;
+import static org.apache.commons.lang3.Validate.notNull;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,8 +19,9 @@ public class DefaultStreetMatcher implements CameraFilter, StreetMatcher {
 	private String stepStreet;
 
 	public DefaultStreetMatcher(String street) {
-		notEmpty(street);
-		this.stepStreet = street.toLowerCase();
+		notNull(street, "invalid parameter: street=" + street);
+		notEmpty(street.trim(), "invalid parameter: street=" + street);
+		this.stepStreet = street.trim().toLowerCase();
 	}
 
 	/* (non-Javadoc)
@@ -35,6 +37,7 @@ public class DefaultStreetMatcher implements CameraFilter, StreetMatcher {
 	 */
 	@Override
 	public boolean match(Camera camera) {
+		notNull(camera, "invalid parameter: camera=" + camera);
 		
 		boolean match = false;
 		
