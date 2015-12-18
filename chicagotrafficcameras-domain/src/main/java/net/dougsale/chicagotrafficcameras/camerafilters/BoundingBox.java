@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2015 Doug Sale
+ * All rights reserved.
+ */
 package net.dougsale.chicagotrafficcameras.camerafilters;
 
 import static org.apache.commons.lang3.Validate.isTrue;

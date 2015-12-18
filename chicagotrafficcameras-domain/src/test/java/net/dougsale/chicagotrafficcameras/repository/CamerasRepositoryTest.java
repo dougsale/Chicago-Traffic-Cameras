@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2015 Doug Sale
+ * All rights reserved.
+ */
 package net.dougsale.chicagotrafficcameras.repository;
 
 import static org.hamcrest.CoreMatchers.equalTo;

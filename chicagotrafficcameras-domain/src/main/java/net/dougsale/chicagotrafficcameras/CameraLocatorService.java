@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2015 Doug Sale
+ * All rights reserved.
+ */
 package net.dougsale.chicagotrafficcameras;
 
 import java.io.IOException;
