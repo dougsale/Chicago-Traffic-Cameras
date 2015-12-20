@@ -18,14 +18,14 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import net.dougsale.chicagotrafficcameras.domain.Location;
 
 /**
- * Immutable data class representing the salient portion of the directions
- * provided by the Google Maps API.  These directions represent the steps
+ * Immutable data class representing the salient portion of the route
+ * provided by the Google Maps API.  These route represent the steps
  * in a single leg of a driving journey with no waypoints.
  * 
  * @author dsale
  *
  */
-public class Directions {
+public class Route {
 
 	// immutable class, these values are computed once, lazily
 	// current values indicate that they have not been computed
@@ -36,7 +36,7 @@ public class Directions {
 	public final String endAddress;
 	public final List<Step> steps;
 
-	public Directions(String startAddress, String endAddress, List<Step> steps) {
+	public Route(String startAddress, String endAddress, List<Step> steps) {
 		notNull(startAddress, "invalid parameter: startAddress=" + startAddress);
 		notEmpty(startAddress.trim(), "invalid parameter: startAddress=" + startAddress);
 		notNull(endAddress, "invalid parameter: endAddress=" + endAddress);
@@ -68,7 +68,7 @@ public class Directions {
 		if (object == this) return true;
 		if (object.getClass() != getClass()) return false;
 
-		Directions that = (Directions) object;
+		Route that = (Route) object;
    
 		return new EqualsBuilder()
 			.append(startAddress, that.startAddress)

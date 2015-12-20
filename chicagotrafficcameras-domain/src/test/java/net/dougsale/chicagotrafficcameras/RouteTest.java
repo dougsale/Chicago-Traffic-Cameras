@@ -11,10 +11,10 @@ import java.util.List;
 
 import org.junit.Test;
 
-import net.dougsale.chicagotrafficcameras.Directions.Step;
+import net.dougsale.chicagotrafficcameras.Route.Step;
 import net.dougsale.chicagotrafficcameras.domain.Location;
 
-public class DirectionsTest {
+public class RouteTest {
 
 	String startAddress = "123 Start";
 	String endAddress = "789 End";
@@ -24,85 +24,85 @@ public class DirectionsTest {
 	);
 
 	@Test
-	public void testDirections() {
-		Directions directions = new Directions(startAddress, endAddress, steps);
-		assertThat(directions.startAddress, equalTo(startAddress));
-		assertThat(directions.endAddress, equalTo(endAddress));
-		assertThat(directions.steps, equalTo(steps));
+	public void testRoute() {
+		Route route = new Route(startAddress, endAddress, steps);
+		assertThat(route.startAddress, equalTo(startAddress));
+		assertThat(route.endAddress, equalTo(endAddress));
+		assertThat(route.steps, equalTo(steps));
 	}
 	
 	// Immutable tests
 	
 	@Test
-	public void testDirectionsImmutableStepsListParameterCopied() {
+	public void testRouteImmutableStepsListParameterCopied() {
 		List<Step> steps = new ArrayList<>(this.steps);
-		Directions directions = new Directions(startAddress, endAddress, steps);
+		Route route = new Route(startAddress, endAddress, steps);
 		steps.clear();
-		assertThat(directions.steps, equalTo(this.steps));		
+		assertThat(route.steps, equalTo(this.steps));		
 	}
 
 	@Test(expected=UnsupportedOperationException.class)
-	public void testDirectionsImmutableStepsUnmodifiable() {
-		Directions directions = new Directions(startAddress, endAddress, steps);
-		directions.steps.clear();
+	public void testRouteImmutableStepsUnmodifiable() {
+		Route route = new Route(startAddress, endAddress, steps);
+		route.steps.clear();
 	}
 
 	// Invalid parameters tests
 	
 	@Test(expected=NullPointerException.class)
-	public void testDirectionsNullStartAddress() {
-		new Directions(null, endAddress, steps);
+	public void testRouteNullStartAddress() {
+		new Route(null, endAddress, steps);
 	}
 
 	@Test(expected=IllegalArgumentException.class)
-	public void testDirectionsEmptyStartAddress() {
-		new Directions("  ", endAddress, steps);
+	public void testRouteEmptyStartAddress() {
+		new Route("  ", endAddress, steps);
 	}
 
 	@Test(expected=NullPointerException.class)
-	public void testDirectionsNullEndAddress() {
-		new Directions(startAddress, null, steps);
+	public void testRouteNullEndAddress() {
+		new Route(startAddress, null, steps);
 	}
 
 	@Test(expected=IllegalArgumentException.class)
-	public void testDirectionsEmptyEndAddress() {
-		new Directions(startAddress, "  ", steps);
+	public void testRouteEmptyEndAddress() {
+		new Route(startAddress, "  ", steps);
 	}
 
 	@Test(expected=NullPointerException.class)
-	public void testDirectionsNullSteps() {
-		new Directions(startAddress, endAddress, null);
+	public void testRouteNullSteps() {
+		new Route(startAddress, endAddress, null);
 	}
 
 	@Test(expected=IllegalArgumentException.class)
-	public void testDirectionsEmptySteps() {
-		new Directions(startAddress, endAddress, Collections.emptyList());
+	public void testRouteEmptySteps() {
+		new Route(startAddress, endAddress, Collections.emptyList());
 	}
 
 	@Test(expected=NullPointerException.class)
-	public void testDirectionsStepsNullElement() {
-		new Directions(startAddress, endAddress, Arrays.asList((Directions.Step) null));
+	public void testRouteStepsNullElement() {
+		new Route(startAddress, endAddress, Arrays.asList((Route.Step) null));
 	}
 
 	@Test
-	public void testDirectionsEqualsHashCode() {
-		Directions d1 = new Directions(startAddress, endAddress, steps);
-		Directions d2 = new Directions(startAddress, endAddress, steps);
+	public void testRouteEqualsHashCode() {
+		Route d1 = new Route(startAddress, endAddress, steps);
+		Route d2 = new Route(startAddress, endAddress, steps);
 		
 		assertThat(d1, equalTo(d2));
 		assertThat(d2, equalTo(d1));
 		assertThat(d1.hashCode(), equalTo(d2.hashCode()));
 		
-		Directions d3 = new Directions("0 Foo Way", endAddress, steps);
+		Route d3 = new Route("0 Foo Way", endAddress, steps);
 		assertThat(d3, not(equalTo(d1)));
 		
-		Directions d4 = new Directions(startAddress, "0 Foo Way", steps);
+		Route d4 = new Route(startAddress, "0 Foo Way", steps);
 		assertThat(d4, not(equalTo(d1)));
 		
 		List<Step> steps = new ArrayList<>(this.steps);
 		steps.remove(1);
 		
-		Directions d5 = new Directions(startAddress, endAddress, steps);
+		Route d5 = new Route(startAddress, endAddress, steps);
 		assertThat(d5, not(equalTo(d1)));
 	}
 

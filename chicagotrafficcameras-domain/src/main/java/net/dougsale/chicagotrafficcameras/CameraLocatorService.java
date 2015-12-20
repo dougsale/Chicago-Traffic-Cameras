@@ -4,6 +4,8 @@
  */
 package net.dougsale.chicagotrafficcameras;
 
+import static org.apache.commons.lang3.Validate.notNull;
+
 import java.io.IOException;
 
 import net.dougsale.chicagotrafficcameras.repository.CamerasRepository;
@@ -15,7 +17,7 @@ public class CameraLocatorService {
 	
 	public CameraLocatorService() {
 	}
-	
+	// TODO dependency injection
 	public void init() throws ClassNotFoundException, IOException {
 		allCameras = new CamerasRepository("Cameras.ser").getCameras();
 		locator = new CameraLocator(allCameras);
@@ -25,7 +27,8 @@ public class CameraLocatorService {
 		return allCameras;
 	}
 	
-	public Cameras locateCameras(Directions directions) {
-		return locator.locate(directions);
+	public Cameras locateCameras(Route route) {
+		notNull("invalid parameter: route=" + route);
+		return locator.locate(route);
 	}
 }

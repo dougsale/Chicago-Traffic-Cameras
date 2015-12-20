@@ -14,8 +14,8 @@ import java.util.HashSet;
 
 import org.junit.Test;
 
-import net.dougsale.chicagotrafficcameras.Directions;
-import net.dougsale.chicagotrafficcameras.Directions.Step;
+import net.dougsale.chicagotrafficcameras.Route;
+import net.dougsale.chicagotrafficcameras.Route.Step;
 import net.dougsale.chicagotrafficcameras.domain.Approach;
 import net.dougsale.chicagotrafficcameras.domain.Location;
 import net.dougsale.chicagotrafficcameras.domain.RedLightCamera;
@@ -31,7 +31,7 @@ public class BoundingBoxTest {
 
 	@Test(expected=IllegalArgumentException.class)
 	public void testBoundingBoxInvalidPadding() {
-		new BoundingBox(new Directions.Step("instructions", mock(Location.class), mock(Location.class)), -0.01);
+		new BoundingBox(new Route.Step("instructions", mock(Location.class), mock(Location.class)), -0.01);
 	}
 
 	Location cameraLocation = new Location(41.867401834997956, -87.72508368792016);

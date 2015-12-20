@@ -10,17 +10,17 @@ import java.io.IOException;
 
 import net.dougsale.chicagotrafficcameras.domain.mappers.DirectionsFromJsonMapper;
 
-public class DirectionsTestUtility {
+public class TestUtility {
 	
 	private static DirectionsFromJsonMapper mapper = new DirectionsFromJsonMapper();
 	
-	public static Directions getDirections(String json) {
-		Directions directions = null;
+	public static Route getRoute(String json) {
+		Route route = null;
 		try {
-			directions = mapper.map(json);
+			route = mapper.map(json);
 		} catch (IOException e) {
-			fail("directions parse failed: " + e.getMessage());
+			fail("route parse failed: " + e.getMessage());
 		}
-		return directions; // for compiler
+		return route; // for compiler
 	}
 }

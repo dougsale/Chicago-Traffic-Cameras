@@ -16,8 +16,8 @@ import org.junit.Test;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
-import net.dougsale.chicagotrafficcameras.Directions;
-import net.dougsale.chicagotrafficcameras.Directions.Step;
+import net.dougsale.chicagotrafficcameras.Route;
+import net.dougsale.chicagotrafficcameras.Route.Step;
 import net.dougsale.chicagotrafficcameras.domain.Location;
 
 public class DirectionsFromJsonMapperTest {
@@ -47,8 +47,8 @@ public class DirectionsFromJsonMapperTest {
 			new Step("Turn <b>right</b> to stay on <b>N Central Park Ave</b><div style=\"font-size:0.9em\">Destination will be on the right</div>", new Location(41.8884337, -87.71657859999999), new Location(41.8885286, -87.7162669))
 		);
 		
-		Directions directions = new Directions(startAddress, endAddress, steps);
+		Route route = new Route(startAddress, endAddress, steps);
 		
-		assertThat(mapper.map(json), equalTo(directions));
+		assertThat(mapper.map(json), equalTo(route));
 	}
 }

@@ -14,42 +14,65 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.dougsale.chicagotrafficcameras.Directions;
-import net.dougsale.chicagotrafficcameras.Directions.Step;
+import net.dougsale.chicagotrafficcameras.Route;
+import net.dougsale.chicagotrafficcameras.Route.Step;
 import net.dougsale.chicagotrafficcameras.domain.Camera;
 
 /**
+ * StreetMatcherFactory provides appropriate StreetMatcher instances
+ * for a given Step in a Route.  The Route is digested to compute
+ * the appropriate street representation used in the StreetMatcher
+ * instances.  In the case where the StreetMatcherFactory can't 
+ * determine the street representation for a given Step, it returns
+ * a StreetMatcher that always matches; false positives being
+ * better than false negatives.
  * @author dsale
- *
  */
 public class StreetMatcherFactory {
 
+	public static final StreetMatcher streetMatcherAlways =
+		new StreetMatcher() {
+			@Override
+			public boolean accept(Camera camera) { return match(camera); }
+			@Override
+			public boolean match(Camera camera) { return true; }			
+		};
+
+	public static final StreetMatcher streetMatcherNever =
+		new StreetMatcher() {
+			@Override
+			public boolean accept(Camera camera) { return match(camera); }
+			@Override
+			public boolean match(Camera camera) { return true; }			
+		};
+
 	private static final Logger logger = LoggerFactory.getLogger(StreetMatcherFactory.class);
-	
-	static final StreetMatcher streetMatcherAlways =
-			new StreetMatcher() {
-				@Override
-				public boolean accept(Camera camera) { return match(camera); }
-				@Override
-				public boolean match(Camera camera) { return true; }			
-			};
-
-	static final StreetMatcher streetMatcherNever =
-			new StreetMatcher() {
-				@Override
-				public boolean accept(Camera camera) { return match(camera); }
-				@Override
-				public boolean match(Camera camera) { return true; }			
-			};
-
-	private Directions directions;
+			
+	private Route route;
 	private Map<Step, String> streetForStep;
 	
-	public StreetMatcherFactory(Directions directions) {
-		notNull(directions, "invalid parameter: directions=" + directions);
-		this.directions = directions;
+	/**
+	 * Create a StreetMatcherFactory for the given Route instance.
+	 * @param route
+	 */
+	public StreetMatcherFactory(Route route) {
+		notNull(route, "invalid parameter: route=" + route);
+		this.route = route;
 	}
 	
+	/**
+	 * Returns a StreetMatcher instance for the given Step of
+	 * the Route provided in the StreetMatcherFactory
+	 * constructor.
+	 * Note that if the StreetMatcherFactory can't determine an
+	 * appropriate street representation, the StreetMatcher returned
+	 * will always match.
+	 * Note also that if a request contains a Step parameter that isn't
+	 * part of the Route provided in the StreetMatcher constructor, the
+	 * StreetMatcher returned will never match.
+	 * @param step
+	 * @return
+	 */
 	public StreetMatcher get(Step step) {
 		notNull(step, "invalid parameter: step=" + step);
 		
@@ -60,42 +83,43 @@ public class StreetMatcherFactory {
 			if (streetForStep.containsKey(step)) {
 				return streetMatcherAlways;
 			} else {
+				logger.warn("Client requesting StreetMatcher for Step not in Route: step={}; route={}", step, route);
 				return streetMatcherNever;
 			}
 		}
 	}
 
 	/**
-	 * Returns the street driven for the given step.
-	 * Also handles lazy initialization/processing of the directions. 
+	 * Returns the street representation for the given step.
+	 * Also handles lazy initialization/processing of the route. 
 	 * @param step
-	 * @return the street driven for the given step
+	 * @return the street representation for the given step
 	 */
 	String getStreetForStep(Step step) {
 		if (streetForStep == null)
-			streetForStep = createStreetForStepMapping(directions);
+			streetForStep = createStreetForStepMapping(route);
 		
 		return streetForStep.get(step);
 	}
 
 	/**
-	 * Processes the Google-supplied directions and determines the street being navigated
-	 * in each step of the directions.
-	 * @param directions
-	 * @return a mapping between each steps of the directions and the street being navigated
+	 * Processes the route and determines the street being navigated
+	 * in each step of the route.
+	 * @param route
+	 * @return a mapping between each steps of the route and the street being navigated
 	 */
-	Map<Step, String> createStreetForStepMapping(Directions directions) {
+	Map<Step, String> createStreetForStepMapping(Route route) {
 		
 		Map<Step, String> mapping = new HashMap<>();
 		
 		// retrieve the starting street
-		String street = extractStreetFromAddress(directions.startAddress);
+		String street = extractStreetFromAddress(route.startAddress);
 
-		for (Step step : directions.steps) {
+		for (Step step : route.steps) {
 			street = extractStreetFromInstructions(step.instructions, street);
 			
 			if (street == null) {
-				logger.warn("Could not determine street utilized in step in directions: step={}; directions={}", step, directions);
+				logger.warn("Could not determine street utilized in Step of Route: step={}; route={}", step, route);
 			}
 			
 			mapping.put(step, street);
@@ -104,12 +128,24 @@ public class StreetMatcherFactory {
 		return mapping;
 	}
 	
+	/**
+	 * 
+	 * @param address
+	 * @return
+	 */
 	String extractStreetFromAddress(String address) {
 		Matcher matcher = addressPattern.matcher(address);
-		return matcher.matches()? matcher.group(2) : null;
+		if (matcher.matches()) {
+			return matcher.group(2);
+		} else {
+			logger.warn("Failed to extract street from address: address={}", address);
+			return null;
+		}
 	}
 
 	// example start address: 716 S Central Park Ave, Chicago, IL 60624, USA
+	// note that this pattern forces the matcher to store all 6 groups - not necessary,
+	// but likely not a big deal - easy to fix
 	private static final Pattern addressPattern =
 		Pattern.compile(// 1 = addressNumber, 2 = street, 3 = city, 4 = state, 5 = zip, 6 = country
 			"^\\s*(\\d+)\\s+([^,]+),\\s*([^,]+),\\s*([^\\s]+)\\s+([^,]+),\\s*([^\\s]+)\\s*$",

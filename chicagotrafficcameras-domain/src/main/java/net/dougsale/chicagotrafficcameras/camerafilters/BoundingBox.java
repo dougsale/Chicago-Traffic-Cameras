@@ -11,10 +11,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.dougsale.chicagotrafficcameras.CameraFilter;
-import net.dougsale.chicagotrafficcameras.Directions.Step;
+import net.dougsale.chicagotrafficcameras.Route.Step;
 import net.dougsale.chicagotrafficcameras.domain.Camera;
 import net.dougsale.chicagotrafficcameras.domain.Location;
 
+/**
+ * 
+ * @author dsale
+ *
+ */
 public class BoundingBox implements CameraFilter {
 
 	private static final Logger logger = LoggerFactory.getLogger(BoundingBox.class);
@@ -27,11 +32,11 @@ public class BoundingBox implements CameraFilter {
 	/**
 	 * BoundingBox filters cameras that aren't located in a box
 	 * defined the start and the stop of the step parameter and
-	 * a padding value applied equally in all 4 cardinal directions.
+	 * a padding value applied equally in all 4 cardinal route.
 	 * Note that the padding is in degrees and thus isn't equal in absolute
 	 * distance between latitude and longitude.  Over small padding values
 	 * this is considered negligible.
-	 * @param step the step of the route directions
+	 * @param step the step of the route route
 	 * @param padding allowed variance, in degrees
 	 */
 	public BoundingBox(Step step, double padding) {

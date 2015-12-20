@@ -6,7 +6,7 @@ package net.dougsale.chicagotrafficcameras;
 
 import static org.apache.commons.lang3.Validate.notNull;
 
-import net.dougsale.chicagotrafficcameras.Directions.Step;
+import net.dougsale.chicagotrafficcameras.Route.Step;
 import net.dougsale.chicagotrafficcameras.camerafilters.BoundingBox;
 import net.dougsale.chicagotrafficcameras.camerafilters.StreetMatcher;
 import net.dougsale.chicagotrafficcameras.camerafilters.StreetMatcherFactory;
@@ -32,14 +32,14 @@ public class CameraLocator {
 		this.allCameras = cameras;
 	}
 	
-	public Cameras locate(Directions directions) {
-		notNull(directions, "invalid parameter: directions=" + directions);
+	public Cameras locate(Route route) {
+		notNull(route, "invalid parameter: route=" + route);
 		
-		StreetMatcherFactory smFactory = new StreetMatcherFactory(directions);
+		StreetMatcherFactory smFactory = new StreetMatcherFactory(route);
 		
 		Cameras foundCameras = new Cameras();
 		
-		for (Step step : directions.steps) {
+		for (Step step : route.steps) {
 
 			BoundingBox box = new BoundingBox(step, BOX_PADDING);
 			StreetMatcher street = smFactory.get(step);

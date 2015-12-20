@@ -15,6 +15,11 @@ import net.dougsale.chicagotrafficcameras.domain.Camera;
 import net.dougsale.chicagotrafficcameras.domain.RedLightCamera;
 import net.dougsale.chicagotrafficcameras.domain.SpeedCamera;
 
+/**
+ * A CameraFilter instance that determines if a given Step of a Route
+ * matches a street representation.
+ * @author dsale
+ */
 public class DefaultStreetMatcher implements CameraFilter, StreetMatcher {
 
 	private static final Pattern streetExtractorPattern =
@@ -22,6 +27,11 @@ public class DefaultStreetMatcher implements CameraFilter, StreetMatcher {
 	
 	private String stepStreet;
 
+	/**
+	 * Creates a DefaultStreetmatcher instance for a given
+	 * street representation.
+	 * @param street
+	 */
 	public DefaultStreetMatcher(String street) {
 		notNull(street, "invalid parameter: street=" + street);
 		notEmpty(street.trim(), "invalid parameter: street=" + street);

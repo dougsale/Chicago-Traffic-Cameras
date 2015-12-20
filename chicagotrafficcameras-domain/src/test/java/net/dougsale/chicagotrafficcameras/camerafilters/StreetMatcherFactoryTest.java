@@ -19,9 +19,9 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import net.dougsale.chicagotrafficcameras.Directions;
-import net.dougsale.chicagotrafficcameras.Directions.Step;
-import net.dougsale.chicagotrafficcameras.DirectionsTestUtility;
+import net.dougsale.chicagotrafficcameras.Route;
+import net.dougsale.chicagotrafficcameras.Route.Step;
+import net.dougsale.chicagotrafficcameras.TestUtility;
 import net.dougsale.chicagotrafficcameras.domain.Approach;
 import net.dougsale.chicagotrafficcameras.domain.Location;
 import net.dougsale.chicagotrafficcameras.domain.SpeedCamera;
@@ -38,7 +38,7 @@ public class StreetMatcherFactoryTest {
 
 	@Test(expected=NullPointerException.class)
 	public void testGetNullArg() {
-		StreetMatcherFactory factory = new StreetMatcherFactory(mock(Directions.class));
+		StreetMatcherFactory factory = new StreetMatcherFactory(mock(Route.class));
 		factory.get(null);
 	}
 
@@ -49,26 +49,26 @@ public class StreetMatcherFactoryTest {
 			new Step("Make a <b>U-turn</b> at <b>W Superior St</b>", mockLocation, mockLocation),
 			new Step("Lather. Rinse. Repeat.", mockLocation, mockLocation)
 		);
-		Directions directions = new Directions("123 Foo Way", "789 Bar Dr", steps);
-		StreetMatcherFactory factory = new StreetMatcherFactory(directions);
+		Route route = new Route("123 Foo Way", "789 Bar Dr", steps);
+		StreetMatcherFactory factory = new StreetMatcherFactory(route);
 
 		// a step with a street should return a matcher
 		SpeedCamera camera = new SpeedCamera("134 Foo Way", mockLocation, EnumSet.of(Approach.EASTBOUND));
-		StreetMatcher matcher = factory.get(directions.steps.get(0));
+		StreetMatcher matcher = factory.get(route.steps.get(0));
 		assertThat(matcher.match(camera), is(true));
 
 		// a step with an indeterminate street should always match (false positive better than false negative)
-		assertThat(factory.get(directions.steps.get(1)), sameInstance(StreetMatcherFactory.streetMatcherAlways));
+		assertThat(factory.get(route.steps.get(1)), sameInstance(StreetMatcherFactory.streetMatcherAlways));
 
-		// a step not in the directions should never match
+		// a step not in the route should never match
 		assertThat(factory.get(mock(Step.class)), sameInstance(StreetMatcherFactory.streetMatcherNever));
 	}
 
 	@Test
 	public void testGetStreetForStep() {
-		Directions directions = DirectionsTestUtility.getDirections(_201NColumbusDr_4800WGrandAve);
-		StreetMatcherFactory factory = new StreetMatcherFactory(directions);
-		Iterator<Step> iter = directions.steps.iterator();
+		Route route = TestUtility.getRoute(_201NColumbusDr_4800WGrandAve);
+		StreetMatcherFactory factory = new StreetMatcherFactory(route);
+		Iterator<Step> iter = route.steps.iterator();
 		
 		assertThat(factory.getStreetForStep(iter.next()), equalTo("N Columbus Dr"));
 		assertThat(factory.getStreetForStep(iter.next()), equalTo("N Columbus Dr"));
@@ -82,11 +82,11 @@ public class StreetMatcherFactoryTest {
 
 	@Test
 	public void testCreateStreetForStepMapping() {
-		Directions directions = DirectionsTestUtility.getDirections(_201NColumbusDr_4800WGrandAve);
-		StreetMatcherFactory factory = new StreetMatcherFactory(directions);
-		Iterator<Step> iter = directions.steps.iterator();
+		Route route = TestUtility.getRoute(_201NColumbusDr_4800WGrandAve);
+		StreetMatcherFactory factory = new StreetMatcherFactory(route);
+		Iterator<Step> iter = route.steps.iterator();
 
-		Map<Step, String> map = factory.createStreetForStepMapping(directions);
+		Map<Step, String> map = factory.createStreetForStepMapping(route);
 
 		assertThat(map.size(), equalTo(8));
 		assertThat(map.get(iter.next()), equalTo("N Columbus Dr"));
@@ -101,14 +101,14 @@ public class StreetMatcherFactoryTest {
 
 	@Test
 	public void testExtractStreetFromAddress() {
-		StreetMatcherFactory factory = new StreetMatcherFactory(mock(Directions.class));
+		StreetMatcherFactory factory = new StreetMatcherFactory(mock(Route.class));
 		assertThat(factory.extractStreetFromAddress("615 N Ogden Ave, Chicago, IL 60642, USA"), equalTo("N Ogden Ave"));
 		assertThat(factory.extractStreetFromAddress("201 N Columbus Dr, Chicago, IL 60611, USA"), equalTo("N Columbus Dr"));
 	}
 
 	@Test
 	public void testExtractStreetFromInstructions() {
-		StreetMatcherFactory factory = new StreetMatcherFactory(mock(Directions.class));
+		StreetMatcherFactory factory = new StreetMatcherFactory(mock(Route.class));
 		assertThat(factory.extractStreetFromInstructions("Make a <b>U-turn</b> at <b>W Superior St</b>", "Prior St"), equalTo("Prior St"));
 		assertThat(factory.extractStreetFromInstructions("Keep <b>left</b> to continue on <b>Historic U.S. 66 W</b>/<b>W Ogden Ave</b>", null), equalTo("Historic U.S. 66 W/W Ogden Ave"));
 		assertThat(factory.extractStreetFromInstructions("Continue onto <b>I-290 W</b> (signs for <b>I-90</b>)", "Prior St"), equalTo("I-290 W"));

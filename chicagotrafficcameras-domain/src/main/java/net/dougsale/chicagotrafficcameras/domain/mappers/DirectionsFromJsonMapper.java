@@ -16,16 +16,16 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import net.dougsale.chicagotrafficcameras.Directions;
+import net.dougsale.chicagotrafficcameras.Route;
 import net.dougsale.chicagotrafficcameras.domain.Location;
 
 /**
- * DirectionsFromJsonMapper creates an immutable Directions object from Google's JSON representation.
+ * DirectionsFromJsonMapper creates an immutable Route object from Google's JSON representation.
  * <P>
  * Uses Jackson under the hood.  As Jackson requires either publicly available fields,
  * publicly available setter methods, or annotations to inform object construction,
- * DirectionsFromJsonMapper serves to construct the immutable Directions object without polluting the
- * Directions domain with Jackson annotations. 
+ * DirectionsFromJsonMapper serves to construct the immutable Route object without polluting the
+ * Route domain with Jackson annotations. 
  * </P>
  * @author dsale
  *
@@ -42,15 +42,15 @@ public class DirectionsFromJsonMapper {
 	private JsonPointer endLatitudePointer = JsonPointer.valueOf("/end/latitude");
 	private JsonPointer endLongitudePointer = JsonPointer.valueOf("/end/longitude");
 	
-	public Directions map(String json) throws JsonParseException, JsonMappingException, IOException {
+	public Route map(String json) throws JsonParseException, JsonMappingException, IOException {
 		notNull(json, "invalid parameter: json=" + json);
 		notEmpty(json.trim(), "invalid parameter: json=" + json);
 		
 		JsonNode rootNode = objectMapper.readTree(json);
 		JsonNode stepsNode = rootNode.at(stepsPointer);
 
-		List<Directions.Step> steps = new ArrayList<Directions.Step>(); 
-		Directions.Step step;
+		List<Route.Step> steps = new ArrayList<Route.Step>(); 
+		Route.Step step;
 		String instructions;
 		Double startLatitude, startLongitude, endLatitude, endLongitude;
 
@@ -63,7 +63,7 @@ public class DirectionsFromJsonMapper {
 			endLongitude = stepNode.at(endLongitudePointer).asDouble();
 
 			// build step
-			step = new Directions.Step(
+			step = new Route.Step(
 					instructions,
 					new Location(startLatitude, startLongitude),
 					new Location(endLatitude, endLongitude)
@@ -75,8 +75,8 @@ public class DirectionsFromJsonMapper {
 		
 		String startAddress = rootNode.at(startAddressPointer).asText();
 		String endAddress = rootNode.at(endAddressPointer).asText();
-		Directions directions = new Directions(startAddress, endAddress, steps);
+		Route route = new Route(startAddress, endAddress, steps);
 		
-		return directions;
+		return route;
 	}
 }
