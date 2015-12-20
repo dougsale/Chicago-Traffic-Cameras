@@ -8,11 +8,11 @@ import static org.junit.Assert.fail;
 
 import java.io.IOException;
 
-import net.dougsale.chicagotrafficcameras.domain.mappers.DirectionsFromJsonMapper;
+import net.dougsale.chicagotrafficcameras.domain.mappers.RouteFromJsonMapper;
 
 public class TestUtility {
 	
-	private static DirectionsFromJsonMapper mapper = new DirectionsFromJsonMapper();
+	private static RouteFromJsonMapper mapper = new RouteFromJsonMapper();
 	
 	public static Route getRoute(String json) {
 		Route route = null;

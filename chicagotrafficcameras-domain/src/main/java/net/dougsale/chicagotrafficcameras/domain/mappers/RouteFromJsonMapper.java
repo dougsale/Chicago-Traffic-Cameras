@@ -20,17 +20,17 @@ import net.dougsale.chicagotrafficcameras.Route;
 import net.dougsale.chicagotrafficcameras.domain.Location;
 
 /**
- * DirectionsFromJsonMapper creates an immutable Route object from Google's JSON representation.
+ * RouteFromJsonMapper creates an immutable Route object from a JSON representation.
  * <P>
  * Uses Jackson under the hood.  As Jackson requires either publicly available fields,
  * publicly available setter methods, or annotations to inform object construction,
- * DirectionsFromJsonMapper serves to construct the immutable Route object without polluting the
+ * RouteFromJsonMapper serves to construct the immutable Route object without polluting the
  * Route domain with Jackson annotations. 
  * </P>
  * @author dsale
  *
  */
-public class DirectionsFromJsonMapper {
+public class RouteFromJsonMapper {
 	
 	private ObjectMapper objectMapper = new ObjectMapper();
 	private JsonPointer startAddressPointer = JsonPointer.valueOf("/startAddress");

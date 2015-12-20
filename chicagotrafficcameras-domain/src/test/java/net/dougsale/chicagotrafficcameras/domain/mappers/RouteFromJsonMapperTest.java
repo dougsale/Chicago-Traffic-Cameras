@@ -20,9 +20,9 @@ import net.dougsale.chicagotrafficcameras.Route;
 import net.dougsale.chicagotrafficcameras.Route.Step;
 import net.dougsale.chicagotrafficcameras.domain.Location;
 
-public class DirectionsFromJsonMapperTest {
+public class RouteFromJsonMapperTest {
 
-	DirectionsFromJsonMapper mapper = new DirectionsFromJsonMapper();
+	RouteFromJsonMapper mapper = new RouteFromJsonMapper();
 	
 	@Test(expected=NullPointerException.class)
 	public void testMapNullJson() throws JsonParseException, JsonMappingException, IOException {
