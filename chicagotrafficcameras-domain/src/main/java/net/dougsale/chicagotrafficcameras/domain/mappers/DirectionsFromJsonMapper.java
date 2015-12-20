@@ -4,6 +4,8 @@
  */
 package net.dougsale.chicagotrafficcameras.domain.mappers;
 
+import static org.apache.commons.lang3.Validate.*;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +43,9 @@ public class DirectionsFromJsonMapper {
 	private JsonPointer endLongitudePointer = JsonPointer.valueOf("/end/longitude");
 	
 	public Directions map(String json) throws JsonParseException, JsonMappingException, IOException {
-
+		notNull(json, "invalid parameter: json=" + json);
+		notEmpty(json.trim(), "invalid parameter: json=" + json);
+		
 		JsonNode rootNode = objectMapper.readTree(json);
 		JsonNode stepsNode = rootNode.at(stepsPointer);
 
