@@ -7,10 +7,7 @@ package net.dougsale.chicagotrafficcameras.camerafilters;
 import static org.apache.commons.lang3.Validate.isTrue;
 import static org.apache.commons.lang3.Validate.notNull;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import net.dougsale.chicagotrafficcameras.CameraFilter;
+import net.dougsale.chicagotrafficcameras.Cameras;
 import net.dougsale.chicagotrafficcameras.Route.Step;
 import net.dougsale.chicagotrafficcameras.domain.Camera;
 import net.dougsale.chicagotrafficcameras.domain.Location;
@@ -21,8 +18,6 @@ import net.dougsale.chicagotrafficcameras.domain.Location;
  *
  */
 public class BoundingBox implements CameraFilter {
-
-	private static final Logger logger = LoggerFactory.getLogger(BoundingBox.class);
 
 	private double minLat;
 	private double maxLat;
@@ -52,18 +47,22 @@ public class BoundingBox implements CameraFilter {
 		maxLng = Math.max(start.longitude, end.longitude) + padding;						
 	}
 	
-	public boolean inBounds(Camera camera) {
-		notNull(camera, "invalid parameter: camera=" + camera);
-		boolean inBounds = camera.location.latitude >= minLat && camera.location.latitude <= maxLat
-				&& camera.location.longitude >= minLng && camera.location.longitude <= maxLng;
-				
-		logger.debug("inBounds = {} for camera ({})", inBounds, camera);
-		
-		return inBounds;
+	@Override
+	public Cameras filter(Cameras cameras) {
+		Cameras filtered = new Cameras();
+//		for (Camera camera : cameras.get(comparator))
+		return null;
 	}
 
 	@Override
 	public boolean accept(Camera camera) {
 		return inBounds(camera);
+	}
+
+	public boolean inBounds(Camera camera) {
+		notNull(camera, "invalid parameter: camera=" + camera);
+		boolean inBounds = camera.location.latitude >= minLat && camera.location.latitude <= maxLat
+				&& camera.location.longitude >= minLng && camera.location.longitude <= maxLng;
+		return inBounds;
 	}
 }

@@ -28,12 +28,10 @@ import net.dougsale.chicagotrafficcameras.domain.Camera;
  * better than false negatives.
  * @author dsale
  */
-public class StreetMatcherFactory {
+public class StreetMatcherFactory implements CameraFilterFactory {
 
 	public static final StreetMatcher streetMatcherAlways =
 		new StreetMatcher() {
-			@Override
-			public boolean accept(Camera camera) { return match(camera); }
 			@Override
 			public boolean match(Camera camera) { return true; }			
 		};
@@ -41,25 +39,28 @@ public class StreetMatcherFactory {
 	public static final StreetMatcher streetMatcherNever =
 		new StreetMatcher() {
 			@Override
-			public boolean accept(Camera camera) { return match(camera); }
-			@Override
-			public boolean match(Camera camera) { return true; }			
+			public boolean match(Camera camera) { return false; }			
 		};
 
 	private static final Logger logger = LoggerFactory.getLogger(StreetMatcherFactory.class);
 			
+	private final Map<Step, String> streetForStep = new HashMap<>();
 	private Route route;
-	private Map<Step, String> streetForStep;
 	
-	/**
-	 * Create a StreetMatcherFactory for the given Route instance.
-	 * @param route
-	 */
-	public StreetMatcherFactory(Route route) {
+	@Override
+	public void setRoute(Route route) {
 		notNull(route, "invalid parameter: route=" + route);
 		this.route = route;
+		map(streetForStep, route);
 	}
-	
+
+	/**
+	 */
+	@Override
+	public CameraFilter getCameraFilter(Step step) {
+		return getStreetMatcher(step);
+	}
+
 	/**
 	 * Returns a StreetMatcher instance for the given Step of
 	 * the Route provided in the StreetMatcherFactory
@@ -73,12 +74,12 @@ public class StreetMatcherFactory {
 	 * @param step
 	 * @return
 	 */
-	public StreetMatcher get(Step step) {
+	public StreetMatcher getStreetMatcher(Step step) {
 		notNull(step, "invalid parameter: step=" + step);
 		
-		String street = getStreetForStep(step);
+		String street = streetForStep.get(step);
 		if (street != null) {
-			return new DefaultStreetMatcher(street);
+			return new StreetMatcher(street);
 		} else {
 			if (streetForStep.containsKey(step)) {
 				return streetMatcherAlways;
@@ -90,27 +91,13 @@ public class StreetMatcherFactory {
 	}
 
 	/**
-	 * Returns the street representation for the given step.
-	 * Also handles lazy initialization/processing of the route. 
-	 * @param step
-	 * @return the street representation for the given step
-	 */
-	String getStreetForStep(Step step) {
-		if (streetForStep == null)
-			streetForStep = createStreetForStepMapping(route);
-		
-		return streetForStep.get(step);
-	}
-
-	/**
 	 * Processes the route and determines the street being navigated
 	 * in each step of the route.
 	 * @param route
-	 * @return a mapping between each steps of the route and the street being navigated
 	 */
-	Map<Step, String> createStreetForStepMapping(Route route) {
+	void map(Map<Step, String> streetForStep, Route route) {
 		
-		Map<Step, String> mapping = new HashMap<>();
+		streetForStep.clear();
 		
 		// retrieve the starting street
 		String street = extractStreetFromAddress(route.startAddress);
@@ -122,10 +109,8 @@ public class StreetMatcherFactory {
 				logger.warn("Could not determine street utilized in Step of Route: step={}; route={}", step, route);
 			}
 			
-			mapping.put(step, street);
+			streetForStep.put(step, street);
 		}
-
-		return mapping;
 	}
 	
 	/**
@@ -136,7 +121,7 @@ public class StreetMatcherFactory {
 	String extractStreetFromAddress(String address) {
 		Matcher matcher = addressPattern.matcher(address);
 		if (matcher.matches()) {
-			return matcher.group(2);
+			return matcher.group(1);
 		} else {
 			logger.warn("Failed to extract street from address: address={}", address);
 			return null;
@@ -144,11 +129,11 @@ public class StreetMatcherFactory {
 	}
 
 	// example start address: 716 S Central Park Ave, Chicago, IL 60624, USA
-	// note that this pattern forces the matcher to store all 6 groups - not necessary,
-	// but likely not a big deal - easy to fix
 	private static final Pattern addressPattern =
-		Pattern.compile(// 1 = addressNumber, 2 = street, 3 = city, 4 = state, 5 = zip, 6 = country
-			"^\\s*(\\d+)\\s+([^,]+),\\s*([^,]+),\\s*([^\\s]+)\\s+([^,]+),\\s*([^\\s]+)\\s*$",
+		// if remove "?:", groups would be: 1 = addressNumber, 2 = street, 3 = city, 4 = state, 5 = zip, 6 = country
+		// imposes unnecessary storage on each matcher, so just 1 group - the street
+		Pattern.compile(
+			"^\\s*(?:\\d+)\\s+([^,]+),\\s*(?:[^,]+),\\s*(?:[^\\s]+)\\s+(?:[^,]+),\\s*(?:[^\\s]+)\\s*$",
 			Pattern.CASE_INSENSITIVE
 		);
 

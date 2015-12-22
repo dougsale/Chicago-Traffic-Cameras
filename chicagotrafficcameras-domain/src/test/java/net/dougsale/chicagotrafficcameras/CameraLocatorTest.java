@@ -18,6 +18,8 @@ import java.util.Set;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import net.dougsale.chicagotrafficcameras.camerafilters.BoundingBoxFactory;
+import net.dougsale.chicagotrafficcameras.camerafilters.StreetMatcherFactory;
 import net.dougsale.chicagotrafficcameras.domain.Approach;
 import net.dougsale.chicagotrafficcameras.domain.Location;
 import net.dougsale.chicagotrafficcameras.domain.RedLightCamera;
@@ -56,7 +58,30 @@ public class CameraLocatorTest {
 		assertThat(located.get(RedLightCamera.class).size(), equalTo(0));
 		assertThat(located.get(SpeedCamera.class).size(), equalTo(2));
 		
-		NavigableSet<SpeedCamera> cameras = located.get(SpeedCamera.class, Cameras.Sorted.BY_LATITUDE);
+		NavigableSet<SpeedCamera> cameras = located.get(SpeedCamera.class, Cameras.BY_LATITUDE);
+		Iterator<SpeedCamera> iter = cameras.iterator();
+		assertThat(iter.next(), equalTo(
+				new SpeedCamera("2900 W Ogden Ave", new Location(41.86040786445197, -87.69867209877323),
+						EnumSet.of(Approach.EASTBOUND, Approach.WESTBOUND))));
+		assertThat(iter.next(), equalTo(
+				new SpeedCamera("115 N Ogden", new Location(41.883191521391076, -87.66411469955516),
+						EnumSet.of(Approach.NORTHBOUND, Approach.SOUTHBOUND))));
+	}
+	
+	@Test
+	public void testLocateCameras_615_N_Ogden_Ave_3315_W_Ogden_Ave_newLocate() {
+		// route with large diagonal steps, i.e., large bounding boxes; so taxes street matcher filtering
+		
+		String json = "{\"startAddress\":\"615 N Ogden Ave, Chicago, IL 60642, USA\",\"endAddress\":\"3315 W Ogden Ave, Chicago, IL 60623, USA\",\"steps\":[{\"instructions\":\"Head <b>northeast</b> on <b>N Ogden Ave</b> toward <b>W Erie St</b>\",\"start\":{\"latitude\":41.8929664,\"longitude\":-87.65731360000001},\"end\":{\"latitude\":41.8949373,\"longitude\":-87.65565119999997}},{\"instructions\":\"Make a <b>U-turn</b> at <b>W Superior St</b>\",\"start\":{\"latitude\":41.8949373,\"longitude\":-87.65565119999997},\"end\":{\"latitude\":41.8666981,\"longitude\":-87.6836672}},{\"instructions\":\"Keep <b>left</b> to continue on <b>Historic U.S. 66 W</b>/<b>W Ogden Ave</b>\",\"start\":{\"latitude\":41.8666981,\"longitude\":-87.6836672},\"end\":{\"latitude\":41.8571103,\"longitude\":-87.7078085}},{\"instructions\":\"Keep <b>right</b> to continue on <b>W Ogden Ave</b>\",\"start\":{\"latitude\":41.8571103,\"longitude\":-87.7078085},\"end\":{\"latitude\":41.8567775,\"longitude\":-87.7090442}},{\"instructions\":\"Make a <b>U-turn</b> at <b>S Christiana Ave</b><div style=\\\"font-size:0.9em\\\">Destination will be on the right</div>\",\"start\":{\"latitude\":41.8567775,\"longitude\":-87.7090442},\"end\":{\"latitude\":41.8566225,\"longitude\":-87.70858179999999}}]}";
+		Route route = TestUtility.getRoute(json);
+
+		CameraLocator locator = new CameraLocator(cameras, new BoundingBoxFactory(0.0003), new StreetMatcherFactory());
+		Cameras located = locator.newLocate(route);
+		
+		assertThat(located.get(RedLightCamera.class).size(), equalTo(0));
+		assertThat(located.get(SpeedCamera.class).size(), equalTo(2));
+		
+		NavigableSet<SpeedCamera> cameras = located.get(SpeedCamera.class, Cameras.BY_LATITUDE);
 		Iterator<SpeedCamera> iter = cameras.iterator();
 		assertThat(iter.next(), equalTo(
 				new SpeedCamera("2900 W Ogden Ave", new Location(41.86040786445197, -87.69867209877323),
@@ -86,7 +111,7 @@ public class CameraLocatorTest {
 						new Location(41.891002, -87.620224),
 						EnumSet.of(Approach.NORTHBOUND, Approach.SOUTHBOUND))));
 
-		NavigableSet<SpeedCamera> spCameras = located.get(SpeedCamera.class, Cameras.Sorted.BY_LONGITUDE);
+		NavigableSet<SpeedCamera> spCameras = located.get(SpeedCamera.class, Cameras.BY_LONGITUDE);
 		Iterator<SpeedCamera> spIter = spCameras.iterator();
 		assertThat(spIter.next(), equalTo(
 				new SpeedCamera("450 N Columbus Dr", new Location(41.890122352505166, -87.62041639513696),

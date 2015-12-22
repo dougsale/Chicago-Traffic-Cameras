@@ -20,16 +20,16 @@ import net.dougsale.chicagotrafficcameras.domain.Location;
 import net.dougsale.chicagotrafficcameras.domain.RedLightCamera;
 import net.dougsale.chicagotrafficcameras.domain.SpeedCamera;
 
-public class DefaultStreetMatcherTest {
+public class StreetMatcherTest {
 
 	@Test(expected=NullPointerException.class)
 	public void testDefaultStreetMatcherNullStreet() {
-		new DefaultStreetMatcher(null);
+		new StreetMatcher(null);
 	}
 
 	@Test(expected=IllegalArgumentException.class)
 	public void testDefaultStreetMatcherEmptyStreet() {
-		new DefaultStreetMatcher("");
+		new StreetMatcher("");
 	}
 
 	@Test
@@ -37,20 +37,20 @@ public class DefaultStreetMatcherTest {
 		{
 			RedLightCamera rlCamera = new RedLightCamera(
 				new HashSet<String>(Arrays.asList("Madison", "Ashland")), mock(Location.class), EnumSet.of(Approach.EASTBOUND));
-			assertThat(new DefaultStreetMatcher("N Ashland Ave").accept(rlCamera), is(true));
+			assertThat(new StreetMatcher("N Ashland Ave").accept(rlCamera), is(true));
 	
 			SpeedCamera spCamera = new SpeedCamera(
 				"123 Ashland Ave", mock(Location.class), EnumSet.of(Approach.EASTBOUND));
-			assertThat(new DefaultStreetMatcher("N Ashland Ave").accept(spCamera), is(true));
+			assertThat(new StreetMatcher("N Ashland Ave").accept(spCamera), is(true));
 		}
 		{
 			RedLightCamera rlCamera = new RedLightCamera(
 				new HashSet<String>(Arrays.asList("Madison", "Western")), mock(Location.class), EnumSet.of(Approach.EASTBOUND));
-			assertThat(new DefaultStreetMatcher("N Ashland Ave").accept(rlCamera), is(false));
+			assertThat(new StreetMatcher("N Ashland Ave").accept(rlCamera), is(false));
 	
 			SpeedCamera spCamera = new SpeedCamera(
 				"123 Madison Ave", mock(Location.class), EnumSet.of(Approach.EASTBOUND));
-			assertThat(new DefaultStreetMatcher("N Ashland Ave").accept(spCamera), is(false));
+			assertThat(new StreetMatcher("N Ashland Ave").accept(spCamera), is(false));
 		}
 	}
 
@@ -59,26 +59,26 @@ public class DefaultStreetMatcherTest {
 		{
 			RedLightCamera rlCamera = new RedLightCamera(
 				new HashSet<String>(Arrays.asList("Madison", "Ashland")), mock(Location.class), EnumSet.of(Approach.EASTBOUND));
-			assertThat(new DefaultStreetMatcher("N Ashland Ave").match(rlCamera), is(true));
+			assertThat(new StreetMatcher("N Ashland Ave").match(rlCamera), is(true));
 	
 			SpeedCamera spCamera = new SpeedCamera(
 				"123 Ashland Ave", mock(Location.class), EnumSet.of(Approach.EASTBOUND));
-			assertThat(new DefaultStreetMatcher("N Ashland Ave").match(spCamera), is(true));
+			assertThat(new StreetMatcher("N Ashland Ave").match(spCamera), is(true));
 		}
 		{
 			RedLightCamera rlCamera = new RedLightCamera(
 				new HashSet<String>(Arrays.asList("Madison", "Western")), mock(Location.class), EnumSet.of(Approach.EASTBOUND));
-			assertThat(new DefaultStreetMatcher("N Ashland Ave").match(rlCamera), is(false));
+			assertThat(new StreetMatcher("N Ashland Ave").match(rlCamera), is(false));
 	
 			SpeedCamera spCamera = new SpeedCamera(
 				"123 Madison Ave", mock(Location.class), EnumSet.of(Approach.EASTBOUND));
-			assertThat(new DefaultStreetMatcher("N Ashland Ave").match(spCamera), is(false));
+			assertThat(new StreetMatcher("N Ashland Ave").match(spCamera), is(false));
 		}
 	}
 
 	@Test
 	public void testStreetForAddress() {
-		DefaultStreetMatcher matcher = new DefaultStreetMatcher("foo");	
+		StreetMatcher matcher = new StreetMatcher("foo");	
 		assertThat(matcher.streetForAddress("123 Ashland Ave "), equalTo("Ashland Ave"));
 		assertThat(matcher.streetForAddress("2448 N Clybourn Ave "), equalTo("Clybourn Ave"));
 		assertThat(matcher.streetForAddress(" 115 N Ogden"), equalTo("Ogden"));
