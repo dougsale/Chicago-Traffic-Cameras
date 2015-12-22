@@ -7,7 +7,6 @@ package net.dougsale.chicagotrafficcameras;
 import static org.apache.commons.lang3.Validate.notNull;
 
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -18,46 +17,27 @@ import java.util.TreeSet;
 import net.dougsale.chicagotrafficcameras.domain.Camera;
 
 /**
- * A container for cameras, allowing retrieval of cameras by type, with or without imposed ordering
+ * Cameras is a container for Camera instances.
  * @author dsale
  */
 public class Cameras implements Serializable {
 	
-	public enum Sorted {
-		BY_LATITUDE(new Comparator<Camera>() {
-			@Override
-			public int compare(Camera c1, Camera c2) {
-				return (c1.location.latitude < c2.location.latitude)? -1 : (c1.location.latitude > c2.location.latitude)? 1 : 0;
-			}			
-		}),
-		BY_LONGITUDE(new Comparator<Camera>() {
-			@Override
-			public int compare(Camera c1, Camera c2) {
-				return (c1.location.longitude < c2.location.longitude)? -1 : (c1.location.longitude > c2.location.longitude)? 1 : 0;
-			}			
-		}),
-		BY_LATITUDE_DECREASING(new Comparator<Camera>() {
-			@Override
-			public int compare(Camera c1, Camera c2) {
-				return (c1.location.latitude < c2.location.latitude)? 1 : (c1.location.latitude > c2.location.latitude)? -1 : 0;
-			}			
-		}),
-		BY_LONGITUDE_DECREASING(new Comparator<Camera>() {
-			@Override
-			public int compare(Camera c1, Camera c2) {
-				return (c1.location.longitude < c2.location.longitude)? 1 : (c1.location.longitude > c2.location.longitude)? -1 : 0;
-			}			
-		});
-		
-		final Comparator<Camera> comparator;
-		
-		Sorted(Comparator<Camera> comparator) {
-			this.comparator = comparator;
-		}
-	}
-	
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 
+	public static final Comparator<Camera> BY_LATITUDE = new Comparator<Camera>() {
+		@Override
+		public int compare(Camera c1, Camera c2) {
+			return (c1.location.latitude < c2.location.latitude)? -1 : (c1.location.latitude > c2.location.latitude)? 1 : 0;
+		}
+	};
+			
+	public static final Comparator<Camera> BY_LONGITUDE = new Comparator<Camera>() {
+		@Override
+		public int compare(Camera c1, Camera c2) {
+			return (c1.location.longitude < c2.location.longitude)? -1 : (c1.location.longitude > c2.location.longitude)? 1 : 0;
+		}			
+	};
+	
 	private HashMap<Class<? extends Camera>, Set<? extends Camera>> camerasByType = new HashMap<>();
 
 	/**
@@ -66,63 +46,98 @@ public class Cameras implements Serializable {
 	public Cameras() {}
 	
 	/**
-	 * Add a camera to this Cameras container.
+	 * Add a Camera to this Cameras container.
 	 * @param camera
+	 * @throws NullPointerException if camera is null
 	 */
+	@SuppressWarnings("unchecked")
 	public <T extends Camera> void add(T camera) {
-		notNull(camera, "invalid parameter: camera=" + camera);
+		notNull(camera, "invalid parameter: camera=null");
 		
-		@SuppressWarnings("unchecked")
-		Set<T> cameras = (Set<T>) camerasByType.get(camera.getClass());
+		Class<? extends Camera> type = camera.getClass();
+		
+		if (!camerasByType.containsKey(type))
+			camerasByType.put(type, new HashSet<T>());
 
-		if (cameras == null) {
-			cameras = new HashSet<T>();
-			camerasByType.put(camera.getClass(), cameras);
-		}
-		
-		cameras.add(camera);	
+		((Set<T>)camerasByType.get(type)).add(camera);
 	}
-	
+		
 	/**
-	 * Returns the set of camera types contained in this Cameras instance.
-	 * @return the set of camera types
+	 * Returns the Set of Camera types in this Cameras container.
+	 * @return the Set of Camera types
 	 */
 	public Set<Class<? extends Camera>> getTypes() {
-		return Collections.unmodifiableSet(camerasByType.keySet());
+		Set<Class<? extends Camera>> types = new HashSet<>();
+		types.addAll(camerasByType.keySet());
+		return types;
 	}
 
 	/**
-	 * Retrieves a Set of all cameras of the given type contained in this Cameras instance.
-	 * @param type a camera subclass
-	 * @return a set of cameras of the given type
+	 * Returns the Set of all Camera instances in this Cameras container.
+	 * @return the Set of all Camera instances
 	 */
-	public  <T extends Camera> Set<T> get(Class<T> type) {
-		notNull(type, "invalid parameter: type=" + type);
+	public Set<Camera> get() {
+		Set<Camera> cameras = new HashSet<>();
 		
-		@SuppressWarnings("unchecked")
-		Set<T> cameras = (Set<T>) camerasByType.get(type);
-		return cameras == null? Collections.emptySet() : Collections.unmodifiableSet(cameras);
+		for (Class<? extends Camera> type : camerasByType.keySet())
+			cameras.addAll(camerasByType.get(type));
+		
+		return cameras;
 	}
 	
 	/**
-	 * Retrieves a NavigableSet of all cameras of the given type contained in this Cameras instance.
-	 * @param type a camera subclass
-	 * @param sorted the ordering criteria for the given set
-	 * @return a set of cameras of the given type
+	 * Returns the NavigableSet of all Camera instances in this Cameras container. 
+	 * @param comparator used to order the set
+	 * @return the NavigableSet of all Camera instances
+	 * @throws NullPointerException if comparator is null
 	 */
-	public <T extends Camera> NavigableSet<T> get(Class<T> type, Sorted sorted) {
-		notNull(type, "invalid parameter: type=" + type);
-		notNull(sorted, "invalid parameter: sorted=" + sorted);
+	public NavigableSet<Camera> get(Comparator<? super Camera> comparator) {
+		notNull(comparator, "invalid parameter: comparator=null");
 		
-		@SuppressWarnings("unchecked")
-		Set<T> cameras = (Set<T>) camerasByType.get(type);
-		if (cameras == null) {
-			return new TreeSet<T>();
-		}
-		else {
-			TreeSet<T> sortedCameras = new TreeSet<>(sorted.comparator);
-			sortedCameras.addAll(cameras);
-			return sortedCameras;
-		}
-	}	
+		NavigableSet<Camera> cameras = new TreeSet<>(comparator);
+		
+		for (Class<? extends Camera> type : camerasByType.keySet())
+			cameras.addAll(camerasByType.get(type));
+		
+		return cameras;
+	}
+	
+	/**
+	 * Returns the Set of all Camera instances of type in this Cameras container.
+	 * @param type a camera type
+	 * @return the Set of all Camera instances of type
+	 * @throws NullPointerException if type is null
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends Camera> Set<T> get(Class<T> type) {
+		notNull(type, "invalid parameter: type=null");
+		
+		Set<T> cameras = new HashSet<>();
+
+		if (camerasByType.containsKey(type))
+			cameras.addAll((Set<T>)camerasByType.get(type));
+
+		return cameras;
+	}
+	
+	/**
+	 * Returns the NavigableSet of all Camera instances of type in this Cameras container. 
+	 * @param type a camera type
+	 * @param comparator used to order the set
+	 * @return the NavigableSet of all Camera instances of type
+	 * @throws NullPointerException if type is null or comparator is null
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends Camera> NavigableSet<T> get(Class<T> type, Comparator<? super T> comparator) {
+		notNull(type, "invalid parameter: type=null");
+		notNull(comparator, "invalid parameter: comparator=null");
+		
+		NavigableSet<T> cameras = new TreeSet<>(comparator);
+		
+		if (camerasByType.containsKey(type))
+			cameras.addAll((Set<T>)camerasByType.get(type));
+
+		return cameras;
+	}
+	
 }
