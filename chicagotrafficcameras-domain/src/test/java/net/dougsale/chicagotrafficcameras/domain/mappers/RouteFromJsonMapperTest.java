@@ -16,8 +16,8 @@ import org.junit.Test;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
-import net.dougsale.chicagotrafficcameras.Route;
-import net.dougsale.chicagotrafficcameras.Route.Step;
+import net.dougsale.chicagotrafficcameras.domain.Route;
+import net.dougsale.chicagotrafficcameras.domain.Route.Step;
 import net.dougsale.chicagotrafficcameras.domain.Location;
 
 public class RouteFromJsonMapperTest {

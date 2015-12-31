@@ -1,4 +1,4 @@
-package net.dougsale.chicagotrafficcameras;
+package net.dougsale.chicagotrafficcameras.domain;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
@@ -11,8 +11,9 @@ import java.util.List;
 
 import org.junit.Test;
 
-import net.dougsale.chicagotrafficcameras.Route.Step;
 import net.dougsale.chicagotrafficcameras.domain.Location;
+import net.dougsale.chicagotrafficcameras.domain.Route;
+import net.dougsale.chicagotrafficcameras.domain.Route.Step;
 
 public class RouteTest {
 

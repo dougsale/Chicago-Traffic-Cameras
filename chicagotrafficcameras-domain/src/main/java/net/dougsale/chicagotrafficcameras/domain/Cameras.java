@@ -2,7 +2,7 @@
  * Copyright (c) 2015 Doug Sale
  * All rights reserved.
  */
-package net.dougsale.chicagotrafficcameras;
+package net.dougsale.chicagotrafficcameras.domain;
 
 import static org.apache.commons.lang3.Validate.notNull;
 
@@ -16,8 +16,6 @@ import java.util.TreeSet;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-
-import net.dougsale.chicagotrafficcameras.domain.Camera;
 
 /**
  * Cameras is a container for Camera instances.
