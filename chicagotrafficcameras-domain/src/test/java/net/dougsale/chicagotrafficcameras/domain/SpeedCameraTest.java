@@ -10,7 +10,6 @@ import static org.junit.Assert.assertThat;
 
 import java.util.Collections;
 import java.util.EnumSet;
-import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.Test;
@@ -26,36 +25,30 @@ public class SpeedCameraTest {
 	// constructor 
 	
 	@Test
-	public void testSpeedCameraBasic() {
+	public void testSpeedCamera() {
 		SpeedCamera camera = new SpeedCamera(address, location, approaches);
 		assertThat(address, equalTo(camera.address));
-		assertThat(latitude, equalTo(camera.location.latitude));
-		assertThat(longitude, equalTo(camera.location.longitude));
-		assertThat(approaches, equalTo(camera.approaches));
+		assertThat(location, equalTo(camera.getLocation()));
+		assertThat(approaches, equalTo(camera.getApproaches()));
 	}
 
 	// immutability 
-	// speed camera fields are marked final;  location's member fields are final
-	// their immutability handled by the compiler
 	
 	@Test
-	public void testRedLightCameraImmutable() {
-		Set<Approach> approaches = new HashSet<Approach>(this.approaches);
-		
+	public void testSpeedCameraImmutableApproachesParameterCopied() {
+		Set<Approach> approaches = EnumSet.copyOf(this.approaches);
 		SpeedCamera camera = new SpeedCamera(address, location, approaches);
+		approaches.clear();
+		assertThat(camera.getApproaches(), not(equalTo(approaches)));
+		assertThat(camera.getApproaches(), equalTo(this.approaches));
+	}
 
-		approaches.clear(); // clear the provided set - should be copied
-		
-		assertThat(approaches, not(equalTo(camera.approaches)));
-		assertThat(this.approaches, equalTo(camera.approaches));
-	}
-	
 	@Test(expected=UnsupportedOperationException.class)
-	public void testRedLightCameraIntersectionImmutable() {
-		// approaches set is unmodifiable
-		new SpeedCamera(address, location, approaches).approaches.clear();
+	public void testSpeedCameraImmutableApproachesUnmodifiable() {
+		SpeedCamera camera = new SpeedCamera(address, location, approaches);
+		camera.getApproaches().add(Approach.NORTHBOUND);
 	}
-	
+
 	// validate constructor parameters
 	
 	@Test(expected=NullPointerException.class)

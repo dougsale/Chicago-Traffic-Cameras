@@ -1,5 +1,7 @@
 package net.dougsale.chicagotrafficcameras.camerafilters;
 
+import java.util.Map;
+
 import net.dougsale.chicagotrafficcameras.Route;
 import net.dougsale.chicagotrafficcameras.Route.Step;
 
@@ -12,16 +14,9 @@ import net.dougsale.chicagotrafficcameras.Route.Step;
 public interface CameraFilterFactory {
 	
 	/**
-	 * Sets the route.  Any subsequent calls to getCameraFilter(Step step)
-	 * will be based on this route.
+	 * Returns CameraFilters for each Step in the Route.
 	 * @param route
+	 * @returns a Map of CameraFilters by Step
 	 */
-	void setRoute(Route route);
-	
-	/**
-	 * Return a CameraFilter for the given Step.
-	 * @param step
-	 * @return a CameraFilter instance
-	 */
-	CameraFilter getCameraFilter(Step step);
+	Map<Step,CameraFilter> getCameraFilters(Route route);
 }

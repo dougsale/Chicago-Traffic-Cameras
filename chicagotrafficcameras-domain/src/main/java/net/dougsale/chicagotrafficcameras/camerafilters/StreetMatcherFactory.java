@@ -30,87 +30,48 @@ import net.dougsale.chicagotrafficcameras.domain.Camera;
  */
 public class StreetMatcherFactory implements CameraFilterFactory {
 
+	private static final Logger logger = LoggerFactory.getLogger(StreetMatcherFactory.class);
+	
 	public static final StreetMatcher streetMatcherAlways =
 		new StreetMatcher() {
 			@Override
-			public boolean match(Camera camera) { return true; }			
+			public boolean accept(Camera camera) { return true; }			
 		};
 
-	public static final StreetMatcher streetMatcherNever =
-		new StreetMatcher() {
-			@Override
-			public boolean match(Camera camera) { return false; }			
-		};
-
-	private static final Logger logger = LoggerFactory.getLogger(StreetMatcherFactory.class);
-			
-	private final Map<Step, String> streetForStep = new HashMap<>();
-	private Route route;
-	
-	@Override
-	public void setRoute(Route route) {
-		notNull(route, "invalid parameter: route=" + route);
-		this.route = route;
-		map(streetForStep, route);
-	}
-
 	/**
-	 */
-	@Override
-	public CameraFilter getCameraFilter(Step step) {
-		return getStreetMatcher(step);
-	}
-
-	/**
-	 * Returns a StreetMatcher instance for the given Step of
-	 * the Route provided in the StreetMatcherFactory
-	 * constructor.
+	 * Returns a StreetMatcher instance for each Step of
+	 * the given Route provided.
+	 * <p>
 	 * Note that if the StreetMatcherFactory can't determine an
 	 * appropriate street representation, the StreetMatcher returned
 	 * will always match.
-	 * Note also that if a request contains a Step parameter that isn't
-	 * part of the Route provided in the StreetMatcher constructor, the
-	 * StreetMatcher returned will never match.
-	 * @param step
+	 * </p>
+	 * @param route
 	 * @return
 	 */
-	public StreetMatcher getStreetMatcher(Step step) {
-		notNull(step, "invalid parameter: step=" + step);
+	@Override
+	public Map<Step,CameraFilter> getCameraFilters(Route route) {
+		notNull(route, "invalid parameter: route=null");
 		
-		String street = streetForStep.get(step);
-		if (street != null) {
-			return new StreetMatcher(street);
-		} else {
-			if (streetForStep.containsKey(step)) {
-				return streetMatcherAlways;
+		Map<Step,CameraFilter> filters = new HashMap<>(route.getSteps().size());
+		
+		StreetMatcher matcher;
+		String street = extractStreetFromAddress(route.getStartAddress());
+		
+		for (Step step : route.getSteps()) {
+			street = extractStreetFromInstructions(step.getInstructions(), street);
+			
+			if (street != null) {
+				matcher = new StreetMatcher(street);
 			} else {
-				logger.warn("Client requesting StreetMatcher for Step not in Route: step={}; route={}", step, route);
-				return streetMatcherNever;
-			}
-		}
-	}
-
-	/**
-	 * Processes the route and determines the street being navigated
-	 * in each step of the route.
-	 * @param route
-	 */
-	void map(Map<Step, String> streetForStep, Route route) {
-		
-		streetForStep.clear();
-		
-		// retrieve the starting street
-		String street = extractStreetFromAddress(route.startAddress);
-
-		for (Step step : route.steps) {
-			street = extractStreetFromInstructions(step.instructions, street);
-			
-			if (street == null) {
 				logger.warn("Could not determine street utilized in Step of Route: step={}; route={}", step, route);
+				matcher = streetMatcherAlways;
 			}
-			
-			streetForStep.put(step, street);
+
+			filters.put(step, matcher);
 		}
+		
+		return filters;
 	}
 	
 	/**

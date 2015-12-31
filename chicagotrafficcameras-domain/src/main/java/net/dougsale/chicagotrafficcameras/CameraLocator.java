@@ -4,93 +4,55 @@
  */
 package net.dougsale.chicagotrafficcameras;
 
-import static org.apache.commons.lang3.Validate.notEmpty;
 import static org.apache.commons.lang3.Validate.notNull;
 
-import java.util.Arrays;
+import java.util.Map;
 
 import net.dougsale.chicagotrafficcameras.Route.Step;
-import net.dougsale.chicagotrafficcameras.camerafilters.BoundingBox;
+import net.dougsale.chicagotrafficcameras.camerafilters.CameraFilter;
 import net.dougsale.chicagotrafficcameras.camerafilters.CameraFilterFactory;
-import net.dougsale.chicagotrafficcameras.camerafilters.StreetMatcher;
-import net.dougsale.chicagotrafficcameras.camerafilters.StreetMatcherFactory;
-import net.dougsale.chicagotrafficcameras.domain.RedLightCamera;
-import net.dougsale.chicagotrafficcameras.domain.SpeedCamera;
 
 /**
+ * CameraLocator uses filtering strategies to locate traffic cameras
+ * along a given route.
+ * 
+ * <p>
+ * <i>methinks it should not only be a container for strategies, but at some point
+ * be responsible for mapping cameras to steps and generating a more complex response
+ * than Cameras instance</i>
+ * </p>
+ * 
  * @author dsale
  *
  */
 public class CameraLocator {
 
-	// pad bounding box as cameras may lay outside the box
-	// defined by the route (especially when the route is
-	// almost strictly horizontal or vertical)
-	// TODO determine an appropriate value
-	static final double BOX_PADDING = 0.0003;
+	private final CameraFilterFactory filterFactory;
 	
-	private Cameras cameras;
-	private CameraFilterFactory[] filterFactories;
-	
-	public CameraLocator(Cameras cameras, CameraFilterFactory...filterFactories) {
-		notNull(cameras, "Invalid parameter: cameras=" + cameras);
-		this.cameras = cameras;
-
-		notEmpty(filterFactories, "Invalid parameter: filterFactories=" + filterFactories);
-		this.filterFactories = Arrays.copyOf(filterFactories, filterFactories.length);
+	public CameraLocator(CameraFilterFactory filterFactory) {
+		notNull(filterFactory, "Invalid parameter: filterFactory=null");
+		this.filterFactory = filterFactory;
 	}
 	
-	public Cameras newLocate(Route route) {
-		notNull(route, "invalid parameter: route=" + route);
-		
-		for (CameraFilterFactory filterFactory : filterFactories)
-			filterFactory.setRoute(route);
-
-		Cameras located = cameras;
-		
-		for (Step step : route.steps)
-			for (CameraFilterFactory filterFactory : filterFactories)
-					located = filterFactory.getCameraFilter(step).filter(located);
-		
-		return located;
+	public CameraFilterFactory getCameraFilterFactory() {
+		return filterFactory;
 	}
-	
-	public CameraLocator(Cameras cameras) {
-		notNull(cameras, "Invalid parameter: cameras=" + cameras);
-		this.cameras = cameras;
-	}
-	
-	public Cameras locate(Route route) {
-		notNull(route, "invalid parameter: route=" + route);
-		
-		StreetMatcherFactory smFactory = new StreetMatcherFactory();
-		smFactory.setRoute(route);
-		
-		Cameras located = new Cameras();
-		
-		for (Step step : route.steps) {
 
-			BoundingBox box = new BoundingBox(step, BOX_PADDING);
-			StreetMatcher street = smFactory.getStreetMatcher(step);
-
-			// TODO the following would be a good candidate for stream processing
-
-			// TODO determine smallest range of box dimensions (either lat or long) and
-			// then get a navigable set from cameras and only iterate over that subrange
-			
-			for (RedLightCamera camera : cameras.get(RedLightCamera.class)) {
-				if (box.accept(camera)  && street.accept(camera)) {
-					located.add(camera);
-				}
-			}
-			
-			for (SpeedCamera camera : cameras.get(SpeedCamera.class)) {
-				if (box.accept(camera)  && street.accept(camera)) {
-					located.add(camera);
-				}
-			}
+	/**
+	 * Locate the traffic cameras that are germane to the given route.
+	 * @param candidates a container of candidate cameras
+	 * @param route the route taken
+	 * @return a container of cameras germane to the route
+	 */
+	public void locate(Cameras candidates, Cameras matches, Route route) {
+		notNull(candidates, "Invalid parameter: cameras=null");
+		notNull(matches, "Invalid parameter: matches=null");
+		notNull(route, "Invalid parameter: route=null");
+		
+		Map<Step,CameraFilter> filters = filterFactory.getCameraFilters(route);
+		
+		for (Step step : route.getSteps()) {
+			matches.addAll(filters.get(step).filter(candidates));
 		}
-		
-		return located;
 	}
 }

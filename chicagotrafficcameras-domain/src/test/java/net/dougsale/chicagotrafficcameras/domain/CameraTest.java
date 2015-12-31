@@ -22,20 +22,27 @@ public class CameraTest {
 	Set<Approach> approaches = EnumSet.of(Approach.EASTBOUND, Approach.SOUTHBOUND);
 
 	@Test
-	public void testCameraBasic() {
+	public void testCamera() {
 		Camera camera = new Camera(location, approaches);
-		assertThat(latitude, equalTo(camera.location.latitude));
-		assertThat(longitude, equalTo(camera.location.longitude));
-		assertThat(approaches, equalTo(camera.approaches));
+		assertThat(location, equalTo(camera.getLocation()));
+		assertThat(approaches, equalTo(camera.getApproaches()));
+	}
+
+	@Test
+	public void testCameraImmutableApproachesParameterCopied() {
+		Set<Approach> approaches = EnumSet.copyOf(this.approaches);
+		Camera camera = new Camera(location, approaches);
+		approaches.clear();
+		assertThat(camera.getApproaches(), not(equalTo(approaches)));
+		assertThat(camera.getApproaches(), equalTo(this.approaches));
 	}
 
 	@Test(expected=UnsupportedOperationException.class)
-	public void testCameraImmutable() {
-		// location is final, attempts to change caught by compiler
-		Camera camera = new Camera(location, approaches);
-		camera.approaches.add(Approach.NORTHBOUND);
+	public void testCameraImmutableApproachesUnmodifiable() {
+		Camera camera = new Camera(location, this.approaches);	
+		camera.getApproaches().add(Approach.NORTHBOUND);
 	}
-
+	
 	@Test(expected=NullPointerException.class)
 	public void testCameraNullLocation() {
 		new Camera(null, approaches); 

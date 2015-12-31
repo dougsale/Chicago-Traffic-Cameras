@@ -7,62 +7,129 @@ package net.dougsale.chicagotrafficcameras.camerafilters;
 import static org.apache.commons.lang3.Validate.isTrue;
 import static org.apache.commons.lang3.Validate.notNull;
 
-import net.dougsale.chicagotrafficcameras.Cameras;
-import net.dougsale.chicagotrafficcameras.Route.Step;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import net.dougsale.chicagotrafficcameras.domain.Camera;
 import net.dougsale.chicagotrafficcameras.domain.Location;
 
 /**
+ * A CameraFilter implementation that utilizes a
+ * bounding box to filter Cameras by location.
  * 
  * @author dsale
- *
  */
-public class BoundingBox implements CameraFilter {
+public class BoundingBox extends AbstractCameraFilter {
 
-	private double minLat;
-	private double maxLat;
-	private double minLng;
-	private double maxLng;						
+	// Immutable class, so these are
+	// computed once, lazily.
+	private Integer hashCode = null;
+	private String toString = null;
+	
+	public final Location min;
+	public final Location max;
 	
 	/**
-	 * BoundingBox filters cameras that aren't located in a box
-	 * defined the start and the stop of the step parameter and
-	 * a padding value applied equally in all 4 cardinal route.
-	 * Note that the padding is in degrees and thus isn't equal in absolute
-	 * distance between latitude and longitude.  Over small padding values
-	 * this is considered negligible.
-	 * @param step the step of the route route
-	 * @param padding allowed variance, in degrees
+	 * @param min a location representing the corner of the box with smallest latitude and longitude
+	 * @param max a location representing the corner of the box with largest latitude and longitude
+	 * @throws NullPointerException if either min or max are null
+	 * @throws IllegalArgumentException if either min.latitude > max.latitude or min.longitude > max.longitude
 	 */
-	public BoundingBox(Step step, double padding) {
-		notNull(step, "invalid parameter: step=" + step);
-		isTrue(padding >= 0.0, "invalid parameter: padding=" + padding + " (must be >= 0.0)");
-		
-		Location start = step.start;
-		Location end = step.end;
-		
-		minLat = Math.min(start.latitude, end.latitude) - padding;
-		maxLat = Math.max(start.latitude, end.latitude) + padding;
-		minLng = Math.min(start.longitude, end.longitude) - padding;
-		maxLng = Math.max(start.longitude, end.longitude) + padding;						
+	public BoundingBox(Location min, Location max) {
+		notNull(min, "invalid parameter: min = null");
+		notNull(max, "invalid parameter: max = null");
+		isTrue(min.latitude <= max.latitude,
+				"invalid parameters: min.latitude=" + min.latitude + " max.latitude=" + max.latitude);
+		isTrue(min.longitude <= max.longitude,
+				"invalid parameters: min.longitude=" + min.longitude + " max.longitude=" + max.longitude);
+		this.min = min;
+		this.max = max;
 	}
 	
-	@Override
-	public Cameras filter(Cameras cameras) {
-		Cameras filtered = new Cameras();
-//		for (Camera camera : cameras.get(comparator))
-		return null;
-	}
-
+	/**
+	 * Returns true if the camera lies within
+	 * the bounding box.
+	 * @param camera
+	 * @returns true if the camera lies within the bounding box
+	 * @throws NullPointerException if camera is null
+	 */
 	@Override
 	public boolean accept(Camera camera) {
-		return inBounds(camera);
-	}
-
-	public boolean inBounds(Camera camera) {
-		notNull(camera, "invalid parameter: camera=" + camera);
-		boolean inBounds = camera.location.latitude >= minLat && camera.location.latitude <= maxLat
-				&& camera.location.longitude >= minLng && camera.location.longitude <= maxLng;
+		notNull(camera, "invalid parameter: camera=null");
+		
+		Location location = camera.getLocation();
+		
+		boolean inBounds =
+				location.latitude >= min.latitude && location.latitude <= max.latitude && 
+				location.longitude >= min.longitude && location.longitude <= max.longitude;
+				
 		return inBounds;
 	}
+	
+	//SOMETHING IS WRONG WITH THIS OPTIMIZATION - it has to do with the comparator and set semantics, methinks
+//	Camera lower = new Camera(min, EnumSet.of(Approach.EASTBOUND));
+//	Camera upper = new Camera(max, EnumSet.of(Approach.EASTBOUND));
+//	
+//	for (Camera camera : cameras.get(getCameraComparator()).subSet(lower, true, upper, true)) {
+//		System.out.println(camera);
+//		if (accept(camera))
+//			filtered.add(camera);
+//	}
+//because this doesn't work either:
+//	Set<Camera> cs = cameras.get(getCameraComparator());
+//	for (Camera c : cs)
+//		if (accept(c))
+//			filtered.add(c);
+	// At 41.850 degrees latitude (~Chicago),
+	// 	 1 degree of longitude is roughly 45 nautical miles
+	//   1 degree of latitude is roughly 60 nautical miles
+	// So, a rough estimate for comparing degrees longitude to
+	// latitude at Chicago's latitude is:
+//	static final double LONG_OVER_LAT = 0.75;
+//
+//	//
+//	Comparator<Camera> getCameraComparator() {
+//		return ((max.latitude - min.latitude) * LONG_OVER_LAT < (max.longitude - min.longitude))?
+//				Cameras.BY_LATITUDE : Cameras.BY_LONGITUDE;
+//	}
+
+	@Override
+	public boolean equals(Object object) {
+		if (object == null) return false;
+		if (object == this) return true;
+		if (object.getClass() != getClass()) return false;
+
+		BoundingBox that = (BoundingBox) object;
+
+		return new EqualsBuilder()
+			.append(min, that.min)
+			.append(max, that.max)
+			.isEquals();
+	}
+
+	@Override
+	public int hashCode() {
+		// immutable; compute hashCode once, lazily
+		if (hashCode == null)
+			hashCode = new HashCodeBuilder(19, 73)
+				.append(min)
+				.append(max)
+				.toHashCode();
+
+		return hashCode;
+	}
+
+	@Override
+	public String toString() {
+		// immutable; generate toString once, lazily
+		if (toString == null)
+			toString = new ToStringBuilder(this)
+				.append("min", min)
+				.append("max", max)
+				.toString();
+
+		return toString;
+	}
+
 }

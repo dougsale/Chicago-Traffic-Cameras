@@ -10,22 +10,29 @@ import static org.apache.commons.lang3.Validate.notNull;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import net.dougsale.chicagotrafficcameras.Cameras;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import net.dougsale.chicagotrafficcameras.domain.Camera;
 import net.dougsale.chicagotrafficcameras.domain.RedLightCamera;
 import net.dougsale.chicagotrafficcameras.domain.SpeedCamera;
 
 /**
- * A CameraFilter instance that determines if a given Step of a Route
- * matches a street representation.
+ * A CameraFilter implementation that filters Cameras by street.
  * @author dsale
  */
-public class StreetMatcher implements CameraFilter {
+public class StreetMatcher extends AbstractCameraFilter {
 
 	private static final Pattern streetExtractorPattern =
 			Pattern.compile("^\\s*(?:\\d+\\s+)(?:[NSEW]\\s+)?(.*?)\\s*", Pattern.CASE_INSENSITIVE);
 	
-	private String stepStreet;
+	// Immutable class, so these are
+	// computed once, lazily.
+	private Integer hashCode = null;
+	private String toString = null;
+	
+	private final String street;
 
 	/**
 	 * Creates a DefaultStreetmatcher instance for a given
@@ -35,38 +42,33 @@ public class StreetMatcher implements CameraFilter {
 	public StreetMatcher(String street) {
 		notNull(street, "invalid parameter: street=" + street);
 		notEmpty(street.trim(), "invalid parameter: street=" + street);
-		this.stepStreet = street.trim().toLowerCase();
-	}
-	
-	protected StreetMatcher() {
-		stepStreet = null;
+		this.street = street.trim().toUpperCase();
 	}
 
-	@Override
-	public Cameras filter(Cameras cameras) {
-		// TODO Auto-generated method stub
-		return null;
+	// this exists for the benefit of StreetMatcherFactory.streetMatcherAlways
+	protected StreetMatcher() {
+		this.street = null;
+	}
+
+	public String getStreet() {
+		return street;
 	}
 
 	@Override
 	public boolean accept(Camera camera) {
-		return match(camera);
-	}
-
-	public boolean match(Camera camera) {
 		notNull(camera, "invalid parameter: camera=" + camera);
 		
 		boolean match = false;
 		
 		if (camera instanceof SpeedCamera) {
 			
-			String cameraStreet = streetForAddress(((SpeedCamera) camera).address);
-			match = stepStreet.contains(cameraStreet.toLowerCase());
+			String cameraStreet = streetForAddress(((SpeedCamera) camera).getAddress());
+			match = street.contains(cameraStreet.toUpperCase());
 			
 		} else if (camera instanceof RedLightCamera) {
 			
-			for (String cameraStreet : ((RedLightCamera)camera).intersection)
-				if (stepStreet.contains(cameraStreet.toLowerCase()))
+			for (String cameraStreet : ((RedLightCamera)camera).getIntersection())
+				if (street.contains(cameraStreet.toUpperCase()))
 					match = true;
 		}
 		
@@ -76,5 +78,39 @@ public class StreetMatcher implements CameraFilter {
 	String streetForAddress(String address) {
 		Matcher matcher = streetExtractorPattern.matcher(address);
 		return matcher.matches()? matcher.group(1).replaceAll("\\s+", " ") : null;
+	}
+	
+	@Override
+	public boolean equals(Object object) {
+	   if (object == null) return false;
+	   if (object == this) return true;
+	   if (object.getClass() != getClass()) return false;
+	   
+	   StreetMatcher that = (StreetMatcher) object;
+	   
+	   return new EqualsBuilder()
+	                 .append(street, that.street)
+	                 .isEquals();
+	}
+
+	@Override
+	public int hashCode() {
+		// immutable; compute hashCode once, lazily
+		if (hashCode == null)
+			hashCode = new HashCodeBuilder(19, 73)
+					.append(street)
+					.toHashCode();
+		return hashCode;
+	}
+
+	@Override
+	public String toString() {
+		// immutable; generate toString once, lazily
+		if (toString == null)
+			toString = new ToStringBuilder(this)
+				.append("street", street)
+				.toString();
+
+		return toString;
 	}
 }

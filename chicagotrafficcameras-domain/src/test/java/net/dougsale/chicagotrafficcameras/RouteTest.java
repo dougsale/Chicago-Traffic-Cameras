@@ -26,25 +26,26 @@ public class RouteTest {
 	@Test
 	public void testRoute() {
 		Route route = new Route(startAddress, endAddress, steps);
-		assertThat(route.startAddress, equalTo(startAddress));
-		assertThat(route.endAddress, equalTo(endAddress));
-		assertThat(route.steps, equalTo(steps));
+		assertThat(route.getStartAddress(), equalTo(startAddress));
+		assertThat(route.getEndAddress(), equalTo(endAddress));
+		assertThat(route.getSteps(), equalTo(steps));
 	}
 	
 	// Immutable tests
 	
 	@Test
-	public void testRouteImmutableStepsListParameterCopied() {
+	public void testRouteImmutableStepsParameterCopied() {
 		List<Step> steps = new ArrayList<>(this.steps);
 		Route route = new Route(startAddress, endAddress, steps);
 		steps.clear();
-		assertThat(route.steps, equalTo(this.steps));		
+		assertThat(route.getSteps(), not(equalTo(steps)));		
+		assertThat(route.getSteps(), equalTo(this.steps));		
 	}
 
 	@Test(expected=UnsupportedOperationException.class)
 	public void testRouteImmutableStepsUnmodifiable() {
 		Route route = new Route(startAddress, endAddress, steps);
-		route.steps.clear();
+		route.getSteps().clear();
 	}
 
 	// Invalid parameters tests
@@ -84,6 +85,8 @@ public class RouteTest {
 		new Route(startAddress, endAddress, Arrays.asList((Route.Step) null));
 	}
 
+	// test equals and hashcode
+	
 	@Test
 	public void testRouteEqualsHashCode() {
 		Route d1 = new Route(startAddress, endAddress, steps);
@@ -115,12 +118,12 @@ public class RouteTest {
 	@Test
 	public void testStep() {
 		Step step = new Step(instructions, start, end);
-		assertThat(step.instructions, equalTo(instructions));
-		assertThat(step.start, equalTo(start));
-		assertThat(step.end, equalTo(end));
+		assertThat(step.getInstructions(), equalTo(instructions));
+		assertThat(step.getStart(), equalTo(start));
+		assertThat(step.getEnd(), equalTo(end));
 	}
 	
-	// Invalid parameters
+	// invalid parameters tests
 	
 	@Test(expected=NullPointerException.class)
 	public void testStepInstructionsNull() {
@@ -141,6 +144,8 @@ public class RouteTest {
 	public void testStepEndNull() {
 		new Step(instructions, start, null);
 	}
+	
+	// test equals and hashcode
 	
 	@Test
 	public void testStepEqualsHashCode() {

@@ -32,9 +32,9 @@ public class Route {
 	private Integer hashCode = null;
 	private String toString = null;
 
-	public final String startAddress;
-	public final String endAddress;
-	public final List<Step> steps;
+	private final String startAddress;
+	private final String endAddress;
+	private final List<Step> steps;
 
 	public Route(String startAddress, String endAddress, List<Step> steps) {
 		notNull(startAddress, "invalid parameter: startAddress=" + startAddress);
@@ -48,6 +48,18 @@ public class Route {
 		this.startAddress = startAddress;
 		this.endAddress = endAddress;
 		this.steps = Collections.unmodifiableList(new ArrayList<Step>(steps));
+	}
+
+	public String getStartAddress() {
+		return startAddress;
+	}
+
+	public String getEndAddress() {
+		return endAddress;
+	}
+
+	public List<Step> getSteps() {
+		return steps;
 	}
 
 	@Override
@@ -97,9 +109,9 @@ public class Route {
 		private Integer hashCode = null;
 		private String toString = null;
 
-		public final String instructions;
-		public final Location start;
-		public final Location end;
+		private final String instructions;
+		private final Location start;
+		private final Location end;
 		
 		public Step(String instructions, Location start, Location end) {
 			notNull(instructions, "invalid parameter: instructions=" + instructions);
@@ -110,6 +122,18 @@ public class Route {
 			this.instructions = instructions;
 			this.start = start;
 			this.end = end;
+		}
+
+		public String getInstructions() {
+			return instructions;
+		}
+
+		public Location getStart() {
+			return start;
+		}
+
+		public Location getEnd() {
+			return end;
 		}
 
 		@Override

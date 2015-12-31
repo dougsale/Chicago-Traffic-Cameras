@@ -14,6 +14,9 @@ import java.util.NavigableSet;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import net.dougsale.chicagotrafficcameras.domain.Camera;
 
 /**
@@ -22,19 +25,23 @@ import net.dougsale.chicagotrafficcameras.domain.Camera;
  */
 public class Cameras implements Serializable {
 	
-	private static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = 3L;
 
 	public static final Comparator<Camera> BY_LATITUDE = new Comparator<Camera>() {
 		@Override
 		public int compare(Camera c1, Camera c2) {
-			return (c1.location.latitude < c2.location.latitude)? -1 : (c1.location.latitude > c2.location.latitude)? 1 : 0;
+			return 
+					c1.getLocation().latitude < c2.getLocation().latitude? -1 :
+					c1.getLocation().latitude > c2.getLocation().latitude? 1 : 0;
 		}
 	};
 			
 	public static final Comparator<Camera> BY_LONGITUDE = new Comparator<Camera>() {
 		@Override
 		public int compare(Camera c1, Camera c2) {
-			return (c1.location.longitude < c2.location.longitude)? -1 : (c1.location.longitude > c2.location.longitude)? 1 : 0;
+			return
+					c1.getLocation().longitude < c2.getLocation().longitude? -1 :
+					c1.getLocation().longitude > c2.getLocation().longitude? 1 : 0;
 		}			
 	};
 	
@@ -61,7 +68,22 @@ public class Cameras implements Serializable {
 
 		((Set<T>)camerasByType.get(type)).add(camera);
 	}
+	
+	public void addAll(Cameras cameras) {
+		throw new UnsupportedOperationException("Oh!  You needed this?");
+	}
 		
+	public void remove(Camera camera) {
+		throw new UnsupportedOperationException("Oh!  You needed this?");
+	}
+	
+	public int size() {
+		int size = 0;
+		for (Set<? extends Camera> set : camerasByType.values())
+			size += set.size();
+		return size;
+	}
+	
 	/**
 	 * Returns the Set of Camera types in this Cameras container.
 	 * @return the Set of Camera types
@@ -139,5 +161,26 @@ public class Cameras implements Serializable {
 
 		return cameras;
 	}
+
+	@Override
+	public boolean equals(Object object) {
+		   if (object == null) return false;
+		   if (object == this) return true;
+		   if (object.getClass() != getClass()) return false;
+		   
+		   Cameras that = (Cameras) object;
+		   
+		   return new EqualsBuilder()
+                 .append(camerasByType, that.camerasByType)
+                 .isEquals();
+	}
 	
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(19, 73)
+					.append(camerasByType)
+					.toHashCode();
+	}
+
+
 }

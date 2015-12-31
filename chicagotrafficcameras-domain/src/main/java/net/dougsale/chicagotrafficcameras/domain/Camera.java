@@ -18,16 +18,16 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class Camera implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 3L;
 	
-	public final Location location;
-	public final Set<Approach> approaches;
-
 	// immutable class, these values are computed once, lazily
 	// current values indicate that they have not been computed
 	private Integer hashCode = null;
 	private String toString = null;
 	
+	private final Location location;
+	private final Set<Approach> approaches;
+
 	/**
 	 * Create a Camera instance.  Note that Camera instances are immutable.
 	 * The approaches set is unmodifiable and its elements are copied
@@ -38,15 +38,23 @@ public class Camera implements Serializable {
 	 * @param approach directions, requiring at least one entry
 	 */
 	public Camera(Location location, Set<Approach> approaches) {
-		notNull(location, "invalid parameter: location=" + location);
+		notNull(location, "invalid parameter: location=null");
 		this.location = location;
 
 		notEmpty(approaches, "invalid parameter: approaches=" + approaches);
 		for (Approach approach : approaches)
-			notNull(approach, "invalid parameter: approaches; contains element=" + approaches);
+			notNull(approach, "invalid parameter: approaches; contains element=null");
 		
 		// ensure the set is immutable
 		this.approaches = Collections.unmodifiableSet(EnumSet.copyOf(approaches));	
+	}
+
+	public Location getLocation() {
+		return location;
+	}
+
+	public Set<Approach> getApproaches() {
+		return approaches;
 	}
 
 	@Override
@@ -84,5 +92,6 @@ public class Camera implements Serializable {
 					.append("approaches", approaches)
 					.toString();
 		
-		return toString;	}
+		return toString;	
+	}
 }

@@ -22,34 +22,42 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  */
 public class RedLightCamera extends Camera {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 3L;
 
-	public final Set<String> intersection;
-
+	// immutable class, these values are computed once, lazily
+	// current values indicate that they have not been computed
 	private Integer hashCode = null;
 	private String toString = null;
 	
+	private final Set<String> intersection;
+
 	/**
 	 * Create a RedLightCamera instance.  Note that RedLightCamera instances are immutable.
 	 * The intersection and approaches sets are unmodifiable and their elements are copied
 	 * from the constructor parameter sets.  Location is immutable.
 	 * All fields are final.
 	 * 
-	 * @param intersection a set of 2 or more street names
-	 * @param location coordinates per the WGS84 standard
-	 * @param approaches at least one approach direction
+	 * @param intersection street names identifying the intersection (at least 2)
+	 * @param location camera location
+	 * @param approaches camera approach direction (at least one)
 	 */
 	public RedLightCamera(Set<String> intersection, Location location, Set<Approach> approaches) {
 		super(location, approaches);
 
 		// validate intersection
-		isTrue(intersection.size() > 1, "invalid parameter: intersection; size=" + intersection.size() + " (must contain at least 2 streets");
+		isTrue(!(intersection.size() < 2),
+				String.format("invalid parameter: intersection (size < 2); size=%d", intersection.size()));
 		for (String street : intersection) {
-			notNull(street, "invalid parameter: street=" + street);
-			notEmpty(street.trim(), "invalid parameter: street=" + street);
+			notNull(street, "invalid parameter: street=null");
+			notEmpty(street.trim(), String.format("invalid parameter: street=<%s>", street));
 		}
-		// ensure set is immutable
+		
+		// ensure intersection is immutable
 		this.intersection = Collections.unmodifiableSet(new HashSet<>(intersection));
+	}
+
+	public Set<String> getIntersection() {
+		return intersection;
 	}
 
 	@Override

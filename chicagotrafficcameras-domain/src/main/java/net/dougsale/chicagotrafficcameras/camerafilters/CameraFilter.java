@@ -9,7 +9,18 @@ import net.dougsale.chicagotrafficcameras.domain.Camera;
 
 public interface CameraFilter {
 
+	/**
+	 * Returns true if the camera is accepted by this filter.
+	 * @param camera
+	 * @return true if the camera is accepted
+	 */
 	boolean accept(Camera camera);
-	Cameras filter(Cameras cameras);
 	
+	/**
+	 * Filters the input cameras, returning those accepted
+	 * by this filter.
+	 * @param cameras
+	 * @returns cameras accepted by this filter
+	 */
+	Cameras filter(Cameras cameras);	
 }

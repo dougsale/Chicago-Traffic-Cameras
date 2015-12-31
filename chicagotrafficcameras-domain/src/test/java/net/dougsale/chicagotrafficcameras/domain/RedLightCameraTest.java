@@ -27,44 +27,43 @@ public class RedLightCameraTest {
 	// constructor
 	
 	@Test
-	public void testRedLightCameraBasic() {
+	public void testRedLightCamera() {
 		RedLightCamera camera = new RedLightCamera(intersection, location, approaches);
-		assertThat(intersection, equalTo(camera.intersection));
-		assertThat(latitude, equalTo(camera.location.latitude));
-		assertThat(longitude, equalTo(camera.location.longitude));
-		assertThat(approaches, equalTo(camera.approaches));
+		assertThat(intersection, equalTo(camera.getIntersection()));
+		assertThat(location, equalTo(camera.getLocation()));
+		assertThat(approaches, equalTo(camera.getApproaches()));
 	}
 
-	// immutability
-	// red light camera fields are marked final;  location's member fields are final
-	// their immutability handled by the compiler
-
+	// Immutability
 	
 	@Test
-	public void testRedLightCameraImmutable() {
-		Set<String> intersection = new HashSet<String>(this.intersection);
-		Set<Approach> approaches = new HashSet<Approach>(this.approaches);
-		
+	public void testRedLightCameraImmutableIntersectionParameterCopied() {
+		Set<String> intersection = new HashSet<>(this.intersection);
 		RedLightCamera camera = new RedLightCamera(intersection, location, approaches);
-
-		// should be no effect, these should be copied
 		intersection.clear();
+		assertThat(camera.getIntersection(), not(equalTo(intersection)));
+		assertThat(camera.getIntersection(), equalTo(this.intersection));
+	}
+
+	@Test(expected=UnsupportedOperationException.class)
+	public void testRedLightCameraImmutableIntersectionUnmodifiable() {
+		RedLightCamera camera = new RedLightCamera(intersection, location, approaches);
+		camera.getIntersection().clear();
+	}
+
+	@Test
+	public void testRedLightCameraImmutableApproachesParameterCopied() {
+		Set<Approach> approaches = EnumSet.copyOf(this.approaches);
+		RedLightCamera camera = new RedLightCamera(intersection, location, approaches);
 		approaches.clear();
-		
-		assertThat(intersection, not(equalTo(camera.intersection)));
-		assertThat(approaches, not(equalTo(camera.approaches)));
-		assertThat(this.intersection, equalTo(camera.intersection));
-		assertThat(this.approaches, equalTo(camera.approaches));
+		assertThat(camera.getApproaches(), not(equalTo(approaches)));
+		assertThat(camera.getApproaches(), equalTo(this.approaches));
 	}
-	
+
 	@Test(expected=UnsupportedOperationException.class)
-	public void testRedLightCameraIntersectionImmutable() {
-		new RedLightCamera(intersection, location, approaches).intersection.add("Foo Way");
-	}
-	
-	@Test(expected=UnsupportedOperationException.class)
-	public void testRedLightCameraApproachesImmutable() {
-		new RedLightCamera(intersection, location, approaches).approaches.clear();
+	public void testRedLightCameraImmutableApproachesUnmodifiable() {
+		RedLightCamera camera = new RedLightCamera(intersection, location, approaches);
+		camera.getApproaches().add(Approach.NORTHBOUND);
 	}
 
 	// argument validation
