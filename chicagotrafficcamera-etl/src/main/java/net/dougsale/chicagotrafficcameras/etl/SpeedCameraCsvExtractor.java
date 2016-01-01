@@ -5,8 +5,8 @@ import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
 
-import net.dougsale.chicagotrafficcameras.Cameras;
 import net.dougsale.chicagotrafficcameras.domain.Approach;
+import net.dougsale.chicagotrafficcameras.domain.Cameras;
 import net.dougsale.chicagotrafficcameras.domain.Location;
 import net.dougsale.chicagotrafficcameras.domain.SpeedCamera;
 
@@ -47,8 +47,6 @@ public class SpeedCameraCsvExtractor {
 			SpeedCamera camera =
 					new SpeedCamera(address, new Location(latitude, longitude), approaches);
 			cameras.add(camera);
-			
-//			System.out.println(camera);
 		}
 
 		scanner.close();
