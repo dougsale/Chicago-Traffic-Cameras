@@ -1,14 +1,16 @@
 package net.dougsale.chicagotrafficcameras;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 
 import net.dougsale.chicagotrafficcameras.domain.Cameras;
-import net.dougsale.chicagotrafficcameras.domain.Route;
 import net.dougsale.chicagotrafficcameras.repository.CamerasRepository;
 import net.dougsale.chicagotrafficcameras.repository.RepositoryException;
 

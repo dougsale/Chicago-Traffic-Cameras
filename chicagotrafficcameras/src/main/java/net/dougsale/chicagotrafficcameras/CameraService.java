@@ -7,7 +7,6 @@ package net.dougsale.chicagotrafficcameras;
 import static org.apache.commons.lang3.Validate.notNull;
 
 import net.dougsale.chicagotrafficcameras.domain.Cameras;
-import net.dougsale.chicagotrafficcameras.domain.Route;
 import net.dougsale.chicagotrafficcameras.repository.CamerasRepository;
 import net.dougsale.chicagotrafficcameras.repository.RepositoryException;
 

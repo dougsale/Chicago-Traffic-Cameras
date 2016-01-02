@@ -1,18 +1,18 @@
 package net.dougsale.chicagotrafficcameras.camerafilters;
 
-import static org.junit.Assert.*;
-
-import org.junit.Test;
-
-import net.dougsale.chicagotrafficcameras.domain.Location;
-import net.dougsale.chicagotrafficcameras.domain.Route;
-import net.dougsale.chicagotrafficcameras.domain.Route.Step;
-
-import static org.hamcrest.CoreMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.Map;
+
+import org.junit.Test;
+
+import net.dougsale.chicagotrafficcameras.Route;
+import net.dougsale.chicagotrafficcameras.Route.Step;
+import net.dougsale.chicagotrafficcameras.domain.Location;
 
 public class BoundingBoxFactoryTest {
 

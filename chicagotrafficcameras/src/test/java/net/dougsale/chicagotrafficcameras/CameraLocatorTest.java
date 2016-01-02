@@ -18,11 +18,10 @@ import java.util.Map;
 import org.junit.Test;
 import org.mockito.InOrder;
 
+import net.dougsale.chicagotrafficcameras.Route.Step;
 import net.dougsale.chicagotrafficcameras.camerafilters.CameraFilter;
 import net.dougsale.chicagotrafficcameras.camerafilters.CameraFilterFactory;
 import net.dougsale.chicagotrafficcameras.domain.Cameras;
-import net.dougsale.chicagotrafficcameras.domain.Route;
-import net.dougsale.chicagotrafficcameras.domain.Route.Step;
 
 public class CameraLocatorTest {
 

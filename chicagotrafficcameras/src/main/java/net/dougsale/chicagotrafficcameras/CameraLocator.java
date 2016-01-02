@@ -8,11 +8,10 @@ import static org.apache.commons.lang3.Validate.notNull;
 
 import java.util.Map;
 
+import net.dougsale.chicagotrafficcameras.Route.Step;
 import net.dougsale.chicagotrafficcameras.camerafilters.CameraFilter;
 import net.dougsale.chicagotrafficcameras.camerafilters.CameraFilterFactory;
 import net.dougsale.chicagotrafficcameras.domain.Cameras;
-import net.dougsale.chicagotrafficcameras.domain.Route;
-import net.dougsale.chicagotrafficcameras.domain.Route.Step;
 
 /**
  * CameraLocator uses filtering strategies to locate traffic cameras
