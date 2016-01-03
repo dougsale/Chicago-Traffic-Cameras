@@ -138,11 +138,6 @@ public class CompositeCameraFilterTest {
 		verify(filters[2], never()).accept(camera);
 	}
 
-	@Test(expected=NullPointerException.class)
-	public void testAcceptNullCamera() {
-		new CompositeCameraFilter(filters).accept(null);
-	}
-
 	@Test
 	public void testEqualsHashCode() {
 		CameraFilter component1 = mock(CameraFilter.class);
