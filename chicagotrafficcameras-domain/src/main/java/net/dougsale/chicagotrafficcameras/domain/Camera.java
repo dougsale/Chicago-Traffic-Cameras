@@ -26,7 +26,7 @@ public class Camera implements Serializable {
 	private String toString = null;
 	
 	private final Location location;
-	private final Set<Approach> approaches;
+	private final Set<Direction> approaches;
 
 	/**
 	 * Create a Camera instance.  Note that Camera instances are immutable.
@@ -37,12 +37,12 @@ public class Camera implements Serializable {
 	 * @param location coordinates per the WGS84 standard
 	 * @param approach directions, requiring at least one entry
 	 */
-	public Camera(Location location, Set<Approach> approaches) {
+	public Camera(Location location, Set<Direction> approaches) {
 		notNull(location, "invalid parameter: location=null");
 		this.location = location;
 
 		notEmpty(approaches, "invalid parameter: approaches=" + approaches);
-		for (Approach approach : approaches)
+		for (Direction approach : approaches)
 			notNull(approach, "invalid parameter: approaches; contains element=null");
 		
 		// ensure the set is immutable
@@ -53,7 +53,7 @@ public class Camera implements Serializable {
 		return location;
 	}
 
-	public Set<Approach> getApproaches() {
+	public Set<Direction> getApproaches() {
 		return approaches;
 	}
 

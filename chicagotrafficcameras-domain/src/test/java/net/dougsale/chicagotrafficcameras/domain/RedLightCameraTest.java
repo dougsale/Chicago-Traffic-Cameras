@@ -21,7 +21,7 @@ public class RedLightCameraTest {
 	double latitude = -68.132412f;
 	double longitude = 104.345612f;
 	Location location = new Location(latitude, longitude);
-	Set<Approach> approaches = EnumSet.of(Approach.EASTBOUND, Approach.SOUTHBOUND);
+	Set<Direction> approaches = EnumSet.of(Direction.EASTBOUND, Direction.SOUTHBOUND);
 	Set<String> intersection = new HashSet<String>(Arrays.asList("Milwaukee", "North", "Damen"));
 
 	// constructor
@@ -53,7 +53,7 @@ public class RedLightCameraTest {
 
 	@Test
 	public void testRedLightCameraImmutableApproachesParameterCopied() {
-		Set<Approach> approaches = EnumSet.copyOf(this.approaches);
+		Set<Direction> approaches = EnumSet.copyOf(this.approaches);
 		RedLightCamera camera = new RedLightCamera(intersection, location, approaches);
 		approaches.clear();
 		assertThat(camera.getApproaches(), not(equalTo(approaches)));
@@ -63,7 +63,7 @@ public class RedLightCameraTest {
 	@Test(expected=UnsupportedOperationException.class)
 	public void testRedLightCameraImmutableApproachesUnmodifiable() {
 		RedLightCamera camera = new RedLightCamera(intersection, location, approaches);
-		camera.getApproaches().add(Approach.NORTHBOUND);
+		camera.getApproaches().add(Direction.NORTHBOUND);
 	}
 
 	// argument validation
@@ -129,7 +129,7 @@ public class RedLightCameraTest {
 		assertThat(camera1, not(equalTo(camera4)));
 		assertThat(camera4, not(equalTo(camera1)));
 		
-		RedLightCamera camera5 = new RedLightCamera(intersection, location, Collections.singleton(Approach.WESTBOUND));
+		RedLightCamera camera5 = new RedLightCamera(intersection, location, Collections.singleton(Direction.WESTBOUND));
 		assertThat(camera1, not(equalTo(camera5)));
 		assertThat(camera5, not(equalTo(camera1)));
 		

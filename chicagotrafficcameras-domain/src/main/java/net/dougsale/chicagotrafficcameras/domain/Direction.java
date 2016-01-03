@@ -8,7 +8,7 @@ package net.dougsale.chicagotrafficcameras.domain;
  * @author dsale
  *
  */
-public enum Approach {
+public enum Direction {
 	NORTHBOUND, NORTHEASTBOUND, NORTHWESTBOUND,
 	SOUTHBOUND, SOUTHEASTBOUND, SOUTHWESTBOUND,
 	EASTBOUND, WESTBOUND

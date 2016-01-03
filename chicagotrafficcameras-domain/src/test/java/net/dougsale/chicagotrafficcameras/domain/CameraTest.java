@@ -19,7 +19,7 @@ public class CameraTest {
 	double latitude = -68.132412;
 	double longitude = 104.345612;
 	Location location = new Location(latitude, longitude);
-	Set<Approach> approaches = EnumSet.of(Approach.EASTBOUND, Approach.SOUTHBOUND);
+	Set<Direction> approaches = EnumSet.of(Direction.EASTBOUND, Direction.SOUTHBOUND);
 
 	@Test
 	public void testCamera() {
@@ -30,7 +30,7 @@ public class CameraTest {
 
 	@Test
 	public void testCameraImmutableApproachesParameterCopied() {
-		Set<Approach> approaches = EnumSet.copyOf(this.approaches);
+		Set<Direction> approaches = EnumSet.copyOf(this.approaches);
 		Camera camera = new Camera(location, approaches);
 		approaches.clear();
 		assertThat(camera.getApproaches(), not(equalTo(approaches)));
@@ -40,7 +40,7 @@ public class CameraTest {
 	@Test(expected=UnsupportedOperationException.class)
 	public void testCameraImmutableApproachesUnmodifiable() {
 		Camera camera = new Camera(location, this.approaches);	
-		camera.getApproaches().add(Approach.NORTHBOUND);
+		camera.getApproaches().add(Direction.NORTHBOUND);
 	}
 	
 	@Test(expected=NullPointerException.class)
@@ -74,7 +74,7 @@ public class CameraTest {
 		assertThat(camera1, not(equalTo(camera4)));
 		assertThat(camera4, not(equalTo(camera1)));
 		
-		Camera camera5 = new Camera(location, Collections.singleton(Approach.WESTBOUND));
+		Camera camera5 = new Camera(location, Collections.singleton(Direction.WESTBOUND));
 		assertThat(camera1, not(equalTo(camera5)));
 		assertThat(camera5, not(equalTo(camera1)));
 	}

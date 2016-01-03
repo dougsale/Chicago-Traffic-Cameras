@@ -38,7 +38,7 @@ public class SpeedCamera extends Camera {
 	 * @param location coordinates per the WGS84 standard
 	 * @param approaches at least one approach direction
 	 */
-	public SpeedCamera(String address, Location location, Set<Approach> approaches) {		
+	public SpeedCamera(String address, Location location, Set<Direction> approaches) {		
 		super(location, approaches);
 
 		notNull(address, "invalid parameter: address=null");

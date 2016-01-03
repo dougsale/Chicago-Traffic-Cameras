@@ -41,14 +41,14 @@ public class RedLightCamera extends Camera {
 	 * @param location camera location
 	 * @param approaches camera approach direction (at least one)
 	 */
-	public RedLightCamera(Set<String> intersection, Location location, Set<Approach> approaches) {
+	public RedLightCamera(Set<String> intersection, Location location, Set<Direction> approaches) {
 		super(location, approaches);
 
 		// validate intersection
 		isTrue(!(intersection.size() < 2),
 				String.format("invalid parameter: intersection (size < 2); size=%d", intersection.size()));
 		for (String street : intersection) {
-			notNull(street, "invalid parameter: street=null");
+			notNull(street, "invalid parameter: intersection; contains element=null");
 			notEmpty(street.trim(), String.format("invalid parameter: street=<%s>", street));
 		}
 		
