@@ -13,7 +13,6 @@ import java.util.Arrays;
 import org.junit.Test;
 
 import net.dougsale.chicagotrafficcameras.domain.Camera;
-import net.dougsale.chicagotrafficcameras.domain.Location;
 
 public class CompositeCameraFilterTest {
 
