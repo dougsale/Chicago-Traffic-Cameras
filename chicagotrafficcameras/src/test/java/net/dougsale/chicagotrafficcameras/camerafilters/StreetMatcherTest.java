@@ -32,7 +32,7 @@ public class StreetMatcherTest {
 	public void testStreetMatcher() {
 		String street = " stREet	";
 		StreetMatcher matcher = new StreetMatcher(street);
-		assertThat(matcher.getStreet(), equalTo(street.trim().toLowerCase()));
+		assertThat(matcher.getStreet(), equalTo(street.trim().toUpperCase()));
 	}
 	
 	@Test(expected=NullPointerException.class)
