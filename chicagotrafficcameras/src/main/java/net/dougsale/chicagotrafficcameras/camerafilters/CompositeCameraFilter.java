@@ -59,11 +59,9 @@ public class CompositeCameraFilter extends AbstractCameraFilter {
 	/**
 	 * Returns true if all CameraFilter components of this composite accept camera
 	 * @param camera
-	 * @throws NullPointerException if camera is null
 	 */
 	@Override
 	public boolean accept(Camera camera) {
-		notNull(camera, "invalid parameter: camera=null");
 		
 		boolean accept = true;
 		
