@@ -46,14 +46,14 @@ public class CompositeCameraFilter extends AbstractCameraFilter {
 		for (CameraFilter filter : filters)
 			notNull(filter, "invalid parameter: filters; contains element=null");
 		
-		this.filters = Arrays.copyOf(filters, filters.length);
+		this.filters = filters.clone();
 	}
 	
 	/**
 	 * @returns an array of CameraFilter components comprising this composite
 	 */
 	public CameraFilter[] getCameraFilters() {
-		return Arrays.copyOf(filters, filters.length);
+		return filters.clone();
 	}
 
 	/**

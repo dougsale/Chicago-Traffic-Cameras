@@ -32,11 +32,11 @@ public class CompositeCameraFilterFactory implements CameraFilterFactory {
 		for (CameraFilterFactory factory : factories)
 			notNull(factory, "invalid parameter: factories; contains element=null");
 		
-		this.factories = Arrays.copyOf(factories, factories.length);
+		this.factories = factories.clone();
 	}
 	
 	public CameraFilterFactory[] getCameraFilterFactories() {
-		return Arrays.copyOf(factories, factories.length);
+		return factories.clone();
 	}
 
 	/* (non-Javadoc)
