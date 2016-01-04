@@ -5,6 +5,7 @@
 package net.dougsale.chicagotrafficcameras.domain;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
 
@@ -14,6 +15,7 @@ import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.TreeSet;
 
 import org.junit.Test;
@@ -27,9 +29,12 @@ import net.dougsale.chicagotrafficcameras.domain.SpeedCamera;
 
 public class CamerasTest {
 
+	//TODO make other tests like testSize(), testRemove()
+	
 	@Test
 	public void testAdd_GetTypes_GetByType_Get() {
 		Cameras cameras = new Cameras();
+
 		RedLightCamera rlc = mock(RedLightCamera.class);
 		SpeedCamera spc = mock(SpeedCamera.class);	
 		
@@ -46,6 +51,108 @@ public class CamerasTest {
 		
 		assertThat(cameras.get(), equalTo(
 				new HashSet<Camera>(Arrays.asList(rlc, spc))));
+	}
+
+	@Test
+	public void testAdd() {
+		Cameras cameras = new Cameras();
+		Set<Camera> set = new HashSet<>();
+		
+		int count = 10;		
+		for (int i = 1; i <= count; i++) {
+			Camera camera = i % 2 == 0? mock(RedLightCamera.class) : mock(SpeedCamera.class);
+			cameras.add(camera);
+			set.add(camera);
+		}
+
+		assertThat(cameras.size(), equalTo(count));
+		assertThat(cameras.get(), equalTo(set));
+	}	
+
+	@Test
+	public void testAddAll() {
+		Cameras source1 = new Cameras();
+		Cameras source2 = new Cameras();
+		
+		Set<Camera> set = new HashSet<>();
+		
+		Cameras cameras = new Cameras();
+
+		int count = 10;		
+		for (int i = 1; i <= count; i++) {
+			Camera camera = i % 2 == 0? mock(RedLightCamera.class) : mock(SpeedCamera.class);
+			source1.add(camera);
+			source2.add(camera);
+			set.add(camera);
+		}
+		
+		// add 10 cameras
+		cameras.addAll(source1);
+		assertThat(cameras.size(), equalTo(count));
+		assertThat(cameras.get(), equalTo(set));
+		
+		// add no cameras
+		cameras.addAll(new Cameras());
+		assertThat(cameras.size(), equalTo(count));
+		assertThat(cameras.get(), equalTo(set));
+		
+		for (int i = 1; i <= count; i++) {
+			Camera camera = i % 2 == 0? mock(RedLightCamera.class) : mock(SpeedCamera.class);
+			source2.add(camera);
+			set.add(camera);
+		}
+
+		// add 20 cameras, 10 of which are duplicates
+		cameras.addAll(source2);
+		assertThat(cameras.size(), equalTo(2 * count));
+		assertThat(cameras.get(), equalTo(set));
+	}
+	
+	@Test(expected=NullPointerException.class)
+	public void testAddAllNullCameras() {
+		new Cameras().addAll(null);
+	}
+	
+	@Test
+	public void testSize() {
+		Cameras cameras = new Cameras();
+		assertThat(cameras.size(), equalTo(0));
+
+		int count = 10;		
+		for (int i = 1; i <= count; i++) {
+			Camera camera = i % 2 == 0? mock(RedLightCamera.class) : mock(SpeedCamera.class);
+			cameras.add(camera);
+			assertThat(cameras.size(), equalTo(i));
+		}
+	}
+	
+	@Test
+	public void testRemove() {
+		Cameras cameras = new Cameras();
+
+		// remove from empty cameras collection
+		assertThat(cameras.remove(mock(Camera.class)), is(false));
+		
+		// add some cameras
+		int count = 10;
+		Camera camera = null;
+		for (int i = 0; i < count; i++) {
+			camera = i % 2 == 0? mock(RedLightCamera.class) : mock(SpeedCamera.class);
+			cameras.add(camera);
+		}
+		
+		// remove the camera added last
+		assertThat(cameras.remove(camera), is(true));
+		assertThat(cameras.size(), equalTo(count - 1));
+		assertThat(cameras.get().contains(camera), is(false));
+		
+		// remove a camera not in the set
+		assertThat(cameras.remove(mock(Camera.class)), is(false));
+	}
+	
+	@Test(expected=NullPointerException.class)
+	public void testRemoveNullCamera() {
+		new Cameras().remove(null);
 	}
 	
 	@Test

@@ -16,6 +16,7 @@ import java.util.TreeSet;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
  * Cameras is a container for Camera instances.
@@ -25,6 +26,11 @@ public class Cameras implements Serializable {
 	
 	private static final long serialVersionUID = 3L;
 
+	//TODO review code for efficiency, clarity wrt: new/copy/clone/empty, generics, return types, et al
+	
+	/**
+	 * A comparator that sorts Camera instances by their location's latitude.
+	 */
 	public static final Comparator<Camera> BY_LATITUDE = new Comparator<Camera>() {
 		@Override
 		public int compare(Camera c1, Camera c2) {
@@ -34,6 +40,9 @@ public class Cameras implements Serializable {
 		}
 	};
 			
+	/**
+	 * A comparator that sorts Camera instances by their location's longitude.
+	 */
 	public static final Comparator<Camera> BY_LONGITUDE = new Comparator<Camera>() {
 		@Override
 		public int compare(Camera c1, Camera c2) {
@@ -51,30 +60,53 @@ public class Cameras implements Serializable {
 	public Cameras() {}
 	
 	/**
-	 * Add a Camera to this Cameras container.
+	 * Add the Camera instance to this Cameras collection.
 	 * @param camera
 	 * @throws NullPointerException if camera is null
 	 */
 	@SuppressWarnings("unchecked")
-	public <T extends Camera> void add(T camera) {
+	public <T extends Camera> boolean add(T camera) {
 		notNull(camera, "invalid parameter: camera=null");
 		
-		Class<? extends Camera> type = camera.getClass();
-		
-		if (!camerasByType.containsKey(type))
-			camerasByType.put(type, new HashSet<T>());
+		Class<T> type = (Class<T>) camera.getClass();		
+		Set<T> set = (Set<T>) camerasByType.get(type);
 
-		((Set<T>)camerasByType.get(type)).add(camera);
-	}
-	
-	public void addAll(Cameras cameras) {
-		throw new UnsupportedOperationException("Oh!  You needed this?");
-	}
+		if (set == null) {
+			set = new HashSet<T>();
+			camerasByType.put(type, set);
+		}
 		
-	public void remove(Camera camera) {
-		throw new UnsupportedOperationException("Oh!  You needed this?");
+		return set.add(camera);
 	}
 	
+	/**
+	 * Add all Camera instances in cameras to this Cameras collection.
+	 * @param cameras
+	 * @throws NullPointerException if cameras is null
+	 */
+	public void addAll(Cameras cameras) {
+		notNull(cameras, "invalid parameter: cameras=null");
+		//TODO non-naive implementation that correctly handles generics
+		for (Camera camera : cameras.get())
+			add(camera);
+	}
+	
+	/**
+	 * Remove the Camera instance from this Cameras collection. 
+	 * @param camera
+	 * @throws NullPointerException if camera is null
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends Camera> boolean remove(T camera) {
+		notNull(camera, "invalid parameter: camera=null");
+		Set<T> cameras = (Set<T>) camerasByType.get(camera.getClass());
+		return cameras == null? false : cameras.remove(camera);
+	}
+	
+	/**
+	 * Returns the count of all Camera instances contained.
+	 * @return count of Camera instances
+	 */
 	public int size() {
 		int size = 0;
 		for (Set<? extends Camera> set : camerasByType.values())
@@ -180,5 +212,10 @@ public class Cameras implements Serializable {
 					.toHashCode();
 	}
 
-
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this)
+				.append(camerasByType)
+				.toString();
+	}
 }
