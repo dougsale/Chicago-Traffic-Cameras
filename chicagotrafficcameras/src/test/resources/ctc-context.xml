@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:c="http://www.springframework.org/schema/c" xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context 
+                           http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<context:property-placeholder location="classpath:/ctc.properties" />
+
+	<bean id="cameraService" class="net.dougsale.chicagotrafficcameras.CameraService">
+		<constructor-arg index="0" ref="camerasRepository" />
+		<constructor-arg index="1" ref="cameraLocator" />
+	</bean>
+
+	<bean id="cameraLocator" class="net.dougsale.chicagotrafficcameras.CameraLocator">
+		<constructor-arg ref="cameraFilterFactory" />
+	</bean>
+
+	<bean id="cameraFilterFactory" class="net.dougsale.chicagotrafficcameras.camerafilters.CompositeCameraFilterFactory">
+		<constructor-arg>
+			<array>
+				<bean class="net.dougsale.chicagotrafficcameras.camerafilters.BoundingBoxFactory">
+					<constructor-arg type="double" value="${BoundingBoxFactory.padding}" />
+				</bean>
+				<bean class="net.dougsale.chicagotrafficcameras.camerafilters.StreetMatcherFactory" />
+			</array>
+		</constructor-arg>
+	</bean>
+
+	<bean id="camerasRepository" class="net.dougsale.chicagotrafficcameras.repository.CamerasRepository">
+		<constructor-arg value="${CamerasRepository.resourceName}" />
+	</bean>
+
+</beans>
