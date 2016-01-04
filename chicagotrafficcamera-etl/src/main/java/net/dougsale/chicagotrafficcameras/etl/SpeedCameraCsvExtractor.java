@@ -5,14 +5,14 @@ import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
 
-import net.dougsale.chicagotrafficcameras.domain.Approach;
+import net.dougsale.chicagotrafficcameras.domain.Direction;
 import net.dougsale.chicagotrafficcameras.domain.Cameras;
 import net.dougsale.chicagotrafficcameras.domain.Location;
 import net.dougsale.chicagotrafficcameras.domain.SpeedCamera;
 
 public class SpeedCameraCsvExtractor {
 	
-	private HashSet<Approach> approaches = new HashSet<>(2);
+	private HashSet<Direction> approaches = new HashSet<>(2);
 	
 	/**
 	 * 
@@ -33,7 +33,7 @@ public class SpeedCameraCsvExtractor {
 		while (scanner.hasNext()) {
 
 			String address = extractAddress(scanner);
-			Set<Approach> approaches = extractApproaches(scanner);
+			Set<Direction> approaches = extractApproaches(scanner);
 
 			// ignore "go live date"
 			scanner.next();
@@ -58,35 +58,35 @@ public class SpeedCameraCsvExtractor {
 		return address;
 	}
 
-	private Set<Approach> extractApproaches(Scanner scanner) {
+	private Set<Direction> extractApproaches(Scanner scanner) {
 		approaches.clear();
 
 		for (int i = 0; i < 2; i++) {
 			String approach = scanner.next();
 			switch (approach) {
 			case "NB":
-				approaches.add(Approach.NORTHBOUND);
+				approaches.add(Direction.NORTHBOUND);
 				break;
 			case "NEB":
-				approaches.add(Approach.NORTHEASTBOUND);
+				approaches.add(Direction.NORTHEASTBOUND);
 				break;
 			case "NWB":
-				approaches.add(Approach.NORTHWESTBOUND);
+				approaches.add(Direction.NORTHWESTBOUND);
 				break;
 			case "SB":
-				approaches.add(Approach.SOUTHBOUND);
+				approaches.add(Direction.SOUTHBOUND);
 				break;
 			case "SEB":
-				approaches.add(Approach.SOUTHEASTBOUND);
+				approaches.add(Direction.SOUTHEASTBOUND);
 				break;
 			case "SWB":
-				approaches.add(Approach.SOUTHWESTBOUND);
+				approaches.add(Direction.SOUTHWESTBOUND);
 				break;
 			case "EB":
-				approaches.add(Approach.EASTBOUND);
+				approaches.add(Direction.EASTBOUND);
 				break;
 			case "WB":
-				approaches.add(Approach.WESTBOUND);
+				approaches.add(Direction.WESTBOUND);
 				break;
 			case "":
 				// okay
