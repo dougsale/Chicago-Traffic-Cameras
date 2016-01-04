@@ -18,7 +18,7 @@ import net.dougsale.chicagotrafficcameras.domain.RedLightCamera;
 import net.dougsale.chicagotrafficcameras.domain.SpeedCamera;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("/app-context.xml")
+@ContextConfiguration("/ctc-context.xml")
 public class CamerasRepositoryIT {
 
 	@Autowired
