@@ -1,18 +1,13 @@
 package net.dougsale.chicagotrafficcameras.etl;
 
 import java.io.Reader;
-import java.util.HashSet;
 import java.util.Scanner;
-import java.util.Set;
 
-import net.dougsale.chicagotrafficcameras.domain.Direction;
 import net.dougsale.chicagotrafficcameras.domain.Cameras;
-import net.dougsale.chicagotrafficcameras.domain.Location;
-import net.dougsale.chicagotrafficcameras.domain.SpeedCamera;
+import net.dougsale.chicagotrafficcameras.domain.Direction;
+import net.dougsale.chicagotrafficcameras.domain.builders.SpeedCameraBuilder;
 
 public class SpeedCameraCsvExtractor {
-	
-	private HashSet<Direction> approaches = new HashSet<>(2);
 	
 	/**
 	 * 
@@ -30,63 +25,62 @@ public class SpeedCameraCsvExtractor {
 		// make scanner.next() returns values by column (CSV)
 		scanner.useDelimiter(",");
 
+		SpeedCameraBuilder builder = new SpeedCameraBuilder();
+		
 		while (scanner.hasNext()) {
 
-			String address = extractAddress(scanner);
-			Set<Direction> approaches = extractApproaches(scanner);
+			extractAddress(builder, scanner);
+			extractApproaches(builder, scanner);
 
 			// ignore "go live date"
 			scanner.next();
 
-			double latitude = scanner.nextDouble();
-			double longitude = scanner.nextDouble();
+			builder.withLocation(scanner.nextDouble(), scanner.nextDouble());
 
 			// ignore "location"
 			scanner.nextLine();
 
-			SpeedCamera camera =
-					new SpeedCamera(address, new Location(latitude, longitude), approaches);
-			cameras.add(camera);
+			cameras.add(builder.build());
+			builder.reset();
 		}
 
 		scanner.close();
 	}
 
-	private String extractAddress(Scanner scanner) {
+	private void extractAddress(SpeedCameraBuilder builder, Scanner scanner) {
 		String address = scanner.next();
 		address = address.replace(" (Speed Camera)", "");
-		return address;
+		builder.withAddress(address);
 	}
 
-	private Set<Direction> extractApproaches(Scanner scanner) {
-		approaches.clear();
+	private void extractApproaches(SpeedCameraBuilder builder, Scanner scanner) {
 
 		for (int i = 0; i < 2; i++) {
 			String approach = scanner.next();
 			switch (approach) {
 			case "NB":
-				approaches.add(Direction.NORTHBOUND);
+				builder.withApproach(Direction.NORTHBOUND);
 				break;
 			case "NEB":
-				approaches.add(Direction.NORTHEASTBOUND);
+				builder.withApproach(Direction.NORTHEASTBOUND);
 				break;
 			case "NWB":
-				approaches.add(Direction.NORTHWESTBOUND);
+				builder.withApproach(Direction.NORTHWESTBOUND);
 				break;
 			case "SB":
-				approaches.add(Direction.SOUTHBOUND);
+				builder.withApproach(Direction.SOUTHBOUND);
 				break;
 			case "SEB":
-				approaches.add(Direction.SOUTHEASTBOUND);
+				builder.withApproach(Direction.SOUTHEASTBOUND);
 				break;
 			case "SWB":
-				approaches.add(Direction.SOUTHWESTBOUND);
+				builder.withApproach(Direction.SOUTHWESTBOUND);
 				break;
 			case "EB":
-				approaches.add(Direction.EASTBOUND);
+				builder.withApproach(Direction.EASTBOUND);
 				break;
 			case "WB":
-				approaches.add(Direction.WESTBOUND);
+				builder.withApproach(Direction.WESTBOUND);
 				break;
 			case "":
 				// okay
@@ -97,7 +91,6 @@ public class SpeedCameraCsvExtractor {
 			}
 		}
 
-		return approaches;
 	}
 
 }
