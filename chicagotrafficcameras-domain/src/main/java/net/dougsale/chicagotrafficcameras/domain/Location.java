@@ -23,11 +23,6 @@ public class Location implements Serializable {
 	private static double MIN_LONGITUDE = -180.0;
 	private static double MAX_LONGITUDE = 180.0;
 
-	// immutable class, these values are computed once, lazily
-	// current values indicate that they have not been computed
-	private Integer hashCode = null;
-	private String toString = null;
-	
 	public final double latitude;
 	public final double longitude;
 
@@ -56,25 +51,17 @@ public class Location implements Serializable {
 
 	@Override
 	public int hashCode() {
-		// immutable class, calculate hashCode once, lazily
-		if (hashCode == null)
-			hashCode = new HashCodeBuilder(19, 73)
+		return new HashCodeBuilder(19, 73)
 				.append(latitude)
 				.append(longitude)
 				.toHashCode();
-
-		return hashCode;
 	}
 
 	@Override
 	public String toString() {
-		// immutable class, generate toString once, lazily
-		if (toString == null)
-			toString = new ToStringBuilder(this)
+		return new ToStringBuilder(this)
 				.append("latitude", latitude)
 				.append("longitude", longitude)
 				.toString();
-
-		return toString;
 	}
 }

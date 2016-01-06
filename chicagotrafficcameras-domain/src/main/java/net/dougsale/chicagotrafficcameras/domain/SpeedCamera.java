@@ -23,11 +23,6 @@ public class SpeedCamera extends Camera {
 
 	public final String address;
 
-	// immutable class, these values are computed once, lazily
-	// current values indicate that they have not been computed
-	private Integer hashCode = null;
-	private String toString = null;
-	
 	/**
 	 * Create a SpeedCamera instance.  Note that SpeedCamera instances are immutable.
 	 * The approaches set is unmodifiable and its elements are copied
@@ -60,32 +55,24 @@ public class SpeedCamera extends Camera {
 	   SpeedCamera that = (SpeedCamera) o;
 	   
 	   return new EqualsBuilder()
-	                 .appendSuper(super.equals(o))
-	                 .append(address, that.address)
-	                 .isEquals();
+	             .appendSuper(super.equals(o))
+	             .append(address, that.address)
+	             .isEquals();
 	}
 
 	@Override
 	public int hashCode() {
-		// immutable class, calculate hashCode once, lazily
-		if (hashCode == null)
-			hashCode = new HashCodeBuilder(19, 73)
-					.appendSuper(super.hashCode())
-					.append(address)
-					.toHashCode();
-
-		return hashCode;
+		return new HashCodeBuilder(19, 73)
+				.appendSuper(super.hashCode())
+				.append(address)
+				.toHashCode();
 	}
 
 	@Override
 	public String toString() {
-		// immutable class, generate toString once, lazily
-		if (toString == null)
-			toString = new ToStringBuilder(this)
-					.appendSuper(super.toString())
-					.append("address", address)
-					.toString();
-		
-		return toString;
+		return new ToStringBuilder(this)
+				.appendSuper(super.toString())
+				.append("address", address)
+				.toString();
 	}
 }

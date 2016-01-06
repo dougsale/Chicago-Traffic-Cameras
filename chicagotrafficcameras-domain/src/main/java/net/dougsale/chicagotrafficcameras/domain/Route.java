@@ -27,11 +27,6 @@ import net.dougsale.chicagotrafficcameras.domain.Location;
  */
 public class Route {
 
-	// immutable class, these values are computed once, lazily
-	// current values indicate that they have not been computed
-	private Integer hashCode = null;
-	private String toString = null;
-
 	private final String startAddress;
 	private final String endAddress;
 	private final List<Step> steps;
@@ -64,14 +59,12 @@ public class Route {
 
 	@Override
 	public String toString() {
-		if (toString == null)
-			toString = new ToStringBuilder(this)
+		return new ToStringBuilder(this)
 				.appendSuper(super.toString())
 				.append("startAddress", startAddress)
 				.append("endAddress", endAddress)
 				.append("steps", steps)
 				.toString();
-		return toString;
 	}
 
 	@Override
@@ -91,23 +84,14 @@ public class Route {
 	
 	@Override
 	public int hashCode() {
-		// immutable class, calculate hashCode once, lazily
-		if (hashCode == null)
-			hashCode = new HashCodeBuilder(19, 73)
+		return new HashCodeBuilder(19, 73)
 					.append(startAddress)
 					.append(endAddress)
 					.append(steps)
 					.toHashCode();
-
-		return hashCode;
 	}
 	
 	public static class Step {
-		
-		// immutable class, these values are computed once, lazily
-		// current values indicate that they have not been computed
-		private Integer hashCode = null;
-		private String toString = null;
 
 		private final String instructions;
 		private final Location start;
@@ -138,14 +122,12 @@ public class Route {
 
 		@Override
 		public String toString() {
-			if (toString == null)
-				toString = new ToStringBuilder(this)
+			return new ToStringBuilder(this)
 					.appendSuper(super.toString())
 					.append("instructions", instructions)
 					.append("start", start)
 					.append("end", end)
 					.toString();
-				return toString; 
 		}
 		
 		@Override
@@ -165,15 +147,11 @@ public class Route {
 		
 		@Override
 		public int hashCode() {
-			// immutable class, calculate hashCode once, lazily
-			if (hashCode == null)
-				hashCode = new HashCodeBuilder(19, 73)
-						.append(instructions)
-						.append(start)
-						.append(end)
-						.toHashCode();
-
-			return hashCode;
+			return new HashCodeBuilder(19, 73)
+					.append(instructions)
+					.append(start)
+					.append(end)
+					.toHashCode();
 		}
 	}
 }

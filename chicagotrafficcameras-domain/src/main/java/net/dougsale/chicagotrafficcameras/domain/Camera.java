@@ -20,11 +20,6 @@ public class Camera implements Serializable {
 
 	private static final long serialVersionUID = 3L;
 	
-	// immutable class, these values are computed once, lazily
-	// current values indicate that they have not been computed
-	private Integer hashCode = null;
-	private String toString = null;
-	
 	private final Location location;
 	private final Set<Direction> approaches;
 
@@ -73,25 +68,17 @@ public class Camera implements Serializable {
 	
 	@Override
 	public int hashCode() {
-		// immutable class, calculate hashCode once, lazily
-		if (hashCode == null)
-			hashCode = new HashCodeBuilder(19, 73)
-					.append(location)
-					.append(approaches)
-					.toHashCode();
-
-		return hashCode;
+		return new HashCodeBuilder(19, 73)
+				.append(location)
+				.append(approaches)
+				.toHashCode();
 	}
 	
 	@Override
 	public String toString() {
-		// immutable class, generate toString once, lazily
-		if (toString == null)
-			toString = new ToStringBuilder(this)
-					.append("location", location)
-					.append("approaches", approaches)
-					.toString();
-		
-		return toString;	
+		return new ToStringBuilder(this)
+				.append("location", location)
+				.append("approaches", approaches)
+				.toString();
 	}
 }

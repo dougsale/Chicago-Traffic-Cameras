@@ -23,11 +23,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 public class RedLightCamera extends Camera {
 
 	private static final long serialVersionUID = 3L;
-
-	// immutable class, these values are computed once, lazily
-	// current values indicate that they have not been computed
-	private Integer hashCode = null;
-	private String toString = null;
 	
 	private final Set<String> intersection;
 
@@ -76,25 +71,17 @@ public class RedLightCamera extends Camera {
 
 	@Override
 	public int hashCode() {
-		// immutable class, calculate hashCode once, lazily
-		if (hashCode == null)
-			hashCode = new HashCodeBuilder(19, 73)
-					.appendSuper(super.hashCode())
-					.append(intersection)
-					.toHashCode();
-
-		return hashCode;
+		return new HashCodeBuilder(19, 73)
+				.appendSuper(super.hashCode())
+				.append(intersection)
+				.toHashCode();
 	}
 
 	@Override
 	public String toString() {
-		// immutable class, generate toString once, lazily
-		if (toString == null)
-			toString = new ToStringBuilder(this)
-					.appendSuper(super.toString())
-					.append("intersection", intersection)
-					.toString();
-		
-		return toString;
+		return new ToStringBuilder(this)
+				.appendSuper(super.toString())
+				.append("intersection", intersection)
+				.toString();
 	}
 }
