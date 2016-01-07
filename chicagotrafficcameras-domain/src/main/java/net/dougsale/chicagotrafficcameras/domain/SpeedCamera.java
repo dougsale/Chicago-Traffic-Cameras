@@ -19,10 +19,15 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  */
 public class SpeedCamera extends Camera {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 10L;
 
 	public final String address;
 
+	// immutable class, these values are computed once, lazily
+	// current values indicate that they have not been computed
+	private transient Integer hashCode = null;
+	private String toString = null;
+	
 	/**
 	 * Create a SpeedCamera instance.  Note that SpeedCamera instances are immutable.
 	 * The approaches set is unmodifiable and its elements are copied
@@ -62,17 +67,21 @@ public class SpeedCamera extends Camera {
 
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder(19, 73)
+		if (hashCode == null)
+			hashCode = new HashCodeBuilder(19, 73)
 				.appendSuper(super.hashCode())
 				.append(address)
 				.toHashCode();
+		return hashCode;
 	}
 
 	@Override
 	public String toString() {
-		return new ToStringBuilder(this)
+		if (toString == null)
+			toString = new ToStringBuilder(this)
 				.appendSuper(super.toString())
 				.append("address", address)
 				.toString();
+		return toString;
 	}
 }

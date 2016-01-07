@@ -24,7 +24,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  */
 public class Cameras implements Serializable {
 	
-	private static final long serialVersionUID = 3L;
+	private static final long serialVersionUID = 10L;
 
 	//TODO review code for efficiency, clarity wrt: new/copy/clone/empty, generics, return types, et al
 	

@@ -18,7 +18,12 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class Camera implements Serializable {
 
-	private static final long serialVersionUID = 3L;
+	private static final long serialVersionUID = 10L;
+	
+	// immutable class, these values are computed once, lazily
+	// current values indicate that they have not been computed
+	private transient Integer hashCode = null;
+	private String toString = null;
 	
 	private final Location location;
 	private final Set<Direction> approaches;
@@ -68,17 +73,21 @@ public class Camera implements Serializable {
 	
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder(19, 73)
+		if (hashCode == null)
+			hashCode = new HashCodeBuilder(19, 73)
 				.append(location)
 				.append(approaches)
 				.toHashCode();
+		return hashCode;
 	}
 	
 	@Override
 	public String toString() {
-		return new ToStringBuilder(this)
+		if (toString == null)
+			toString = new ToStringBuilder(this)
 				.append("location", location)
 				.append("approaches", approaches)
 				.toString();
+		return toString;
 	}
 }
