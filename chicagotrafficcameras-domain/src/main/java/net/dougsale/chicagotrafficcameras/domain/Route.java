@@ -103,7 +103,9 @@ public class Route implements Serializable {
 		return toString;
 	}
 
-	public static class Step {
+	public static class Step implements Serializable {
+
+		private static final long serialVersionUID = 10L;
 
 		// immutable class, these values are computed once, lazily
 		// current values indicate that they have not been computed
