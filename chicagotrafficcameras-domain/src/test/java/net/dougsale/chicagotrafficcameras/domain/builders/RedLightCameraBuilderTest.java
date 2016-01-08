@@ -42,7 +42,6 @@ public class RedLightCameraBuilderTest {
 	public void testBuildWithPrimitives() {
 		String street1 = "street1";
 		String street2 = "street2";
-		String address = "address";
 		double latitude = 1.0;
 		double longitude = 2.0;
 		Location location = new Location(latitude, longitude);
