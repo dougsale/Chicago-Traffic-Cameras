@@ -3,7 +3,8 @@
  */
 package net.dougsale.chicagotrafficcameras.domain.builders;
 
-import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.Set;
 
 import net.dougsale.chicagotrafficcameras.domain.Camera;
 import net.dougsale.chicagotrafficcameras.domain.Direction;
@@ -42,22 +43,25 @@ public class CameraBuilder {
 	}
 	
 	public CameraBuilder withLocation(double latitude, double longitude) {
-		data.setLocation(new Location(latitude, longitude));
+		return withLocation(new Location(latitude, longitude));
+	}
+	
+	public CameraBuilder withApproach(Direction approach) {		
+		data.addApproach(approach);
 		return this;
 	}
 	
-	public CameraBuilder withApproach(Direction approach) {
-		data.addApproach(approach);
-		return this;
+	public CameraBuilder withApproach(String approach) {
+		return withApproach(Direction.fromString(approach));
 	}
 	
 	public Camera build() {
 		return new Camera(data.getLocation(), data.getApproaches());
 	}
 	
-	class CameraData {
+	static class CameraData {
 		private Location location = null;
-		private EnumSet<Direction> approaches = null;
+		private Set<Direction> approaches = null;
 		public Location getLocation() {
 			return location;
 		}
@@ -66,11 +70,11 @@ public class CameraBuilder {
 		}
 		public void addApproach(Direction direction) {
 			if (approaches == null)
-				approaches = EnumSet.of(direction);
-			else
-				approaches.add(direction);
+				approaches = new HashSet<>();
+
+			approaches.add(direction);
 		}
-		public EnumSet<Direction> getApproaches() {
+		public Set<Direction> getApproaches() {
 			return approaches;
 		}
 	}

@@ -6,6 +6,8 @@ package net.dougsale.chicagotrafficcameras.domain.builders;
 import java.util.HashSet;
 import java.util.Set;
 
+import net.dougsale.chicagotrafficcameras.domain.Direction;
+import net.dougsale.chicagotrafficcameras.domain.Location;
 import net.dougsale.chicagotrafficcameras.domain.RedLightCamera;
 
 /**
@@ -13,8 +15,6 @@ import net.dougsale.chicagotrafficcameras.domain.RedLightCamera;
  *
  */
 public class RedLightCameraBuilder extends CameraBuilder {
-
-	//TODO need to override methods that return CameraBuilder to provide fluent interface (smalltalk-style)
 
 	/**
 	 * 
@@ -39,14 +39,40 @@ public class RedLightCameraBuilder extends CameraBuilder {
 	}
 	
 	@Override
+	public RedLightCameraBuilder withLocation(Location location) {
+		super.withLocation(location);
+		return this;
+	}
+	
+	@Override
+	public RedLightCameraBuilder withLocation(double latitude, double longitude) {
+		super.withLocation(latitude, longitude);
+		return this;
+	}
+	
+	@Override
+	public RedLightCameraBuilder withApproach(Direction approach) {		
+		super.withApproach(approach);
+		return this;
+	}
+	@Override
+	public RedLightCameraBuilder withApproach(String approach) {
+		super.withApproach(approach);
+		return this;
+	}
+		
+	@Override
 	public RedLightCamera build() {
 		RedLightCameraData data = getCameraData();
 		return new RedLightCamera(data.getIntersection(), data.getLocation(), data.getApproaches());
 	}
 	
-	class RedLightCameraData extends CameraData {
-		private Set<String> intersection = new HashSet<>();
+	static class RedLightCameraData extends CameraData {
+		private Set<String> intersection = null;
 		public void addStreet(String street) {
+			if (intersection == null)
+				intersection = new HashSet<>();
+			
 			intersection.add(street);
 		}
 		public Set<String> getIntersection() {
