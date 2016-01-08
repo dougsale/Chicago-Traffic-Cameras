@@ -8,17 +8,14 @@ import static org.apache.commons.lang3.Validate.notEmpty;
 import static org.apache.commons.lang3.Validate.notNull;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonPointer;
-import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import net.dougsale.chicagotrafficcameras.domain.Location;
 import net.dougsale.chicagotrafficcameras.domain.Route;
+import net.dougsale.chicagotrafficcameras.domain.builders.RouteBuilder;
 
 /**
  * RouteFromJsonMapper creates an immutable Route object from a JSON representation.
@@ -33,8 +30,6 @@ import net.dougsale.chicagotrafficcameras.domain.Route;
  */
 public class RouteFromJsonMapper {
 
-	//TODO maybe custom exception type to nest other stuff
-	
 	private ObjectMapper objectMapper = new ObjectMapper();
 	private JsonPointer startAddressPointer = JsonPointer.valueOf("/startAddress");
 	private JsonPointer endAddressPointer = JsonPointer.valueOf("/endAddress");
@@ -45,41 +40,36 @@ public class RouteFromJsonMapper {
 	private JsonPointer endLatitudePointer = JsonPointer.valueOf("/end/latitude");
 	private JsonPointer endLongitudePointer = JsonPointer.valueOf("/end/longitude");
 	
-	public Route map(String json) throws JsonParseException, JsonMappingException, IOException {
+	public Route map(String json) throws MapperException {
 		notNull(json, "invalid parameter: json=" + json);
 		notEmpty(json.trim(), "invalid parameter: json=" + json);
+
+		RouteBuilder builder = new RouteBuilder();
 		
-		JsonNode rootNode = objectMapper.readTree(json);
-		JsonNode stepsNode = rootNode.at(stepsPointer);
+		try {
+			JsonNode rootNode = objectMapper.readTree(json);
+			JsonNode stepsNode = rootNode.at(stepsPointer);
+	
+			builder.withStartAddress(rootNode.at(startAddressPointer).asText());
+			builder.withEndAddress(rootNode.at(endAddressPointer).asText());
 
-		List<Route.Step> steps = new ArrayList<Route.Step>(); 
-		Route.Step step;
-		String instructions;
-		Double startLatitude, startLongitude, endLatitude, endLongitude;
-
-		// process steps
-		for (JsonNode stepNode : stepsNode) {
-			instructions = stepNode.at(instructionsPointer).asText();
-			startLatitude = stepNode.at(startLatitudePointer).asDouble();
-			startLongitude = stepNode.at(startLongitudePointer).asDouble();
-			endLatitude = stepNode.at(endLatitudePointer).asDouble();
-			endLongitude = stepNode.at(endLongitudePointer).asDouble();
-
-			// build step
-			step = new Route.Step(
-					instructions,
-					new Location(startLatitude, startLongitude),
-					new Location(endLatitude, endLongitude)
+			for (JsonNode stepNode : stepsNode) {
+				builder.withStep(
+					stepNode.at(instructionsPointer).asText(),
+					stepNode.at(startLatitudePointer).asDouble(),
+					stepNode.at(startLongitudePointer).asDouble(),
+					stepNode.at(endLatitudePointer).asDouble(),
+					stepNode.at(endLongitudePointer).asDouble()
 				);
-
-			steps.add(step);
+			}
+					
+		} catch (JsonProcessingException e) {
+			throw new MapperException(
+					String.format("Route JSON is possibly malformed or not structured as expected: {}", json), e);
+		} catch (IOException e) {
+			throw new MapperException("Mapper I/O error", e);
 		}
 		
-		
-		String startAddress = rootNode.at(startAddressPointer).asText();
-		String endAddress = rootNode.at(endAddressPointer).asText();
-		Route route = new Route(startAddress, endAddress, steps);
-		
-		return route;
+		return builder.build();
 	}
 }
