@@ -2,11 +2,12 @@
  * Copyright (c) 2015 Doug Sale
  * All rights reserved.
  */
-package net.dougsale.chicagotrafficcameras;
+package net.dougsale.chicagotrafficcameras.domain;
 
 import static org.apache.commons.lang3.Validate.notEmpty;
 import static org.apache.commons.lang3.Validate.notNull;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -25,11 +26,13 @@ import net.dougsale.chicagotrafficcameras.domain.Location;
  * @author dsale
  *
  */
-public class Route {
+public class Route implements Serializable {
 
+	private static final long serialVersionUID = 10L;
+	
 	// immutable class, these values are computed once, lazily
 	// current values indicate that they have not been computed
-	private Integer hashCode = null;
+	private transient Integer hashCode = null;
 	private String toString = null;
 
 	private final String startAddress;
@@ -37,13 +40,13 @@ public class Route {
 	private final List<Step> steps;
 
 	public Route(String startAddress, String endAddress, List<Step> steps) {
-		notNull(startAddress, "invalid parameter: startAddress=" + startAddress);
+		notNull(startAddress, "invalid parameter: startAddress=null");
 		notEmpty(startAddress.trim(), "invalid parameter: startAddress=" + startAddress);
-		notNull(endAddress, "invalid parameter: endAddress=" + endAddress);
+		notNull(endAddress, "invalid parameter: endAddress=null");
 		notEmpty(endAddress.trim(), "invalid parameter: endAddress=" + endAddress);
 		notEmpty(steps, "invalid parameter: steps; size=" + steps.size());
 		for (Step step : steps)
-			notNull(step, "invalid parameter: steps; contains element=" + step);
+			notNull(step, "invalid parameter: steps; contains element=null");
 
 		this.startAddress = startAddress;
 		this.endAddress = endAddress;
@@ -63,18 +66,6 @@ public class Route {
 	}
 
 	@Override
-	public String toString() {
-		if (toString == null)
-			toString = new ToStringBuilder(this)
-				.appendSuper(super.toString())
-				.append("startAddress", startAddress)
-				.append("endAddress", endAddress)
-				.append("steps", steps)
-				.toString();
-		return toString;
-	}
-
-	@Override
 	public boolean equals(Object object) {
 		if (object == null) return false;
 		if (object == this) return true;
@@ -91,22 +82,34 @@ public class Route {
 	
 	@Override
 	public int hashCode() {
-		// immutable class, calculate hashCode once, lazily
 		if (hashCode == null)
 			hashCode = new HashCodeBuilder(19, 73)
 					.append(startAddress)
 					.append(endAddress)
 					.append(steps)
 					.toHashCode();
-
 		return hashCode;
 	}
 	
-	public static class Step {
-		
+	@Override
+	public String toString() {
+		if (toString == null)
+			toString = new ToStringBuilder(this)
+				.appendSuper(super.toString())
+				.append("startAddress", startAddress)
+				.append("endAddress", endAddress)
+				.append("steps", steps)
+				.toString();
+		return toString;
+	}
+
+	public static class Step implements Serializable {
+
+		private static final long serialVersionUID = 10L;
+
 		// immutable class, these values are computed once, lazily
 		// current values indicate that they have not been computed
-		private Integer hashCode = null;
+		private transient Integer hashCode = null;
 		private String toString = null;
 
 		private final String instructions;
@@ -114,10 +117,10 @@ public class Route {
 		private final Location end;
 		
 		public Step(String instructions, Location start, Location end) {
-			notNull(instructions, "invalid parameter: instructions=" + instructions);
+			notNull(instructions, "invalid parameter: instructions=null");
 			notEmpty(instructions.trim(), "invalid parameter: instructions=" + instructions);
-			notNull(start, "invalid parameter: start=" + start);
-			notNull(end, "invalid parameter: end=" + end);
+			notNull(start, "invalid parameter: start=null");
+			notNull(end, "invalid parameter: end=null");
 			
 			this.instructions = instructions;
 			this.start = start;
@@ -134,18 +137,6 @@ public class Route {
 
 		public Location getEnd() {
 			return end;
-		}
-
-		@Override
-		public String toString() {
-			if (toString == null)
-				toString = new ToStringBuilder(this)
-					.appendSuper(super.toString())
-					.append("instructions", instructions)
-					.append("start", start)
-					.append("end", end)
-					.toString();
-				return toString; 
 		}
 		
 		@Override
@@ -165,15 +156,25 @@ public class Route {
 		
 		@Override
 		public int hashCode() {
-			// immutable class, calculate hashCode once, lazily
 			if (hashCode == null)
 				hashCode = new HashCodeBuilder(19, 73)
-						.append(instructions)
-						.append(start)
-						.append(end)
-						.toHashCode();
-
+					.append(instructions)
+					.append(start)
+					.append(end)
+					.toHashCode();
 			return hashCode;
+		}
+
+		@Override
+		public String toString() {
+			if (toString == null)
+				toString = new ToStringBuilder(this)
+					.appendSuper(super.toString())
+					.append("instructions", instructions)
+					.append("start", start)
+					.append("end", end)
+					.toString();
+			return toString;
 		}
 	}
 }

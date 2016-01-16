@@ -9,11 +9,12 @@
 	<context:property-placeholder location="classpath:/ctc.properties" />
 
 	<bean id="cameraService" class="net.dougsale.chicagotrafficcameras.CameraService">
-		<constructor-arg index="0" ref="camerasRepository" />
-		<constructor-arg index="1" ref="cameraLocator" />
+		<constructor-arg ref="camerasFactory" />
+		<constructor-arg ref="cameraLocator" />
 	</bean>
 
 	<bean id="cameraLocator" class="net.dougsale.chicagotrafficcameras.CameraLocator">
+		<constructor-arg ref="camerasFactory" />
 		<constructor-arg ref="cameraFilterFactory" />
 	</bean>
 
@@ -26,6 +27,10 @@
 				<bean class="net.dougsale.chicagotrafficcameras.camerafilters.StreetMatcherFactory" />
 			</array>
 		</constructor-arg>
+	</bean>
+
+	<bean id="camerasFactory" class="net.dougsale.chicagotrafficcameras.CamerasFactory">
+		<constructor-arg ref="camerasRepository" />
 	</bean>
 
 	<bean id="camerasRepository" class="net.dougsale.chicagotrafficcameras.repository.CamerasRepository">
