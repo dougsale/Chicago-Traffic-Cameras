@@ -10,9 +10,9 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import net.dougsale.chicagotrafficcameras.Route;
-import net.dougsale.chicagotrafficcameras.Route.Step;
 import net.dougsale.chicagotrafficcameras.domain.Location;
+import net.dougsale.chicagotrafficcameras.domain.Route;
+import net.dougsale.chicagotrafficcameras.domain.Route.Step;
 
 public class BoundingBoxFactoryTest {
 

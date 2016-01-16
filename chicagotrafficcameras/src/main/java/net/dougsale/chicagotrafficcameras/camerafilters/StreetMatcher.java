@@ -22,7 +22,7 @@ import net.dougsale.chicagotrafficcameras.domain.SpeedCamera;
  * A CameraFilter implementation that filters Cameras by street.
  * @author dsale
  */
-public class StreetMatcher extends AbstractCameraFilter {
+public class StreetMatcher implements CameraFilter {
 
 	private static final Pattern streetExtractorPattern =
 			Pattern.compile("^\\s*(?:\\d+\\s+)(?:[NSEW]\\s+)?(.*?)\\s*", Pattern.CASE_INSENSITIVE);

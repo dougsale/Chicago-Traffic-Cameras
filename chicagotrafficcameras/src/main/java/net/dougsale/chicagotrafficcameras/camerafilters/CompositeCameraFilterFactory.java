@@ -3,14 +3,15 @@
  */
 package net.dougsale.chicagotrafficcameras.camerafilters;
 
-import java.util.List;
-import java.util.Arrays;
+import static org.apache.commons.lang3.Validate.isTrue;
+import static org.apache.commons.lang3.Validate.notNull;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import net.dougsale.chicagotrafficcameras.Route;
-import net.dougsale.chicagotrafficcameras.Route.Step;
-import static org.apache.commons.lang3.Validate.*;
+import net.dougsale.chicagotrafficcameras.domain.Route;
+import net.dougsale.chicagotrafficcameras.domain.Route.Step;
 
 /**
  * CompositeCameraFilterFactory is a CameraFilterFactory composed of

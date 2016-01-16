@@ -2,8 +2,8 @@ package net.dougsale.chicagotrafficcameras.camerafilters;
 
 import java.util.Map;
 
-import net.dougsale.chicagotrafficcameras.Route;
-import net.dougsale.chicagotrafficcameras.Route.Step;
+import net.dougsale.chicagotrafficcameras.domain.Route;
+import net.dougsale.chicagotrafficcameras.domain.Route.Step;
 
 /**
  * Factory interface for retrieving CameraFilter instances

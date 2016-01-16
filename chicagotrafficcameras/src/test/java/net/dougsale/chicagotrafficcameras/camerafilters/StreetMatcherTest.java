@@ -8,21 +8,16 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Set;
 
 import org.junit.Test;
 
 import net.dougsale.chicagotrafficcameras.domain.Camera;
-import net.dougsale.chicagotrafficcameras.domain.Cameras;
 import net.dougsale.chicagotrafficcameras.domain.RedLightCamera;
 import net.dougsale.chicagotrafficcameras.domain.SpeedCamera;
 
@@ -74,39 +69,6 @@ public class StreetMatcherTest {
 		assertThat(new StreetMatcher("N Ashland Ave").accept(camera), is(false));
 	}
 	
-	@Test
-	public void testFilter() {	
-		StreetMatcher filter = new StreetMatcher("N Ashland Ave");
-		
-		Camera
-			ok1 = when(mock(RedLightCamera.class).getIntersection()).thenReturn(new HashSet<>(Arrays.asList("Madison", "Ashland"))).getMock(),
-			ok2 = when(mock(SpeedCamera.class).getAddress()).thenReturn("123 Ashland Ave").getMock(),
-			ok3 = when(mock(RedLightCamera.class).getIntersection()).thenReturn(new HashSet<String>(Arrays.asList("Madison", "Ashland"))).getMock(),
-			ok4 = when(mock(SpeedCamera.class).getAddress()).thenReturn("123 Ashland Ave").getMock(),
-			nope1 = when(mock(RedLightCamera.class).getIntersection()).thenReturn(new HashSet<>(Arrays.asList("Madison", "Western"))).getMock(),
-			nope2 = when(mock(SpeedCamera.class).getAddress()).thenReturn("123 Madison Ave").getMock();
-		
-		Set<Camera> cameraSet = new HashSet<>(Arrays.asList(ok1, ok2, ok3, ok4, nope1, nope2));
-		Cameras source = when(mock(Cameras.class).get()).thenReturn(cameraSet).getMock();
-		
-		Cameras result = filter.filter(source);
-		
-		assertThat(result, sameInstance(source));
-		
-		verify(result).remove(nope1);
-		verify(result).remove(nope2);
-
-		verify(result, never()).remove(ok1);
-		verify(result, never()).remove(ok2);
-		verify(result, never()).remove(ok3);
-		verify(result, never()).remove(ok4);
-	}
-	
-	@Test(expected=NullPointerException.class)
-	public void testFilterNullCameras() {
-		new StreetMatcher("street").filter(null);
-	}
-
 	@Test
 	public void testStreetForAddress() {
 		StreetMatcher matcher = new StreetMatcher("foo");	

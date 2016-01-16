@@ -6,8 +6,6 @@ package net.dougsale.chicagotrafficcameras.camerafilters;
 import static org.apache.commons.lang3.Validate.isTrue;
 import static org.apache.commons.lang3.Validate.notNull;
 
-import java.util.Arrays;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -23,7 +21,7 @@ import net.dougsale.chicagotrafficcameras.domain.Camera;
  * @author dsale
  *
  */
-public class CompositeCameraFilter extends AbstractCameraFilter {
+public class CompositeCameraFilter implements CameraFilter {
 
 	// Immutable class, so these are
 	// computed once, lazily.

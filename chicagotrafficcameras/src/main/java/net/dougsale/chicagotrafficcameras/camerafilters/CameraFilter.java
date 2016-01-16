@@ -5,22 +5,21 @@
 package net.dougsale.chicagotrafficcameras.camerafilters;
 
 import net.dougsale.chicagotrafficcameras.domain.Camera;
-import net.dougsale.chicagotrafficcameras.domain.Cameras;
 
-public interface CameraFilter {
+public interface CameraFilter {//extends Predicate<Camera> {
 
 	/**
-	 * Returns true if the camera is accepted by this filter.
+	 * Returns true if the camera passes this filter.
 	 * @param camera
-	 * @return true if the camera is accepted
+	 * @return true if the camera passes
 	 */
 	boolean accept(Camera camera);
 	
 	/**
-	 * Filters the input cameras, returning those accepted
-	 * by this filter.
-	 * @param cameras
-	 * @returns cameras accepted by this filter
+	 * Maps the predicate method to the accept method.
 	 */
-	Cameras filter(Cameras cameras);	
+//	@Override
+//	default boolean test(Camera camera) {
+//		return accept(camera);
+//	}
 }

@@ -9,9 +9,9 @@ import static org.apache.commons.lang3.Validate.notNull;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.dougsale.chicagotrafficcameras.Route;
-import net.dougsale.chicagotrafficcameras.Route.Step;
 import net.dougsale.chicagotrafficcameras.domain.Location;
+import net.dougsale.chicagotrafficcameras.domain.Route;
+import net.dougsale.chicagotrafficcameras.domain.Route.Step;
 
 /**
  * @author dsale

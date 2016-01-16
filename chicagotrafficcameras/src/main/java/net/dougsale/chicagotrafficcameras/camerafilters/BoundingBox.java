@@ -20,7 +20,7 @@ import net.dougsale.chicagotrafficcameras.domain.Location;
  * 
  * @author dsale
  */
-public class BoundingBox extends AbstractCameraFilter {
+public class BoundingBox implements CameraFilter {
 
 	// Immutable class, so these are
 	// computed once, lazily.
