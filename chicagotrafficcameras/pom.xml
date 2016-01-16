@@ -13,6 +13,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<net.dougsale.chicagotrafficcameras.version>0.0.1-SNAPSHOT</net.dougsale.chicagotrafficcameras.version>
 		<org.apache.commons.commons-lang3.version>3.1</org.apache.commons.commons-lang3.version>
