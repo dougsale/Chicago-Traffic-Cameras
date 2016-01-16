@@ -3,26 +3,39 @@
  */
 package net.dougsale.chicagotrafficcameras.repository;
 
+import net.dougsale.chicagotrafficcameras.ErrorCode;
+import net.dougsale.chicagotrafficcameras.SystemException;
+
 /**
  * @author dsale
  *
  */
-public class RepositoryException extends Exception {
+public class RepositoryException extends SystemException {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -5954062474338855705L;
 
 	/**
 	 * @param message
 	 */
-	public RepositoryException(String message) {
-		super(message);
+	public RepositoryException(ErrorCode errCode) {
+		super(errCode);
 	}
 
 	/**
 	 * @param message
 	 * @param cause
 	 */
-	public RepositoryException(String message, Throwable cause) {
-		super(message, cause);
+	public RepositoryException(ErrorCode errCode, Throwable cause) {
+		super(errCode, cause);
+	}
+	
+	/**
+	 * @param key
+	 * @param value
+	 */
+	@Override
+	public RepositoryException withContext(String key, Object value) {
+		super.withContext(key, value);
+		return this;
 	}
 }
