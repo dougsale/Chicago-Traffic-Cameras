@@ -6,84 +6,134 @@ package net.dougsale.chicagotrafficcameras;
 
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.inOrder;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.junit.Test;
-import org.mockito.InOrder;
 
-import net.dougsale.chicagotrafficcameras.Route.Step;
 import net.dougsale.chicagotrafficcameras.camerafilters.CameraFilter;
 import net.dougsale.chicagotrafficcameras.camerafilters.CameraFilterFactory;
+import net.dougsale.chicagotrafficcameras.domain.Camera;
 import net.dougsale.chicagotrafficcameras.domain.Cameras;
+import net.dougsale.chicagotrafficcameras.domain.RedLightCamera;
+import net.dougsale.chicagotrafficcameras.domain.Route;
+import net.dougsale.chicagotrafficcameras.domain.Route.Step;
+import net.dougsale.chicagotrafficcameras.domain.SpeedCamera;
+import net.dougsale.chicagotrafficcameras.repository.RepositoryException;
 
 public class CameraLocatorTest {
 
 	@Test
 	public void testCameraLocator() {
-		CameraFilterFactory factory = mock(CameraFilterFactory.class);
-		CameraLocator locator = new CameraLocator(factory);
-		assertThat(locator.getCameraFilterFactory(), sameInstance(factory));
+		CamerasFactory camerasFactory = mock(CamerasFactory.class);
+		CameraFilterFactory filterFactory = mock(CameraFilterFactory.class);
+		CameraLocator locator = new CameraLocator(camerasFactory, filterFactory);
+		assertThat(locator.getCamerasFactory(), sameInstance(camerasFactory));
+		assertThat(locator.getCameraFilterFactory(), sameInstance(filterFactory));
+	}
+	
+	@Test(expected=NullPointerException.class)
+	public void testCameraLocatorNullCamerasFactory() {
+		new CameraLocator(null, mock(CameraFilterFactory.class));
 	}
 	
 	@Test(expected=NullPointerException.class)
 	public void testCameraLocatorNullCameraFilterFactory() {
-		new CameraLocator(null);
+		new CameraLocator(mock(CamerasFactory.class), null);
 	}
 	
 	@Test
-	public void testLocate() {
-		// steps in route
+	public void testLocate() throws RepositoryException {
+		// the route taken
+		Route route = mock(Route.class);
 		Step step1 = mock(Step.class);
 		Step step2 = mock(Step.class);
-		List<Step> steps = Arrays.asList(step1, step2);
+		Step step3 = mock(Step.class);
+		List<Step> steps = Arrays.asList(step1, step2, step3);
+		when(route.getSteps()).thenReturn(steps);
+		
+		// the deployed traffic cameras 
+		Cameras allCameras = mock(Cameras.class);
+		Camera camera = mock(Camera.class);
+		RedLightCamera redLightCamera = mock(RedLightCamera.class);
+		SpeedCamera speedCamera = mock(SpeedCamera.class);
+		Set<Camera> cameraSet = new HashSet<>(Arrays.asList(camera, redLightCamera, speedCamera));
+		when(allCameras.get()).thenReturn(cameraSet);
+		
+		// the cameras relevant to the route
+		Cameras cameras = mock(Cameras.class);
+		
+		// the cameras factory
+		CamerasFactory camerasFactory = mock(CamerasFactory.class);
+		when(camerasFactory.getEmptyCameras()).thenReturn(cameras);
+		when(camerasFactory.getAllCameras()).thenReturn(allCameras);
+		
+		// the filters that determine if a camera is germane to a particular step in the route
+		CameraFilter filter1 = mock(CameraFilter.class);
+		when(filter1.accept(camera)).thenReturn(false);
+		when(filter1.accept(redLightCamera)).thenReturn(false);
+		when(filter1.accept(speedCamera)).thenReturn(true);
+		CameraFilter filter2 = mock(CameraFilter.class);
+		when(filter2.accept(camera)).thenReturn(false);
+		when(filter2.accept(redLightCamera)).thenReturn(false);
+		when(filter2.accept(speedCamera)).thenReturn(true);
+		CameraFilter filter3 = mock(CameraFilter.class);
+		when(filter3.accept(camera)).thenReturn(false);
+		when(filter3.accept(redLightCamera)).thenReturn(true);
+		when(filter3.accept(speedCamera)).thenReturn(false);
+		
+		// the filter factory that creates the filters based on the route
+		CameraFilterFactory factory = mock(CameraFilterFactory.class);
+		Map<Step,CameraFilter> stepFilterMap = new HashMap<>();
+		stepFilterMap.put(step1,  filter1);
+		stepFilterMap.put(step2,  filter2);
+		stepFilterMap.put(step3,  filter3);
+		when(factory.getCameraFilters(route)).thenReturn(stepFilterMap);
+		
+		CameraLocator locator = new CameraLocator(camerasFactory, factory);
+		Cameras result = locator.locate(route);
+		
+		// stepFilterMap was generated
+		verify(factory, times(1)).getCameraFilters(route);
+		// for each step
+		verify(route, times(1)).getSteps();
+		// all cameras were retrieved
+		verify(allCameras, times(steps.size())).get();
+		// and tested on each filter
+		verify(filter1, times(cameraSet.size())).accept(any(Camera.class));
+		verify(filter1, times(1)).accept(camera);
+		verify(filter1, times(1)).accept(redLightCamera);
+		verify(filter1, times(1)).accept(speedCamera);
+		verify(filter2, times(cameraSet.size())).accept(any(Camera.class));
+		verify(filter2, times(1)).accept(camera);
+		verify(filter2, times(1)).accept(redLightCamera);
+		verify(filter2, times(1)).accept(speedCamera);
+		verify(filter3, times(cameraSet.size())).accept(any(Camera.class));
+		verify(filter3, times(1)).accept(camera);
+		verify(filter3, times(1)).accept(redLightCamera);
+		verify(filter3, times(1)).accept(speedCamera);
+		// verify that accepted cameras were added to the result
+		assertThat(cameras, sameInstance(result));
+		verify(result, never()).add(camera);
+		verify(result, times(1)).add(redLightCamera);
+		verify(result, times(2)).add(speedCamera);
+		verify(result, times(3)).add(any(Camera.class));
+	}	
 
-		// args to locate, route returns steps
-		Cameras candidates = mock(Cameras.class);
-		Cameras matches = mock(Cameras.class);
-		Route route = when(mock(Route.class).getSteps()).thenReturn(steps).getMock();
-		
-		// camera filters and their filtered results for each step
-		Cameras filtered1 = mock(Cameras.class);
-		CameraFilter filter1 = when(mock(CameraFilter.class).filter(candidates)).thenReturn(filtered1).getMock();
-		Cameras filtered2 = mock(Cameras.class);
-		CameraFilter filter2 = when(mock(CameraFilter.class).filter(candidates)).thenReturn(filtered2).getMock();
-		
-		Map<Step,CameraFilter> filters = new HashMap<>();
-		filters.put(step1, filter1);
-		filters.put(step2, filter2);
-		
-		// filter factory with assembled step->filter data structure
-		CameraFilterFactory factory = when(mock(CameraFilterFactory.class).getCameraFilters(route)).thenReturn(filters).getMock();
-		
-		CameraLocator locator = new CameraLocator(factory);		
-		locator.locate(candidates, matches, route);
-		
-		// verify that locator processed filters correctly
-		InOrder inOrder = inOrder(matches);
-		inOrder.verify(matches).addAll(filtered1);
-		inOrder.verify(matches).addAll(filtered2);
-	}
-	
 	@Test(expected=NullPointerException.class)
-	public void testLocateNullCandidateCameras() {
-		new CameraLocator(mock(CameraFilterFactory.class)).locate(null, mock(Cameras.class), mock(Route.class));
-	}
-	
-	@Test(expected=NullPointerException.class)
-	public void testLocateNullMatchesCameras() {
-		new CameraLocator(mock(CameraFilterFactory.class)).locate(mock(Cameras.class), null, mock(Route.class));
-	}
-	
-	@Test(expected=NullPointerException.class)
-	public void testLocateNullRoute() {
-		new CameraLocator(mock(CameraFilterFactory.class)).locate(mock(Cameras.class), mock(Cameras.class), null);
+	public void testLocateNullRoute() throws RepositoryException {
+		new CameraLocator(mock(CamerasFactory.class), mock(CameraFilterFactory.class)).locate(null);
 	}
 	
 //	@Test
