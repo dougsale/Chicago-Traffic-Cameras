@@ -2,7 +2,7 @@
  * Copyright (c) 2015 Doug Sale
  * All rights reserved.
  */
-package net.dougsale.chicagotrafficcameras;
+package net.dougsale.chicagotrafficcameras.domain;
 
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.assertThat;
@@ -22,10 +22,12 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import net.dougsale.chicagotrafficcameras.camerafilters.CameraFilter;
-import net.dougsale.chicagotrafficcameras.camerafilters.CameraFilterFactory;
 import net.dougsale.chicagotrafficcameras.domain.Camera;
+import net.dougsale.chicagotrafficcameras.domain.CameraFilter;
+import net.dougsale.chicagotrafficcameras.domain.CameraFilterFactory;
+import net.dougsale.chicagotrafficcameras.domain.CameraLocator;
 import net.dougsale.chicagotrafficcameras.domain.Cameras;
+import net.dougsale.chicagotrafficcameras.domain.CamerasFactory;
 import net.dougsale.chicagotrafficcameras.domain.RedLightCamera;
 import net.dougsale.chicagotrafficcameras.domain.Route;
 import net.dougsale.chicagotrafficcameras.domain.Route.Step;

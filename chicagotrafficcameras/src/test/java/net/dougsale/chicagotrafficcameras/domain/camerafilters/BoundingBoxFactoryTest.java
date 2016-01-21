@@ -1,4 +1,4 @@
-package net.dougsale.chicagotrafficcameras.camerafilters;
+package net.dougsale.chicagotrafficcameras.domain.camerafilters;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
@@ -10,9 +10,12 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import net.dougsale.chicagotrafficcameras.domain.CameraFilter;
 import net.dougsale.chicagotrafficcameras.domain.Location;
 import net.dougsale.chicagotrafficcameras.domain.Route;
 import net.dougsale.chicagotrafficcameras.domain.Route.Step;
+import net.dougsale.chicagotrafficcameras.domain.camerafilters.BoundingBox;
+import net.dougsale.chicagotrafficcameras.domain.camerafilters.BoundingBoxFactory;
 
 public class BoundingBoxFactoryTest {
 

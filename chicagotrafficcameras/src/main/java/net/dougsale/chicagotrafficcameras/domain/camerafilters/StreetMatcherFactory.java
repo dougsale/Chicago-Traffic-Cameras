@@ -2,7 +2,7 @@
  * Copyright (c) 2015 Doug Sale
  * All rights reserved.
  */
-package net.dougsale.chicagotrafficcameras.camerafilters;
+package net.dougsale.chicagotrafficcameras.domain.camerafilters;
 
 import static org.apache.commons.lang3.Validate.notNull;
 
@@ -15,6 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.dougsale.chicagotrafficcameras.domain.Camera;
+import net.dougsale.chicagotrafficcameras.domain.CameraFilter;
+import net.dougsale.chicagotrafficcameras.domain.CameraFilterFactory;
 import net.dougsale.chicagotrafficcameras.domain.Route;
 import net.dougsale.chicagotrafficcameras.domain.Route.Step;
 

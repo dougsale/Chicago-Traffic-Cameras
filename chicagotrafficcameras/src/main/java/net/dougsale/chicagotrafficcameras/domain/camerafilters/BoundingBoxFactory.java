@@ -1,7 +1,7 @@
 /**
  * 
  */
-package net.dougsale.chicagotrafficcameras.camerafilters;
+package net.dougsale.chicagotrafficcameras.domain.camerafilters;
 
 import static org.apache.commons.lang3.Validate.isTrue;
 import static org.apache.commons.lang3.Validate.notNull;
@@ -9,6 +9,8 @@ import static org.apache.commons.lang3.Validate.notNull;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.dougsale.chicagotrafficcameras.domain.CameraFilter;
+import net.dougsale.chicagotrafficcameras.domain.CameraFilterFactory;
 import net.dougsale.chicagotrafficcameras.domain.Location;
 import net.dougsale.chicagotrafficcameras.domain.Route;
 import net.dougsale.chicagotrafficcameras.domain.Route.Step;

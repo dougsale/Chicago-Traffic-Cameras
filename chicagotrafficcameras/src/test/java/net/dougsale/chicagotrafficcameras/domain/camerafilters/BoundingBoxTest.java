@@ -2,7 +2,7 @@
  * Copyright (c) 2015 Doug Sale
  * All rights reserved.
  */
-package net.dougsale.chicagotrafficcameras.camerafilters;
+package net.dougsale.chicagotrafficcameras.domain.camerafilters;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
@@ -15,6 +15,7 @@ import org.junit.Test;
 
 import net.dougsale.chicagotrafficcameras.domain.Camera;
 import net.dougsale.chicagotrafficcameras.domain.Location;
+import net.dougsale.chicagotrafficcameras.domain.camerafilters.BoundingBox;
 
 public class BoundingBoxTest {
 	

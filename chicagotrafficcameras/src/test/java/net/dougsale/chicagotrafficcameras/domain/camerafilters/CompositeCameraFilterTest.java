@@ -1,4 +1,4 @@
-package net.dougsale.chicagotrafficcameras.camerafilters;
+package net.dougsale.chicagotrafficcameras.domain.camerafilters;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
@@ -13,6 +13,8 @@ import java.util.Arrays;
 import org.junit.Test;
 
 import net.dougsale.chicagotrafficcameras.domain.Camera;
+import net.dougsale.chicagotrafficcameras.domain.CameraFilter;
+import net.dougsale.chicagotrafficcameras.domain.camerafilters.CompositeCameraFilter;
 
 public class CompositeCameraFilterTest {
 

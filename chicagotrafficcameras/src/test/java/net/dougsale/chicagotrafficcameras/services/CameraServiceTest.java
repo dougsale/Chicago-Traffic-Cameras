@@ -1,4 +1,4 @@
-package net.dougsale.chicagotrafficcameras;
+package net.dougsale.chicagotrafficcameras.services;
 
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.assertThat;
@@ -10,10 +10,12 @@ import static org.mockito.Mockito.when;
 
 import org.junit.Test;
 
+import net.dougsale.chicagotrafficcameras.domain.CameraLocator;
 import net.dougsale.chicagotrafficcameras.domain.Cameras;
+import net.dougsale.chicagotrafficcameras.domain.CamerasFactory;
 import net.dougsale.chicagotrafficcameras.domain.Route;
-import net.dougsale.chicagotrafficcameras.CamerasFactory;
 import net.dougsale.chicagotrafficcameras.repository.RepositoryException;
+import net.dougsale.chicagotrafficcameras.services.CameraService;
 
 public class CameraServiceTest {
 

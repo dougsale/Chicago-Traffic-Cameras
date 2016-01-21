@@ -1,7 +1,7 @@
 /**
  * 
  */
-package net.dougsale.chicagotrafficcameras.camerafilters;
+package net.dougsale.chicagotrafficcameras.domain.camerafilters;
 
 import static org.apache.commons.lang3.Validate.isTrue;
 import static org.apache.commons.lang3.Validate.notNull;
@@ -11,6 +11,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import net.dougsale.chicagotrafficcameras.domain.Camera;
+import net.dougsale.chicagotrafficcameras.domain.CameraFilter;
 
 /**
  * CompositeCameraFilter is a CameraFilter composed of two or

@@ -8,28 +8,28 @@
 
 	<context:property-placeholder location="classpath:/ctc.properties" />
 
-	<bean id="cameraService" class="net.dougsale.chicagotrafficcameras.CameraService">
+	<bean id="cameraService" class="net.dougsale.chicagotrafficcameras.services.CameraService">
 		<constructor-arg ref="camerasFactory" />
 		<constructor-arg ref="cameraLocator" />
 	</bean>
 
-	<bean id="cameraLocator" class="net.dougsale.chicagotrafficcameras.CameraLocator">
+	<bean id="cameraLocator" class="net.dougsale.chicagotrafficcameras.domain.CameraLocator">
 		<constructor-arg ref="camerasFactory" />
 		<constructor-arg ref="cameraFilterFactory" />
 	</bean>
 
-	<bean id="cameraFilterFactory" class="net.dougsale.chicagotrafficcameras.camerafilters.CompositeCameraFilterFactory">
+	<bean id="cameraFilterFactory" class="net.dougsale.chicagotrafficcameras.domain.camerafilters.CompositeCameraFilterFactory">
 		<constructor-arg>
 			<array>
-				<bean class="net.dougsale.chicagotrafficcameras.camerafilters.BoundingBoxFactory">
+				<bean class="net.dougsale.chicagotrafficcameras.domain.camerafilters.BoundingBoxFactory">
 					<constructor-arg type="double" value="${BoundingBoxFactory.padding}" />
 				</bean>
-				<bean class="net.dougsale.chicagotrafficcameras.camerafilters.StreetMatcherFactory" />
+				<bean class="net.dougsale.chicagotrafficcameras.domain.camerafilters.StreetMatcherFactory" />
 			</array>
 		</constructor-arg>
 	</bean>
 
-	<bean id="camerasFactory" class="net.dougsale.chicagotrafficcameras.CamerasFactory">
+	<bean id="camerasFactory" class="net.dougsale.chicagotrafficcameras.domain.CamerasFactory">
 		<constructor-arg ref="camerasRepository" />
 	</bean>
 

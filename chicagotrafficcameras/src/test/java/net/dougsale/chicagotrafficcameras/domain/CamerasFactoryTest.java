@@ -1,4 +1,4 @@
-package net.dougsale.chicagotrafficcameras;
+package net.dougsale.chicagotrafficcameras.domain;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
@@ -14,6 +14,7 @@ import org.junit.Test;
 
 import net.dougsale.chicagotrafficcameras.domain.Camera;
 import net.dougsale.chicagotrafficcameras.domain.Cameras;
+import net.dougsale.chicagotrafficcameras.domain.CamerasFactory;
 import net.dougsale.chicagotrafficcameras.domain.RedLightCamera;
 import net.dougsale.chicagotrafficcameras.domain.SpeedCamera;
 import net.dougsale.chicagotrafficcameras.repository.CamerasRepository;

@@ -1,4 +1,4 @@
-package net.dougsale.chicagotrafficcameras;
+package net.dougsale.chicagotrafficcameras.services;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
@@ -14,6 +14,7 @@ import net.dougsale.chicagotrafficcameras.domain.Route;
 import net.dougsale.chicagotrafficcameras.domain.builders.RouteBuilder;
 import net.dougsale.chicagotrafficcameras.domain.builders.SpeedCameraBuilder;
 import net.dougsale.chicagotrafficcameras.repository.RepositoryException;
+import net.dougsale.chicagotrafficcameras.services.CameraService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("/ctc-context.xml")

@@ -1,11 +1,10 @@
 /**
  * 
  */
-package net.dougsale.chicagotrafficcameras;
+package net.dougsale.chicagotrafficcameras.domain;
 
 import static org.apache.commons.lang3.Validate.notNull;
 
-import net.dougsale.chicagotrafficcameras.domain.Cameras;
 import net.dougsale.chicagotrafficcameras.repository.CamerasRepository;
 import net.dougsale.chicagotrafficcameras.repository.RepositoryException;
 

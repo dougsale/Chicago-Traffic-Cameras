@@ -1,4 +1,4 @@
-package net.dougsale.chicagotrafficcameras.camerafilters;
+package net.dougsale.chicagotrafficcameras.domain.camerafilters;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -14,8 +14,12 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import net.dougsale.chicagotrafficcameras.domain.CameraFilter;
+import net.dougsale.chicagotrafficcameras.domain.CameraFilterFactory;
 import net.dougsale.chicagotrafficcameras.domain.Route;
 import net.dougsale.chicagotrafficcameras.domain.Route.Step;
+import net.dougsale.chicagotrafficcameras.domain.camerafilters.CompositeCameraFilter;
+import net.dougsale.chicagotrafficcameras.domain.camerafilters.CompositeCameraFilterFactory;
 
 public class CompositeCameraFilterFactoryTest {
 
