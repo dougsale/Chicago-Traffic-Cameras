@@ -75,18 +75,18 @@ public class CamerasRepository {
 		try {
 			return (Cameras) in.readObject();
 		} catch (ClassNotFoundException e) {
-			throw new RepositoryException(RepositoryCode.MISSING_CLASS, e).withContext("resourceName", resourceName);			
+			throw new RepositoryException(RepositoryErrorCodes.MISSING_CLASS, e).withContext("resourceName", resourceName);			
 		} catch (InvalidClassException | StreamCorruptedException | OptionalDataException e) {
-			throw new RepositoryException(RepositoryCode.INVALID_FORMAT, e).withContext("resourceName", resourceName);
+			throw new RepositoryException(RepositoryErrorCodes.INVALID_FORMAT, e).withContext("resourceName", resourceName);
 		} catch (IOException e) {
-			throw new RepositoryException(RepositoryCode.READ_FAILED, e).withContext("resourceName", resourceName);
+			throw new RepositoryException(RepositoryErrorCodes.READ_FAILED, e).withContext("resourceName", resourceName);
 		}
 	}
 
 	InputStream getResourceAsStream() throws RepositoryException {
 		InputStream inputStream = CamerasRepository.class.getClassLoader().getResourceAsStream(resourceName);
 		if (inputStream == null)
-			throw new RepositoryException(RepositoryCode.UNAVAILABLE).withContext("resourceName", resourceName);
+			throw new RepositoryException(RepositoryErrorCodes.UNAVAILABLE).withContext("resourceName", resourceName);
 		return inputStream;
 	}
 	
@@ -96,16 +96,16 @@ public class CamerasRepository {
 		try {
 			return new ObjectInputStream(in);
 		} catch (StreamCorruptedException e) {
-			throw new RepositoryException(RepositoryCode.INVALID_FORMAT, e).withContext("resourceName", resourceName);
+			throw new RepositoryException(RepositoryErrorCodes.INVALID_FORMAT, e).withContext("resourceName", resourceName);
 		} catch (IOException e) {
-			throw new RepositoryException(RepositoryCode.READ_FAILED, e).withContext("resourceName", resourceName);
+			throw new RepositoryException(RepositoryErrorCodes.READ_FAILED, e).withContext("resourceName", resourceName);
 		}
 	}
 	
 	void close(InputStream in) throws RepositoryException {
 		try { in.close(); } catch (IOException e) { 
 			// error closing stream... maybe should just log warning and continue execution (i.e., eat exception)
-			throw new RepositoryException(RepositoryCode.CLOSE_FAILED, e).withContext("resourceName", resourceName);
+			throw new RepositoryException(RepositoryErrorCodes.CLOSE_FAILED, e).withContext("resourceName", resourceName);
 		}
 	}
 }

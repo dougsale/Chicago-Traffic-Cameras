@@ -109,7 +109,7 @@ public class CamerasRepositoryTest {
 				fail();
 			} catch (RepositoryException e) {
 				assertThat(e.getCause(), equalTo(cause));
-				assertThat(e.getErrCode(), equalTo(RepositoryCode.INVALID_FORMAT));
+				assertThat(e.getErrCode(), equalTo(RepositoryErrorCodes.INVALID_FORMAT));
 				assertThat(e.getContextData().get("resourceName"), equalTo("foo.ser"));
 			}
 		}
@@ -125,7 +125,7 @@ public class CamerasRepositoryTest {
 			fail();
 		} catch (RepositoryException e) {
 			assertThat(e.getCause(), equalTo(cause));
-			assertThat(e.getErrCode(), equalTo(RepositoryCode.READ_FAILED));
+			assertThat(e.getErrCode(), equalTo(RepositoryErrorCodes.READ_FAILED));
 			assertThat(e.getContextData().get("resourceName"), equalTo("foo.ser"));
 		}
 	}
@@ -140,7 +140,7 @@ public class CamerasRepositoryTest {
 			fail();
 		} catch (RepositoryException e) {
 			assertThat(e.getCause(), equalTo(cause));
-			assertThat(e.getErrCode(), equalTo(RepositoryCode.MISSING_CLASS));
+			assertThat(e.getErrCode(), equalTo(RepositoryErrorCodes.MISSING_CLASS));
 			assertThat(e.getContextData().get("resourceName"), equalTo("foo.ser"));
 		}
 	}
@@ -165,7 +165,7 @@ public class CamerasRepositoryTest {
 			fail();
 		} catch (RepositoryException e) {
 			assertThat(e.getCause(), equalTo(cause));
-			assertThat(e.getErrCode(), equalTo(RepositoryCode.CLOSE_FAILED));
+			assertThat(e.getErrCode(), equalTo(RepositoryErrorCodes.CLOSE_FAILED));
 			assertThat(e.getContextData().get("resourceName"), equalTo("foo.ser"));
 		}
 	}
@@ -191,7 +191,7 @@ public class CamerasRepositoryTest {
 			fail();
 		} catch (RepositoryException e) {
 			assertThat(e.getCause(), nullValue());
-			assertThat(e.getErrCode(), equalTo(RepositoryCode.UNAVAILABLE));
+			assertThat(e.getErrCode(), equalTo(RepositoryErrorCodes.UNAVAILABLE));
 			assertThat(e.getContextData().get("resourceName"), equalTo(resourceName));
 		}
 	}
@@ -222,7 +222,7 @@ public class CamerasRepositoryTest {
 			fail();
 		} catch (RepositoryException e) {
 			assertThat(e.getCause(), equalTo(cause));
-			assertThat(e.getErrCode(), equalTo(RepositoryCode.INVALID_FORMAT));
+			assertThat(e.getErrCode(), equalTo(RepositoryErrorCodes.INVALID_FORMAT));
 			assertThat(e.getContextData().get("resourceName"), equalTo(resourceName));
 		}
 	}
@@ -240,7 +240,7 @@ public class CamerasRepositoryTest {
 			fail();
 		} catch (RepositoryException e) {
 			assertThat(e.getCause(), equalTo(cause));
-			assertThat(e.getErrCode(), equalTo(RepositoryCode.READ_FAILED));
+			assertThat(e.getErrCode(), equalTo(RepositoryErrorCodes.READ_FAILED));
 			assertThat(e.getContextData().get("resourceName"), equalTo(resourceName));
 		}
 	}

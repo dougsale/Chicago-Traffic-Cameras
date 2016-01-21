@@ -9,7 +9,7 @@ import net.dougsale.chicagotrafficcameras.ErrorCode;
  * @author dsale
  *
  */
-public enum RepositoryCode implements ErrorCode {
+public enum RepositoryErrorCodes implements ErrorCode {
 	UNAVAILABLE(100),
 	MISSING_CLASS(101),
 	INVALID_FORMAT(102),
@@ -18,7 +18,7 @@ public enum RepositoryCode implements ErrorCode {
 
 	private final int code;
 
-	private RepositoryCode(int code) {
+	private RepositoryErrorCodes(int code) {
 	    this.code = code;
 	}
 
