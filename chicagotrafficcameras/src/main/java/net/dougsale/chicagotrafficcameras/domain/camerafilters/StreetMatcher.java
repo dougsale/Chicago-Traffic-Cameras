@@ -41,7 +41,7 @@ public class StreetMatcher implements CameraFilter {
 	 * @param street
 	 */
 	public StreetMatcher(String street) {
-		notNull(street, "invalid parameter: street=" + street);
+		notNull(street);
 		notEmpty(street.trim(), "invalid parameter: street=" + street);
 		this.street = street.trim().toUpperCase();
 	}
@@ -57,7 +57,7 @@ public class StreetMatcher implements CameraFilter {
 
 	@Override
 	public boolean accept(Camera camera) {
-		notNull(camera, "invalid parameter: camera=" + camera);
+		notNull(camera);
 		
 		boolean match = false;
 		

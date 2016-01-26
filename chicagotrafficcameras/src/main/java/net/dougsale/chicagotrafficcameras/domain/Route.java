@@ -40,10 +40,11 @@ public class Route implements Serializable {
 	private final List<Step> steps;
 
 	public Route(String startAddress, String endAddress, List<Step> steps) {
-		notNull(startAddress, "invalid parameter: startAddress=null");
+		notNull(startAddress);
 		notEmpty(startAddress.trim(), "invalid parameter: startAddress=" + startAddress);
-		notNull(endAddress, "invalid parameter: endAddress=null");
+		notNull(endAddress);
 		notEmpty(endAddress.trim(), "invalid parameter: endAddress=" + endAddress);
+		notNull(steps);
 		notEmpty(steps, "invalid parameter: steps; size=" + steps.size());
 		for (Step step : steps)
 			notNull(step, "invalid parameter: steps; contains element=null");
@@ -117,10 +118,10 @@ public class Route implements Serializable {
 		private final Location end;
 		
 		public Step(String instructions, Location start, Location end) {
-			notNull(instructions, "invalid parameter: instructions=null");
+			notNull(instructions);
 			notEmpty(instructions.trim(), "invalid parameter: instructions=" + instructions);
-			notNull(start, "invalid parameter: start=null");
-			notNull(end, "invalid parameter: end=null");
+			notNull(start);
+			notNull(end);
 			
 			this.instructions = instructions;
 			this.start = start;

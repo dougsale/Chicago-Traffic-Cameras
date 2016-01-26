@@ -30,8 +30,8 @@ public class CameraLocator {
 	private final CameraFilterFactory filterFactory;
 	
 	public CameraLocator(CamerasFactory camerasFactory, CameraFilterFactory filterFactory) {
-		notNull(camerasFactory, "Invalid parameter: camerasFactory=null");
-		notNull(filterFactory, "Invalid parameter: filterFactory=null");
+		notNull(camerasFactory);
+		notNull(filterFactory);
 		this.camerasFactory = camerasFactory;
 		this.filterFactory = filterFactory;
 	}
@@ -52,7 +52,7 @@ public class CameraLocator {
 	 * @returns a container of cameras germane to the route
 	 */
 	public Cameras locate(Route route) throws RepositoryException {
-		notNull(route, "Invalid parameter: route=null");
+		notNull(route);
 		
 		Map<Step,CameraFilter> filters = filterFactory.getCameraFilters(route);
 		Cameras candidates = camerasFactory.getAllCameras();

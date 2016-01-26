@@ -53,7 +53,7 @@ public class StreetMatcherFactory implements CameraFilterFactory {
 	 */
 	@Override
 	public Map<Step,CameraFilter> getCameraFilters(Route route) {
-		notNull(route, "invalid parameter: route=null");
+		notNull(route);
 		
 		Map<Step,CameraFilter> filters = new HashMap<>(route.getSteps().size());
 		

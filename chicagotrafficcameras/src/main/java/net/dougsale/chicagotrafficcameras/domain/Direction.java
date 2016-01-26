@@ -55,12 +55,12 @@ public enum Direction {
 	 * @throws NullPointerException if direction is null
 	 */
 	public static Direction fromString(String direction) {
-		notNull(direction, "invalid parameter: direction=null");
-		
+		notNull(direction);
+
 		Direction value = lookup.get(direction.trim().toUpperCase());
 		
 		if (value == null)
-			throw new IllegalArgumentException(String.format("\"{}\" is not an accepted Direction representation", direction));
+			throw new IllegalArgumentException(String.format("\"%s\" is not an accepted Direction representation", direction));
 		
 		return value;
 	}

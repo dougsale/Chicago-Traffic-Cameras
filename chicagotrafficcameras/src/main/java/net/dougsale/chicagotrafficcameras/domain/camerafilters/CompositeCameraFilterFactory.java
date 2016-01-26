@@ -29,7 +29,7 @@ public class CompositeCameraFilterFactory implements CameraFilterFactory {
 	 * 
 	 */
 	public CompositeCameraFilterFactory(CameraFilterFactory... factories) {
-		notNull(factories, "invalid parameter: factories=null");
+		notNull(factories);
 		isTrue(!(factories.length < 2),
 				String.format("invalid parameter: factories (length < 2); length=%d", factories.length));
 		for (CameraFilterFactory factory : factories)

@@ -30,7 +30,7 @@ public class CamerasRepository {
 	 * @throws {@link IllegalArgumentException} if resourceName is empty
 	 */
 	public CamerasRepository(String resourceName) {
-		notNull(resourceName, "invalid parameter: resourceName=null");
+		notNull(resourceName);
 		notEmpty(resourceName.trim(), String.format("invalid parameter: resourceName=\"%s\"", resourceName));
 		
 		this.resourceName = resourceName; 

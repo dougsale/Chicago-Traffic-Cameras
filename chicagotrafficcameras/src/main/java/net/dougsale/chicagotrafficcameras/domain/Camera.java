@@ -38,9 +38,10 @@ public class Camera implements Serializable {
 	 * @param approach directions, requiring at least one entry
 	 */
 	public Camera(Location location, Set<Direction> approaches) {
-		notNull(location, "invalid parameter: location=null");
+		notNull(location);
 		this.location = location;
 
+		notNull(approaches);
 		notEmpty(approaches, "invalid parameter: approaches=" + approaches);
 		for (Direction approach : approaches)
 			notNull(approach, "invalid parameter: approaches; contains element=null");

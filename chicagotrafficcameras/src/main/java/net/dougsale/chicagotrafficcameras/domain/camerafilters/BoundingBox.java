@@ -57,7 +57,7 @@ public class BoundingBox implements CameraFilter {
 	 */
 	@Override
 	public boolean accept(Camera camera) {
-		notNull(camera, "invalid parameter: camera=null");
+		notNull(camera);
 		
 		Location location = camera.getLocation();
 		
@@ -67,33 +67,6 @@ public class BoundingBox implements CameraFilter {
 				
 		return inBounds;
 	}
-	
-	//SOMETHING IS WRONG WITH THIS OPTIMIZATION - it has to do with the comparator and set semantics, methinks
-//	Camera lower = new Camera(min, EnumSet.of(Approach.EASTBOUND));
-//	Camera upper = new Camera(max, EnumSet.of(Approach.EASTBOUND));
-//	
-//	for (Camera camera : cameras.get(getCameraComparator()).subSet(lower, true, upper, true)) {
-//		System.out.println(camera);
-//		if (accept(camera))
-//			filtered.add(camera);
-//	}
-//because this doesn't work either:
-//	Set<Camera> cs = cameras.get(getCameraComparator());
-//	for (Camera c : cs)
-//		if (accept(c))
-//			filtered.add(c);
-	// At 41.850 degrees latitude (~Chicago),
-	// 	 1 degree of longitude is roughly 45 nautical miles
-	//   1 degree of latitude is roughly 60 nautical miles
-	// So, a rough estimate for comparing degrees longitude to
-	// latitude at Chicago's latitude is:
-//	static final double LONG_OVER_LAT = 0.75;
-//
-//	//
-//	Comparator<Camera> getCameraComparator() {
-//		return ((max.latitude - min.latitude) * LONG_OVER_LAT < (max.longitude - min.longitude))?
-//				Cameras.BY_LATITUDE : Cameras.BY_LONGITUDE;
-//	}
 
 	@Override
 	public boolean equals(Object object) {

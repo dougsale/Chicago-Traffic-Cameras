@@ -66,7 +66,7 @@ public class Cameras implements Serializable {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T extends Camera> boolean add(T camera) {
-		notNull(camera, "invalid parameter: camera=null");
+		notNull(camera);
 		
 		Class<T> type = (Class<T>) camera.getClass();		
 		Set<T> set = (Set<T>) camerasByType.get(type);
@@ -85,7 +85,7 @@ public class Cameras implements Serializable {
 	 * @throws NullPointerException if cameras is null
 	 */
 	public void addAll(Cameras cameras) {
-		notNull(cameras, "invalid parameter: cameras=null");
+		notNull(cameras);
 		//TODO non-naive implementation that correctly handles generics
 		for (Camera camera : cameras.get())
 			add(camera);
@@ -98,7 +98,7 @@ public class Cameras implements Serializable {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T extends Camera> boolean remove(T camera) {
-		notNull(camera, "invalid parameter: camera=null");
+		notNull(camera);
 		Set<T> cameras = (Set<T>) camerasByType.get(camera.getClass());
 		return cameras == null? false : cameras.remove(camera);
 	}
@@ -144,7 +144,7 @@ public class Cameras implements Serializable {
 	 * @throws NullPointerException if comparator is null
 	 */
 	public NavigableSet<Camera> get(Comparator<? super Camera> comparator) {
-		notNull(comparator, "invalid parameter: comparator=null");
+		notNull(comparator);
 		
 		NavigableSet<Camera> cameras = new TreeSet<>(comparator);
 		
@@ -162,7 +162,7 @@ public class Cameras implements Serializable {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T extends Camera> Set<T> get(Class<T> type) {
-		notNull(type, "invalid parameter: type=null");
+		notNull(type);
 		
 		Set<T> cameras = new HashSet<>();
 
@@ -181,8 +181,8 @@ public class Cameras implements Serializable {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T extends Camera> NavigableSet<T> get(Class<T> type, Comparator<? super T> comparator) {
-		notNull(type, "invalid parameter: type=null");
-		notNull(comparator, "invalid parameter: comparator=null");
+		notNull(type);
+		notNull(comparator);
 		
 		NavigableSet<T> cameras = new TreeSet<>(comparator);
 		

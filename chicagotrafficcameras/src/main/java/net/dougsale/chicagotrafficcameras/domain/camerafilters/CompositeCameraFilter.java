@@ -39,7 +39,7 @@ public class CompositeCameraFilter implements CameraFilter {
 	 * @throws IllegalArgumentException if filters does not contain 2 or more CameraFilter instances
 	 */
 	public CompositeCameraFilter(CameraFilter... filters) {
-		notNull(filters, "invalid parameter: filters=null");
+		notNull(filters);
 		isTrue(!(filters.length < 2),
 				String.format("invalid parameter: filters (length < 2); length=%d", filters.length));
 		for (CameraFilter filter : filters)

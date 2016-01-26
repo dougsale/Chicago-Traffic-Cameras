@@ -18,8 +18,8 @@ public class CamerasService {
 	private final CameraLocator locator;
 	
 	public CamerasService(CamerasFactory factory, CameraLocator locator) {
-		notNull(factory, "invalid parameter: factory=null");
-		notNull(locator, "invalid parameter: locator=null");
+		notNull(factory);
+		notNull(locator);
 		this.factory = factory;
 		this.locator = locator;
 	}
@@ -37,7 +37,7 @@ public class CamerasService {
 	}
 	
 	public Cameras getCameras(Route route) throws RepositoryException {
-		notNull(route, "invalid parameter: route=null");
+		notNull(route);
 		return locator.locate(route);
 	}
 }

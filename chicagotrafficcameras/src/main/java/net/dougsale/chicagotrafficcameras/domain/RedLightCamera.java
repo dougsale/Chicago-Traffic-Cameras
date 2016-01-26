@@ -45,6 +45,7 @@ public class RedLightCamera extends Camera {
 		super(location, approaches);
 
 		// validate intersection
+		notNull(intersection);
 		isTrue(!(intersection.size() < 2),
 				String.format("invalid parameter: intersection (size < 2); size=%d", intersection.size()));
 		for (String street : intersection) {

@@ -41,7 +41,7 @@ public class SpeedCamera extends Camera {
 	public SpeedCamera(String address, Location location, Set<Direction> approaches) {		
 		super(location, approaches);
 
-		notNull(address, "invalid parameter: address=null");
+		notNull(address);
 		notEmpty(address.trim(), String.format("invalid parameter: address=<%s>", address));
 		
 		this.address = address;

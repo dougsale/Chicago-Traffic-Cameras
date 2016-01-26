@@ -19,7 +19,7 @@ public class CamerasFactory {
 	private Cameras allCameras = null;
 	
 	public CamerasFactory(CamerasRepository repository) {
-		notNull(repository, "Invalid parameter: repository=null");
+		notNull(repository);
 		this.repository = repository;
 	}
 

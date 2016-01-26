@@ -12,12 +12,4 @@ public interface CameraFilter {//extends Predicate<Camera> {
 	 * @return true if the camera passes
 	 */
 	boolean accept(Camera camera);
-	
-	/**
-	 * Maps the predicate method to the accept method.
-	 */
-//	@Override
-//	default boolean test(Camera camera) {
-//		return accept(camera);
-//	}
 }

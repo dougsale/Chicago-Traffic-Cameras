@@ -3,6 +3,8 @@
  */
 package net.dougsale.chicagotrafficcameras;
 
+import static org.apache.commons.lang3.Validate.notNull;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,6 +24,7 @@ public class SystemException extends Exception {
 	 * 
 	 */
 	public SystemException(ErrorCode errCode) {
+		notNull(errCode);
 		this.errCode = errCode;
 	}
 
@@ -30,6 +33,7 @@ public class SystemException extends Exception {
 	 */
 	public SystemException(ErrorCode errCode, String message) {
 		super(message);
+		notNull(errCode);
 		this.errCode = errCode;
 	}
 
@@ -38,6 +42,7 @@ public class SystemException extends Exception {
 	 */
 	public SystemException(ErrorCode errCode, Throwable cause) {
 		super(cause);
+		notNull(errCode);
 		this.errCode = errCode;
 	}
 
@@ -47,6 +52,7 @@ public class SystemException extends Exception {
 	 */
 	public SystemException(ErrorCode errCode, String message, Throwable cause) {
 		super(message, cause);
+		notNull(errCode);
 		this.errCode = errCode;
 	}
 
@@ -58,6 +64,7 @@ public class SystemException extends Exception {
 	 */
 	public SystemException(ErrorCode errCode, String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
 		super(message, cause, enableSuppression, writableStackTrace);
+		notNull(errCode);
 		this.errCode = errCode;
 	}
 	
@@ -76,6 +83,7 @@ public class SystemException extends Exception {
 	 * @return
 	 */
 	public SystemException withContext(String key, Object value) {
+		notNull(key);
 		contextData.put(key, value);
 		return this;
 	}
