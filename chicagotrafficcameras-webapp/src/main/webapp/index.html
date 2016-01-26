@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" type="text/css" href="css/default.css">
+    <title>Chicago Traffic Cameras</title>
+</head>
+
+<body onLoad="init()">
+
+    <div id="addressPanel">
+	    from: <input id="fromAddress" type="text" value="201 N Columbus Dr, Chicago, IL"/>
+	    to: <input id="toAddress" type="text" value="400 E Illinois St, Chicago, IL"/>
+	    <input id="mapButton" type="button" value="map route"/>
+    </div>
+    <div id="map"></div>
+    <div id="keyPanel">
+    	<span><img alt="red light camera" style="border-width:0" src="images/glyphicons-533-stop-sign.png"/></span>
+    	<span>red light camera</span>
+    	<span><img alt="speed camera" style="border-width:0" src="images/glyphicons-332-dashboard.png"/></span>
+    	<span>speed camera</span>
+    </div>
+   	<div id="iconAttribution">
+   		<span><a rel="license" href="http://creativecommons.org/licenses/by/3.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/3.0/80x15.png"/></a></span>
+   		<span>GLYPHICONS FREE</span>
+   		<span> by <a href="http://glyphicons.com/">Jan Kovařík</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Attribution 3.0 Unported License</a>.</span>
+	</div>
+
+	<script>
+		function init() {
+			camerasClient.init("map", "fromAddress", "toAddress", "mapButton");
+		}
+	</script>
+	
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADgkkVBeg2P1EccOqgO8Anz1E6JmprH90&amp;v=3.22"></script>
+	<script defer src="scripts/camerasClient.js"></script>
+	
+</body>
+</html>

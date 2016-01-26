@@ -1,0 +1,61 @@
+
+html, body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+#map {
+	height: 100%;
+}
+
+#addressPanel {
+	position: absolute;
+	top: 10px;
+	left: 30%;
+	z-index: 5;
+	background-color: #fff;
+	padding: 5px;
+	border: 1px solid #999;
+	text-align: center;
+	font-family: 'Roboto', 'sans-serif';
+	font-size: small;
+	line-height: 30px;
+	padding-left: 10px;
+}
+
+#fromAddress {
+	font-family: 'Roboto', 'sans-serif';
+	font-size: small;
+}
+
+#toAddress {
+	font-family: 'Roboto', 'sans-serif';
+	font-size: small;
+}
+
+#keyPanel {
+	text-align: center;
+	font-family: 'Roboto', 'sans-serif';
+	font-size: small;
+
+	position: absolute;
+	top: 550px;
+	left: 30%;
+	z-index: 5;
+	background-color: #fff;
+	padding: 5px;
+	border: 1px solid #999;
+	line-height: 30px;
+	padding-left: 10px;
+}
+
+#iconAttribution {
+	width: 100%;
+	background-color: #fff;
+	padding: 5px;
+	text-align: center;
+	font-family: 'Roboto', 'sans-serif';
+	font-size: x-small;
+	padding-left: 10px;
+}
