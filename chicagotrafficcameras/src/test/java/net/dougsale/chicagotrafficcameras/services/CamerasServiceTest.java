@@ -15,16 +15,16 @@ import net.dougsale.chicagotrafficcameras.domain.Cameras;
 import net.dougsale.chicagotrafficcameras.domain.CamerasFactory;
 import net.dougsale.chicagotrafficcameras.domain.Route;
 import net.dougsale.chicagotrafficcameras.repository.RepositoryException;
-import net.dougsale.chicagotrafficcameras.services.CameraService;
+import net.dougsale.chicagotrafficcameras.services.CamerasService;
 
-public class CameraServiceTest {
+public class CamerasServiceTest {
 
 	@Test
 	public void testCameraService() {
 		CamerasFactory factory = mock(CamerasFactory.class);
 		CameraLocator locator = mock(CameraLocator.class);
 		
-		CameraService service = new CameraService(factory, locator);
+		CamerasService service = new CamerasService(factory, locator);
 		assertThat(service.getCamerasFactory(), sameInstance(factory));
 		assertThat(service.getCameraLocator(), sameInstance(locator));
 	}
@@ -32,13 +32,13 @@ public class CameraServiceTest {
 	@Test(expected=NullPointerException.class)
 	public void testCameraServiceNullCamerasFactory() {
 		CameraLocator locator = mock(CameraLocator.class);
-		new CameraService(null, locator);
+		new CamerasService(null, locator);
 	}
 
 	@Test(expected=NullPointerException.class)
 	public void testCameraServiceNullCameraLocator() {
 		CamerasFactory factory = mock(CamerasFactory.class);
-		new CameraService(factory, null);
+		new CamerasService(factory, null);
 	}
 
 	@Test
@@ -47,7 +47,7 @@ public class CameraServiceTest {
 		CamerasFactory factory = when(mock(CamerasFactory.class).getAllCameras()).thenReturn(cameras).getMock();
 		CameraLocator locator = mock(CameraLocator.class);
 		
-		CameraService service = new CameraService(factory, locator);
+		CamerasService service = new CamerasService(factory, locator);
 		assertThat(service.getCameras(), sameInstance(cameras));
 	}
 
@@ -58,7 +58,7 @@ public class CameraServiceTest {
 		Cameras cameras = mock(Cameras.class);
 		CameraLocator locator = when(mock(CameraLocator.class).locate(route)).thenReturn(cameras).getMock();
 
-		CameraService service = new CameraService(factory, locator);		
+		CamerasService service = new CamerasService(factory, locator);		
 		service.getCameras(route);
 
 		verify(factory, never()).getAllCameras();
@@ -67,7 +67,7 @@ public class CameraServiceTest {
 
 	@Test(expected=NullPointerException.class)
 	public void testGetCamerasForRouteNullRoute() throws RepositoryException {
-		new CameraService(mock(CamerasFactory.class), mock(CameraLocator.class)).getCameras(null);
+		new CamerasService(mock(CamerasFactory.class), mock(CameraLocator.class)).getCameras(null);
 	}
 
 }

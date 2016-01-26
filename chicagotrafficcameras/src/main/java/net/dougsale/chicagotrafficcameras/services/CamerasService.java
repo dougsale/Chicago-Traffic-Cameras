@@ -12,12 +12,12 @@ import net.dougsale.chicagotrafficcameras.domain.CamerasFactory;
 import net.dougsale.chicagotrafficcameras.domain.Route;
 import net.dougsale.chicagotrafficcameras.repository.RepositoryException;
 
-public class CameraService {
+public class CamerasService {
 
 	private final CamerasFactory factory;
 	private final CameraLocator locator;
 	
-	public CameraService(CamerasFactory factory, CameraLocator locator) {
+	public CamerasService(CamerasFactory factory, CameraLocator locator) {
 		notNull(factory, "invalid parameter: factory=null");
 		notNull(locator, "invalid parameter: locator=null");
 		this.factory = factory;

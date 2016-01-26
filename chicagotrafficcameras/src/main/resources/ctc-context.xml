@@ -8,7 +8,7 @@
 
 	<context:property-placeholder location="classpath:/ctc.properties" />
 
-	<bean id="cameraService" class="net.dougsale.chicagotrafficcameras.services.CameraService">
+	<bean id="camerasService" class="net.dougsale.chicagotrafficcameras.services.CamerasService">
 		<constructor-arg ref="camerasFactory" />
 		<constructor-arg ref="cameraLocator" />
 	</bean>

@@ -14,14 +14,14 @@ import net.dougsale.chicagotrafficcameras.domain.Route;
 import net.dougsale.chicagotrafficcameras.domain.builders.RouteBuilder;
 import net.dougsale.chicagotrafficcameras.domain.builders.SpeedCameraBuilder;
 import net.dougsale.chicagotrafficcameras.repository.RepositoryException;
-import net.dougsale.chicagotrafficcameras.services.CameraService;
+import net.dougsale.chicagotrafficcameras.services.CamerasService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("/ctc-context.xml")
-public class CameraServiceIT {
+public class CamerasServiceIT {
 
 	@Autowired
-	CameraService cameraService;
+	CamerasService cameraService;
 	
 	@Test
 	public void _615_N_Ogden_Ave_3315_W_Ogden_Ave() throws RepositoryException {
